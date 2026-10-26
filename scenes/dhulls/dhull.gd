@@ -2,7 +2,8 @@ class_name Dhull
 extends Node3D
 ## A Dhull: a smooth, clay-like body with its head floating close above it in a nebula mist. The
 ## face is drawn on the head from swappable eye and mouth images, like Wind Waker's, showing its
-## [member emotion]. The head bobs gently and the eyes blink now and then.
+## [member emotion]. The head bobs gently and the eyes blink now and then. The arms, legs and tail
+## are separate parts that swing from their joints; the AnimationPlayer plays an idle loop.
 
 ## The emotion its face shows.
 @export var emotion := DhullFace.Emotion.NEUTRAL:
@@ -26,13 +27,15 @@ var _rng := RandomNumberGenerator.new()
 
 @onready var _head: MeshInstance3D = $Model/Head
 @onready var _head_rest := _head.position
+@onready var _animation_player: AnimationPlayer = $AnimationPlayer
 
 
 func _ready() -> void:
 	_rng.randomize()
-	# Start each Dhull at its own point in the bob and the blinks, so a group isn't in step.
+	# Start each Dhull at its own point in its idle, bob and blinks, so a group isn't in step.
 	_time = _rng.randf() * 10.0
 	_until_blink_change = _rng.randf_range(blink_interval.x, blink_interval.y)
+	_animation_player.seek(_rng.randf() * _animation_player.current_animation_length, true)
 	_head.material_overlay = face_material
 	_show_face()
 
