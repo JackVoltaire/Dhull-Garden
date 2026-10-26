@@ -5,6 +5,6 @@
 [resource]
 resource_name = "toon_grass"
 next_pass = ExtResource("1_ink")
-albedo_color = Color(0.22, 0.34, 0.32, 1)
+albedo_color = Color(0.14, 0.22, 0.24, 1)
 diffuse_mode = 3
 specular_mode = 2

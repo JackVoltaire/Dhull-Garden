@@ -8,6 +8,8 @@ uniform sampler2D frames : source_color, filter_linear_mipmap;
 uniform int frame_count : hint_range(1, 64) = 4;
 uniform float fps : hint_range(0.0, 30.0) = 4.0;
 uniform float alpha_cut : hint_range(0.0, 1.0) = 0.5;
+// Above 1, the drawing is brighter than white and the environment's glow makes it shine.
+uniform float brightness : hint_range(0.0, 4.0) = 1.0;
 
 varying flat float frame;
 
@@ -22,7 +24,7 @@ void vertex() {
 
 void fragment() {
 	vec4 color = texture(frames, vec2((UV.x + frame) / float(frame_count), UV.y));
-	ALBEDO = color.rgb;
+	ALBEDO = color.rgb * brightness;
 	ALPHA = color.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_cut;
 }
