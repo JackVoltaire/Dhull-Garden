@@ -1,10 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/levels/sandbox/sandbox.tscn" id="1_sandbox"]
-[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu/pause_menu.tscn" id="2_pause_menu"]
+[ext_resource type="Script" path="res://scenes/main/main.gd" id="1_main"]
 
 [node name="Main" type="Node"]
-
-[node name="Sandbox" parent="." instance=ExtResource("1_sandbox")]
-
-[node name="PauseMenu" parent="." instance=ExtResource("2_pause_menu")]
+script = ExtResource("1_main")

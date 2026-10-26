@@ -1,26 +1,30 @@
 # Dhull Garden
 
-A 3D game built with [Godot](https://godotengine.org).
+A creature-raising garden game built with [Godot](https://godotengine.org), in the spirit of
+the Sonic Adventure 2 Battle Chao Garden. The garden runs on the real-world clock, with
+dated events like Animal Crossing, and has minigames in both 2D and 3D.
 
 ## Getting started
 
 1. Install **Godot 4.7** (the standard build; the project uses GDScript, not C#).
 2. In the Project Manager choose **Import**, then select this folder's `project.godot`.
-3. Press **F5** to run. You start in the sandbox level with a third-person character.
+3. Press **F5** to run. The game continues the save in slot 0 (or starts one) and drops you
+   in the sandbox garden with a third-person character.
 
 The first time the editor opens the project it generates `*.uid` files next to scripts and
 `*.import` files next to assets. Commit both: Godot uses them to keep references intact when
-files move.
+files move. The `*.translation` files generated from `localization/strings.csv` are ignored.
 
 ## Controls
 
-| Action  | Keyboard and mouse | Gamepad      |
-| ------- | ------------------ | ------------ |
-| Move    | WASD / arrow keys  | Left stick   |
-| Look    | Mouse              | Right stick  |
-| Jump    | Space              | A / Cross    |
-| Sprint  | Shift (hold)       | L3 (hold)    |
-| Pause   | Esc                | Start        |
+| Action     | Keyboard and mouse | Gamepad      |
+| ---------- | ------------------ | ------------ |
+| Move       | WASD / arrow keys  | Left stick   |
+| Look       | Mouse              | Right stick  |
+| Jump       | Space              | A / Cross    |
+| Sprint     | Shift (hold)       | L3 (hold)    |
+| Pause      | Esc                | Start        |
+| Debug menu | F3 (debug builds)  |              |
 
 Bindings live in **Project > Project Settings > Input Map**. Code refers to actions by name
 (`move_forward`, `jump`, …), never to physical keys.
@@ -28,19 +32,72 @@ Bindings live in **Project > Project Settings > Input Map**. Code refers to acti
 ## Project layout
 
 ```
-autoloads/          Global singletons, registered in Project Settings > Globals
-  game.gd           `Game`: pause state and quitting
+systems/            Game-wide systems, one folder each. Most are autoloads.
+  settings/         `Settings`: player preferences in user://settings.cfg
+  clock/            `Clock`: real-world local time, day phases, debug time travel
+  calendar/         `Calendar`: dated events and seasons; CalendarEvent resource
+  saves/            `Saves`: save slots, backups, migrations, time away
+  audio/            `Audio`: music crossfades and one-shot sounds
+  scenes/           `Scenes`: fading scene changes with background loading
+  minigames/        `Minigames`: launching minigames and returning results
+  game/             `Game`: pausing and quitting
+  data/             ResourceDir: loads every resource in a data folder
+data/               Game content as .tres resources
+  events/           One CalendarEvent per file
+  minigames/        One MinigameDefinition per file
 scenes/
-  main/             Entry scene (run/main_scene): the current level plus UI layers
-  levels/sandbox/   Greybox test level for trying out movement and mechanics
+  main/             Entry scene: loads the save and enters the garden
+  levels/sandbox/   Greybox garden for trying out movement and mechanics
   player/           Player scene and its controller script
-  ui/pause_menu/    Pause overlay
+  minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
+  ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
+  debug/            F3 developer menu (autoload, debug builds only)
+localization/       strings.csv: every player-facing string, by key and language
+tests/              Test runner and unit tests
 assets/             Shared imported resources, by type
   audio/ fonts/ materials/ models/ textures/
 ```
 
 Scenes are grouped **by feature**: a scene, its script and any resources only it uses sit
 together in one folder. `assets/` is for things shared across features.
+
+## Systems
+
+Autoloads load in the order listed in Project Settings > Globals; each may use the ones
+above it.
+
+- **Real-world time.** Read the time from `Clock` (`now_local()`, `phase()`,
+  `day_fraction()`), never from `Time` directly, so time travel works everywhere. Connect to
+  `minute_changed`, `hour_changed`, `phase_changed` and `day_changed` to react as time passes.
+- **Events.** To add one, create a `CalendarEvent` resource in `data/events/`: a yearly date
+  range (which may span New Year), the nth weekday of a month, or a weekday every week, plus
+  optional hours. `Calendar` emits `event_started` and `event_ended`, and
+  `get_active_events()` tells you what's on now. Seasons follow the
+  `game/southern_hemisphere` setting. The four events in `data/events/` are examples.
+- **Saving.** Persistent state lives in systems, not in scene nodes, because scenes are freed
+  whenever the player switches between the garden and a minigame. A system registers with
+  `Saves.register(id, self)` and implements `get_save_data() -> Dictionary` and
+  `apply_save_data(data: Dictionary)`. Save files keep exact types (ints stay ints, Vector3s
+  survive) and the previous save is kept as a backup. When the data layout changes, bump
+  `Saves.VERSION` and add a migration step in `_migrate_step()`. `game_loaded` reports
+  `seconds_away`, how long the game was closed, for things that should happen in the
+  meantime.
+- **Minigames.** Create a scene (2D, 3D or UI) and a `MinigameDefinition` in
+  `data/minigames/`. Start it with `Minigames.launch(definition, context)`. The minigame reads
+  `Minigames.context` and ends with `Minigames.finish({"score": ...})`, which returns the
+  player to where they were and emits `minigame_finished` with the result. Running a minigame
+  scene on its own with F6 restarts it when it finishes.
+- **Scenes.** Change scenes with `Scenes.change_scene(path, params)`. If the new scene's root
+  has `setup(params: Dictionary)`, it gets `params` before `_ready()`.
+- **Settings.** `Settings.get_value("audio/music_volume")` and `set_value()`; every setting
+  and its default is listed in `Settings.DEFAULTS`.
+- **Audio.** `Audio.play_music(stream)` crossfades; `Audio.play_sfx(stream)` plays a one-off
+  sound. Buses (Music, SFX, Ambience, UI) are in `default_bus_layout.tres`.
+- **Text.** Put player-facing text in `localization/strings.csv` and use the key: Controls
+  translate their `text` automatically, and in code use `tr("KEY")`. Add a column to add a
+  language.
+- **Debug menu.** F3 shows the date, day phase, season and active events, and has buttons to
+  jump the clock forward, save, load, wipe the save and launch any minigame.
 
 ## Conventions
 
@@ -52,6 +109,8 @@ together in one folder. `assets/` is for things shared across features.
   obvious). It catches errors in the editor and makes scripts faster.
 - **Signals up, calls down:** a node may call methods on its children, but reports to its
   parent or siblings with signals. Cross-scene communication goes through an autoload.
+- **Content is data:** events, minigames and similar content are `.tres` resources in `data/`,
+  found automatically. Give each a stable `id`; it ends up in save files, so never rename it.
 - **Pausing:** call `Game.set_paused()` and listen for `Game.paused_changed`; don't set
   `get_tree().paused` directly. Nodes that must keep running while paused (menus) set
   **Process > Mode** to *Always* or *When Paused*.
@@ -73,3 +132,13 @@ together in one folder. `assets/` is for things shared across features.
 pipx install "gdtoolkit==4.*"
 gdlint . && gdformat --check .   # drop --check to apply formatting
 ```
+
+Tests live in `tests/unit/`: any `test_*.gd` file extending `TestCase`, with `test_*`
+methods. Run them all with:
+
+```sh
+godot --headless --path . res://tests/test_runner.tscn
+```
+
+or open `tests/test_runner.tscn` and press F6. A test fails on a failed assertion or on any
+error logged while it runs. The exit code is 1 if anything failed.

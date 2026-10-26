@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CalendarEvent" format=3]
+
+[ext_resource type="Script" path="res://systems/calendar/calendar_event.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"harvest_festival"
+display_name = "EVENT_HARVEST_FESTIVAL"
+recurrence = 1
+weekday = 4
+weekday_month = 11
+nth = 4

@@ -6,6 +6,8 @@ extends Node
 
 signal paused_changed(is_paused: bool)
 
+var _mouse_mode_before_pause := Input.MOUSE_MODE_VISIBLE
+
 
 func _ready() -> void:
 	# Keep receiving input while the tree is paused so the pause action can also unpause.
@@ -22,9 +24,16 @@ func set_paused(paused: bool) -> void:
 	if get_tree().paused == paused:
 		return
 	get_tree().paused = paused
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if paused else Input.MOUSE_MODE_CAPTURED
+	if paused:
+		_mouse_mode_before_pause = Input.mouse_mode
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Input.mouse_mode = _mouse_mode_before_pause
 	paused_changed.emit(paused)
 
 
 func quit() -> void:
+	# Closing the window sends this notification but quit() doesn't, so send it ourselves to
+	# give autoloads such as Saves the same chance to save.
+	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
 	get_tree().quit()
