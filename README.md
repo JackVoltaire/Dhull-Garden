@@ -191,10 +191,10 @@ gdlint . && gdformat --check .   # drop --check to apply formatting
 ```
 
 `tools/godot.sh` runs Godot from the command line, passing on all its arguments. On 64-bit
-x86 Linux it downloads Godot 4.7.2 the first time, verifies it against the official SHA-512
-checksums and caches it in `~/.cache/dhull-garden`. Elsewhere, or to use your own copy, set
-`GODOT` to the path of a Godot binary. `.claude/settings.json` lets Claude Code run this
-script without asking.
+x86 Linux or Windows it downloads Godot 4.7.2 the first time, verifies it against the official
+SHA-512 checksums and caches it in `~/.cache/dhull-garden`. On Windows, run it from Git Bash.
+Elsewhere, or to use your own copy, set `GODOT` to the path of a Godot binary.
+`.claude/settings.json` lets Claude Code run this script without asking.
 
 `tools/blender.sh` does the same for Blender 5.2.3 LTS, the version models are made with
 (SHA-256 checked; set `BLENDER` to use your own copy). For example,

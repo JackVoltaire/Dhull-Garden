@@ -38,7 +38,8 @@ def link(import_file: Path) -> None:
     while end < len(lines) and "=" not in lines[end].split('"')[0]:
         end += 1
     lines[start:end] = subresources_line().split("\n")
-    import_file.write_text("\n".join(lines))
+    # Godot writes these files with LF endings; Python on Windows would write CRLF.
+    import_file.write_text("\n".join(lines), newline="\n")
     print("linked", import_file.relative_to(ROOT))
 
 
