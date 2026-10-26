@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DhullColoring" format=3]
+
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_coloring.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+body_color = Color(0.78, 0.16, 0.3, 1)
+head_color = Color(0.96, 0.94, 0.9, 1)
+limb_color = Color(0.78, 0.16, 0.3, 1)
+other_limb_color = Color(0.36, 0.24, 0.8, 1)
+tip_color = Color(1, 0.77, 0.3, 1)
+body_pattern = 1
+pattern_color = Color(0.36, 0.24, 0.8, 1)

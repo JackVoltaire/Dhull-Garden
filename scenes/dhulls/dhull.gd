@@ -17,6 +17,12 @@ extends Node3D
 		eye_style = value
 		if is_node_ready():
 			_show_face()
+## The colors of its clay. Without one, it keeps the clay shader's default colors.
+@export var coloring: DhullColoring:
+	set(value):
+		coloring = value
+		if is_node_ready():
+			_apply_coloring()
 ## Draws the face on the head; see dhull_face.gdshader.
 @export var face_material: Material
 ## How far the head bobs up and down, and how many times a second.
@@ -44,6 +50,7 @@ func _ready() -> void:
 	_animation_player.seek(_rng.randf() * _animation_player.current_animation_length, true)
 	_head.material_overlay = face_material
 	_show_face()
+	_apply_coloring()
 
 
 func _process(delta: float) -> void:
@@ -64,3 +71,22 @@ func _show_face() -> void:
 		&"eye_frame", DhullFace.eyes_for(emotion, eye_style, _blinking)
 	)
 	_head.set_instance_shader_parameter(&"mouth_frame", DhullFace.mouth_for(emotion))
+
+
+func _apply_coloring() -> void:
+	if coloring == null:
+		return
+	_paint($Model/Body, coloring.body_color, coloring.body_pattern)
+	_paint($Model/Body/Tail, coloring.body_color)
+	_paint(_head, coloring.head_color)
+	_paint($Model/Body/ArmLeft, coloring.limb_color)
+	_paint($Model/Body/LegRight, coloring.limb_color)
+	_paint($Model/Body/ArmRight, coloring.other_limb_color)
+	_paint($Model/Body/LegLeft, coloring.other_limb_color)
+
+
+func _paint(part: GeometryInstance3D, color: Color, pattern := DhullColoring.Pattern.NONE) -> void:
+	part.set_instance_shader_parameter(&"part_color", color)
+	part.set_instance_shader_parameter(&"tip_color", coloring.tip_color)
+	part.set_instance_shader_parameter(&"pattern", pattern)
+	part.set_instance_shader_parameter(&"pattern_color", coloring.pattern_color)

@@ -4,11 +4,6 @@ const EYE_FRAME_WIDTH := 256
 const MOUTH_FRAME_WIDTH := 128
 
 
-func test_every_emotion_has_a_mouth() -> void:
-	for emotion: DhullFace.Emotion in DhullFace.Emotion.values():
-		assert_true(DhullFace.MOUTH_FOR.has(emotion), "mouth for %d" % emotion)
-
-
 func test_every_eye_style_has_everyday_eyes() -> void:
 	for style: DhullFace.EyeStyle in DhullFace.EyeStyle.values():
 		assert_true(DhullFace.EVERYDAY_EYES.has(style), "eyes for style %d" % style)
@@ -38,8 +33,14 @@ func test_happy_eyes_stay_happy_when_blinking() -> void:
 	assert_eq(DhullFace.eyes_for(happy, DhullFace.EyeStyle.ROUND, true), DhullFace.Eyes.HAPPY)
 
 
-func test_mouth_follows_the_emotion() -> void:
+func test_open_mouths_show() -> void:
 	assert_eq(DhullFace.mouth_for(DhullFace.Emotion.ANGRY), DhullFace.Mouth.GRIN)
+	assert_eq(DhullFace.mouth_for(DhullFace.Emotion.HAPPY), DhullFace.Mouth.OPEN)
+
+
+func test_shut_mouths_hide() -> void:
+	assert_eq(DhullFace.mouth_for(DhullFace.Emotion.NEUTRAL), DhullFace.NO_MOUTH)
+	assert_eq(DhullFace.mouth_for(DhullFace.Emotion.SAD), DhullFace.NO_MOUTH)
 
 
 ## The face images and the face material must have one frame per eye and mouth shape, or

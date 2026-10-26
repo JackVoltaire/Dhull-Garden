@@ -38,9 +38,10 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
     chalk spirals, stars and eye glyphs in the sky
 - **Dhulls** (`scenes/dhulls/`): the first Dhull model, with a Chao's body shape in separate,
   outlined parts (nub arms, round feet, a lightning J tail) and a floating head in nebula mist,
-  in apricot orange clay with pink nub tips. Wind Waker-style swappable anime eyes and mouths
-  show emotions; each Dhull has an eye style (round, droopy, intense, dumb). An idle animation
-  swings the parts. Four stand near the start of the dream island, one per eye style.
+  in smooth clay. Wind Waker-style swappable anime eyes and mouths show emotions (the mouth only
+  when open); each Dhull has an eye style (round, droopy, intense, dumb). An idle animation
+  swings the parts. Nine stand near the start of the dream island, one per trial coloring in
+  `data/dhulls/colorings/`; the user is choosing between them.
   - 2D "cardboard cutout" tree tops, clouds, sun and moon, animated in 3 or 4 stepped frames
   - a grinning sun and moon in the spirit of Soul Eater
   - all the drawings are placeholders for the user's own art
