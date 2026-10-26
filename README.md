@@ -54,7 +54,7 @@ scenes/
   levels/sandbox/   Greybox garden for trying out movement and mechanics
   environment/      SkyCycle (sky and light by time of day), CloudSea, ScreenTexture
   player/           Player scene and its controller script
-  props/            Reusable things placed in levels: waterfall/, shiny_spot/
+  props/            Reusable things placed in levels: waterfall/, shiny_spot/, cutouts/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
   debug/            F3 developer menu (autoload, debug builds only)
@@ -121,6 +121,17 @@ above it.
   on water; tune its lanes, jaggedness and dashes per material. Instance
   `scenes/environment/screen_texture.tscn` in a level for film grain, faint scanlines and a
   vignette over the whole screen.
+- **Cutouts.** Much of the world is 2D drawings standing in 3D like cardboard cutouts, animated
+  in steps with 3 or 4 frames. The ones in `scenes/props/cutouts/` are placeholders. To make one,
+  draw its frames side by side in one image (PNG, or SVG like the placeholders), all the same
+  size, with the feet at the bottom middle, and turn on **Mipmaps > Generate** in its import
+  settings. Next to it, save a QuadMesh resource whose material uses
+  `cardboard_cutout.gdshader`. Set the material's `frames`, `frame_count` and `fps`. Size the mesh
+  to one frame at 256 pixels per meter, and set its **Center Offset Y** to half the height so it
+  stands on its origin. Place it with a MeshInstance3D, or with a MultiMeshInstance3D when there
+  are lots (the dream island's grass). Cutouts turn to face the camera, are lit like the ground
+  they stand on, and each copy starts on its own frame and may be mirrored, so a field of them
+  doesn't move in lockstep.
 - **Debug menu.** F3 shows the date, day phase, season and active events, and has buttons to
   jump the clock forward, save, load, wipe the save, switch levels and launch any minigame.
 

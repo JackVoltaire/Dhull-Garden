@@ -17,6 +17,11 @@
 [ext_resource type="PackedScene" path="res://assets/models/island_spooky/island_spooky.glb" id="15_spooky"]
 [ext_resource type="PackedScene" path="res://assets/models/island_chilly/island_chilly.glb" id="16_chilly"]
 [ext_resource type="PackedScene" path="res://scenes/environment/screen_texture.tscn" id="17_screen"]
+[ext_resource type="QuadMesh" path="res://scenes/props/cutouts/grass_tuft/grass_tuft.tres" id="18_tuft"]
+[ext_resource type="PackedScene" path="res://scenes/props/cutouts/spiral_flower_rose/spiral_flower_rose.tscn" id="19_flower_rose"]
+[ext_resource type="PackedScene" path="res://scenes/props/cutouts/spiral_flower_teal/spiral_flower_teal.tscn" id="20_flower_teal"]
+[ext_resource type="PackedScene" path="res://scenes/props/cutouts/gravestone/gravestone.tscn" id="21_gravestone"]
+[ext_resource type="PackedScene" path="res://scenes/props/cutouts/eye_bud/eye_bud.tscn" id="22_eye_bud"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -76,6 +81,12 @@ shader = ExtResource("9_water")
 shader_parameter/flow = Vector2(1, 0)
 shader_parameter/uv_scale = Vector2(5.6, 1)
 shader_parameter/lanes = 3.0
+
+[sub_resource type="MultiMesh" id="MultiMesh_tufts"]
+transform_format = 1
+instance_count = 90
+mesh = ExtResource("18_tuft")
+buffer = PackedFloat32Array(1.12855, 0, 0, 15.227, 0, 1.12855, 0, 0.119, 0, 0, 1.12855, -1.379, 0.914029, 0, 0, -1.804, 0, 0.914029, 0, 0.954, 0, 0, 0.914029, -4.725, 1.25339, 0, 0, 11.756, 0, 1.25339, 0, 0.139, 0, 0, 1.25339, 7.651, 1.06657, 0, 0, 11.761, 0, 1.06657, 0, 0.268, 0, 0, 1.06657, -6.117, 0.7647, 0, 0, 0.862, 0, 0.7647, 0, 0.199, 0, 0, 0.7647, -12.896, 1.25839, 0, 0, 5.028, 0, 1.25839, 0, 0.392, 0, 0, 1.25839, 0.26, 1.01175, 0, 0, 7.007, 0, 1.01175, 0, 0.29, 0, 0, 1.01175, 6.058, 0.89384, 0, 0, 4.364, 0, 0.89384, 0, 0.425, 0, 0, 0.89384, -3.909, 0.840337, 0, 0, 0.592, 0, 0.840337, 0, 0.552, 0, 0, 0.840337, -4.268, 0.878341, 0, 0, 16.617, 0, 0.878341, 0, 0.101, 0, 0, 0.878341, 2.642, 1.28985, 0, 0, -9.2, 0, 1.28985, 0, 0.399, 0, 0, 1.28985, -0.087, 1.01924, 0, 0, -2.863, 0, 1.01924, 0, 0.51, 0, 0, 1.01924, -11.781, 0.806681, 0, 0, -1.751, 0, 0.806681, 0, 0.141, 0, 0, 0.806681, 15.582, 0.901941, 0, 0, -6.6, 0, 0.901941, 0, 1.791, 0, 0, 0.901941, -6.339, 1.07551, 0, 0, -6.259, 0, 1.07551, 0, 0.401, 0, 0, 1.07551, 1.872, 0.82773, 0, 0, 1.973, 0, 0.82773, 0, 0.419, 0, 0, 0.82773, 0.94, 1.03072, 0, 0, 12.126, 0, 1.03072, 0, 0.128, 0, 0, 1.03072, 7.689, 0.840942, 0, 0, -6.485, 0, 0.840942, 0, 0.315, 0, 0, 0.840942, -13.503, 1.00314, 0, 0, 8.859, 0, 1.00314, 0, 0.331, 0, 0, 1.00314, -2.796, 1.20557, 0, 0, 0.749, 0, 1.20557, 0, 0.561, 0, 0, 1.20557, -6.455, 1.22537, 0, 0, -6.966, 0, 1.22537, 0, 0.348, 0, 0, 1.22537, 3.379, 0.927911, 0, 0, 10.104, 0, 0.927911, 0, 0.394, 0, 0, 0.927911, -10.491, 1.28359, 0, 0, 11.741, 0, 1.28359, 0, 0.294, 0, 0, 1.28359, -7.056, 1.01294, 0, 0, 0.456, 0, 1.01294, 0, 0.094, 0, 0, 1.01294, -14.929, 1.03843, 0, 0, -0.063, 0, 1.03843, 0, 0.197, 0, 0, 1.03843, -13.258, 1.22769, 0, 0, -9.437, 0, 1.22769, 0, 0.395, 0, 0, 1.22769, -0.256, 1.05902, 0, 0, -9.92, 0, 1.05902, 0, 0.172, 0, 0, 1.05902, 9.49, 0.793389, 0, 0, -2.35, 0, 0.793389, 0, 1.068, 0, 0, 0.793389, -8.466, 0.947758, 0, 0, -2.955, 0, 0.947758, 0, 1.345, 0, 0, 0.947758, -5.811, 1.25106, 0, 0, 0.634, 0, 1.25106, 0, 0.515, 0, 0, 1.25106, -3.154, 1.12241, 0, 0, -9.42, 0, 1.12241, 0, 0.969, 0, 0, 1.12241, -5.884, 1.14631, 0, 0, 2.292, 0, 1.14631, 0, 0.417, 0, 0, 1.14631, 0.857, 1.20275, 0, 0, -10.067, 0, 1.20275, 0, 0.771, 0, 0, 1.20275, -6.084, 1.03361, 0, 0, 3.709, 0, 1.03361, 0, 0.405, 0, 0, 1.03361, -0.734, 0.797656, 0, 0, -11.799, 0, 0.797656, 0, 0.167, 0, 0, 0.797656, -11.646, 0.999592, 0, 0, -1.322, 0, 0.999592, 0, 0.816, 0, 0, 0.999592, -4.283, 0.775937, 0, 0, -11.242, 0, 0.775937, 0, 0.293, 0, 0, 0.775937, -10.581, 0.972579, 0, 0, -0.055, 0, 0.972579, 0, 0.67, 0, 0, 0.972579, -5.79, 0.792174, 0, 0, 14.536, 0, 0.792174, 0, 0.137, 0, 0, 0.792174, -1.724, 1.17948, 0, 0, 2.987, 0, 1.17948, 0, 0.414, 0, 0, 1.17948, 0.086, 1.26517, 0, 0, 4.532, 0, 1.26517, 0, 0.248, 0, 0, 1.26517, -12.019, 1.04857, 0, 0, -10.571, 0, 1.04857, 0, 0.287, 0, 0, 1.04857, -11.716, 1.05286, 0, 0, -2.247, 0, 1.05286, 0, 0.955, 0, 0, 1.05286, -3.995, 1.14312, 0, 0, 10.125, 0, 1.14312, 0, 0.294, 0, 0, 1.14312, -0.617, 1.04782, 0, 0, 4.122, 0, 1.04782, 0, 0.26, 0, 0, 1.04782, 8.528, 1.00782, 0, 0, 1.02, 0, 1.00782, 0, 0.481, 0, 0, 1.00782, -8.307, 1.26689, 0, 0, 3.847, 0, 1.26689, 0, 0.228, 0, 0, 1.26689, 9.696, 1.0562, 0, 0, -9.804, 0, 1.0562, 0, 0.201, 0, 0, 1.0562, 8.464, 0.866434, 0, 0, 3.872, 0, 0.866434, 0, 0.188, 0, 0, 0.866434, 10.889, 0.918693, 0, 0, -12.324, 0, 0.918693, 0, 0.153, 0, 0, 0.918693, -10.711, 1.10434, 0, 0, -4.948, 0, 1.10434, 0, 1.533, 0, 0, 1.10434, -8.82, 1.18171, 0, 0, 3.507, 0, 1.18171, 0, 0.253, 0, 0, 1.18171, 9.077, 0.874151, 0, 0, 1.987, 0, 0.874151, 0, 0.302, 0, 0, 0.874151, 8.439, 1.20722, 0, 0, 6.217, 0, 1.20722, 0, 0.197, 0, 0, 1.20722, 9.542, 0.916349, 0, 0, -9.587, 0, 0.916349, 0, 0.485, 0, 0, 0.916349, -1.629, 1.01392, 0, 0, 1.049, 0, 1.01392, 0, 0.106, 0, 0, 1.01392, 15.599, 0.845182, 0, 0, -3.699, 0, 0.845182, 0, 1.468, 0, 0, 0.845182, -8.092, 0.980466, 0, 0, 9.223, 0, 0.980466, 0, 0.322, 0, 0, 0.980466, 0.535, 1.19108, 0, 0, -5.548, 0, 1.19108, 0, 0.208, 0, 0, 1.19108, -14.341, 1.04801, 0, 0, -5.741, 0, 1.04801, 0, 0.282, 0, 0, 1.04801, -13.75, 1.24149, 0, 0, -14.099, 0, 1.24149, 0, 0.116, 0, 0, 1.24149, 2.439, 0.986277, 0, 0, -11.199, 0, 0.986277, 0, 0.131, 0, 0, 0.986277, 9.756, 1.0771, 0, 0, 0.025, 0, 1.0771, 0, 0.526, 0, 0, 1.0771, -2.329, 1.22888, 0, 0, 9.363, 0, 1.22888, 0, 0.326, 0, 0, 1.22888, -3.252, 0.79207, 0, 0, -1.019, 0, 0.79207, 0, 0.594, 0, 0, 0.79207, -2.189, 1.11134, 0, 0, -7.466, 0, 1.11134, 0, 0.097, 0, 0, 1.11134, 13.459, 0.942613, 0, 0, -11.626, 0, 0.942613, 0, 0.346, 0, 0, 0.942613, -8.198, 1.24942, 0, 0, 5.747, 0, 1.24942, 0, 0.272, 0, 0, 1.24942, 7.521, 0.911729, 0, 0, 4.895, 0, 0.911729, 0, 0.256, 0, 0, 0.911729, 8.338, 1.24898, 0, 0, -2.962, 0, 1.24898, 0, 0.395, 0, 0, 1.24898, 3.708, 0.845144, 0, 0, -0.558, 0, 0.845144, 0, 0.157, 0, 0, 0.845144, 14.975, 1.07365, 0, 0, -2.166, 0, 1.07365, 0, 0.454, 0, 0, 1.07365, 1.079, 0.860216, 0, 0, -9.744, 0, 0.860216, 0, 0.394, 0, 0, 0.860216, -0.597, 1.26337, 0, 0, -2.137, 0, 1.26337, 0, 0.735, 0, 0, 1.26337, -2.526, 0.766515, 0, 0, -2.04, 0, 0.766515, 0, 0.454, 0, 0, 0.766515, 1.049, 0.90283, 0, 0, -1.628, 0, 0.90283, 0, 0.588, 0, 0, 0.90283, -10.556, 1.03037, 0, 0, -12.972, 0, 1.03037, 0, 0.182, 0, 0, 1.03037, -3.133, 1.11481, 0, 0, 1.962, 0, 1.11481, 0, 0.44, 0, 0, 1.11481, -1.997, 0.840673, 0, 0, -10.733, 0, 0.840673, 0, 0.561, 0, 0, 0.840673, -5.584, 0.902557, 0, 0, 6.085, 0, 0.902557, 0, 0.4, 0, 0, 0.902557, -11.279, 1.04997, 0, 0, 3.251, 0, 1.04997, 0, 0.411, 0, 0, 1.04997, -1.1, 1.10112, 0, 0, 5.73, 0, 1.10112, 0, 0.357, 0, 0, 1.10112, 3.461, 0.88483, 0, 0, -3.034, 0, 0.88483, 0, 0.79, 0, 0, 0.88483, -10.548, 1.00418, 0, 0, -7.596, 0, 1.00418, 0, 0.284, 0, 0, 1.00418, 6.817, 1.02329, 0, 0, -3.773, 0, 1.02329, 0, 0.384, 0, 0, 1.02329, 4.03, 1.27551, 0, 0, -3.201, 0, 1.27551, 0, 0.156, 0, 0, 1.27551, 14.802, 1.01214, 0, 0, -0.253, 0, 1.01214, 0, 0.612, 0, 0, 1.01214, -8.636, 1.18967, 0, 0, -0.498, 0, 1.18967, 0, 0.739, 0, 0, 1.18967, -7.217, 1.08027, 0, 0, -11.554, 0, 1.08027, 0, 0.354, 0, 0, 1.08027, -4.321, 0.800066, 0, 0, 5.687, 0, 0.800066, 0, 0.679, 0, 0, 0.800066, -7.922)
 
 [node name="DreamIsland" type="Node3D"]
 script = ExtResource("1_level")
@@ -146,6 +157,99 @@ transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 20.6, 0.
 [node name="ShinySpot" parent="." instance=ExtResource("6_spot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.918, -0.75)
 minigame = ExtResource("10_sample_2d")
+
+[node name="Cutouts" type="Node3D" parent="."]
+
+[node name="GrassTufts" type="MultiMeshInstance3D" parent="Cutouts"]
+multimesh = SubResource("MultiMesh_tufts")
+extra_cull_margin = 0.5
+
+[node name="Gravestone1" parent="Cutouts" instance=ExtResource("21_gravestone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 0.315, -1.2)
+
+[node name="Gravestone2" parent="Cutouts" instance=ExtResource("21_gravestone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.3, 0.229, 1.5)
+
+[node name="Gravestone3" parent="Cutouts" instance=ExtResource("21_gravestone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.6, 0.607, -2.6)
+
+[node name="EyeBud1" parent="Cutouts" instance=ExtResource("22_eye_bud")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0.404, -0.4)
+
+[node name="EyeBud2" parent="Cutouts" instance=ExtResource("22_eye_bud")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.441, -2.7)
+
+[node name="EyeBud3" parent="Cutouts" instance=ExtResource("22_eye_bud")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6, 0.327, 0.4)
+
+[node name="EyeBud4" parent="Cutouts" instance=ExtResource("22_eye_bud")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.8, 0.228, -2.8)
+
+[node name="EyeBud5" parent="Cutouts" instance=ExtResource("22_eye_bud")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 0.412, 4.4)
+
+[node name="Flower1" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.922148, 0, 0, 0, 0.922148, 0, 0, 0, 0.922148, 3.065, 0.424, 2.774)
+
+[node name="Flower2" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.992871, 0, 0, 0, 0.992871, 0, 0, 0, 0.992871, 2.283, 0.429, 2.846)
+
+[node name="Flower3" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.893641, 0, 0, 0, 0.893641, 0, 0, 0, 0.893641, 2.326, 0.437, 2.038)
+
+[node name="Flower4" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(1.10534, 0, 0, 0, 1.10534, 0, 0, 0, 1.10534, -3.632, 0.391, 5.49)
+
+[node name="Flower5" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(0.901804, 0, 0, 0, 0.901804, 0, 0, 0, 0.901804, -4.167, 0.374, 6.18)
+
+[node name="Flower6" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(1.10071, 0, 0, 0, 1.10071, 0, 0, 0, 1.10071, -4.285, 0.396, 4.828)
+
+[node name="Flower7" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.876155, 0, 0, 0, 0.876155, 0, 0, 0, 0.876155, 7.059, 0.706, -6.384)
+
+[node name="Flower8" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.911493, 0, 0, 0, 0.911493, 0, 0, 0, 0.911493, 6.153, 0.611, -5.814)
+
+[node name="Flower9" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.91004, 0, 0, 0, 0.91004, 0, 0, 0, 0.91004, 6.299, 0.679, -6.442)
+
+[node name="Flower10" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(1.06128, 0, 0, 0, 1.06128, 0, 0, 0, 1.06128, -1.654, 0.894, -4.161)
+
+[node name="Flower11" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(1.14463, 0, 0, 0, 1.14463, 0, 0, 0, 1.14463, -2.211, 0.904, -3.472)
+
+[node name="Flower12" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(1.10492, 0, 0, 0, 1.10492, 0, 0, 0, 1.10492, -2.36, 1.125, -4.865)
+
+[node name="Flower13" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(0.873799, 0, 0, 0, 0.873799, 0, 0, 0, 0.873799, 10.693, 0.31, -3.86)
+
+[node name="Flower14" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(0.881943, 0, 0, 0, 0.881943, 0, 0, 0, 0.881943, 9.751, 0.339, -3.214)
+
+[node name="Flower15" parent="Cutouts" instance=ExtResource("20_flower_teal")]
+transform = Transform3D(1.01562, 0, 0, 0, 1.01562, 0, 0, 0, 1.01562, 9.811, 0.374, -4.181)
+
+[node name="Flower16" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.866918, 0, 0, 0, 0.866918, 0, 0, 0, 0.866918, -0.307, 0.321, 10.461)
+
+[node name="Flower17" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(1.07532, 0, 0, 0, 1.07532, 0, 0, 0, 1.07532, -1.634, 0.303, 11.268)
+
+[node name="Flower18" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.915748, 0, 0, 0, 0.915748, 0, 0, 0, 0.915748, -0.993, 0.33, 10.211)
+
+[node name="Flower19" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(1.08055, 0, 0, 0, 1.08055, 0, 0, 0, 1.08055, -6.318, 0.798, -1.623)
+
+[node name="Flower20" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.860529, 0, 0, 0, 0.860529, 0, 0, 0, 0.860529, -7.291, 0.628, -0.881)
+
+[node name="Flower21" parent="Cutouts" instance=ExtResource("19_flower_rose")]
+transform = Transform3D(0.957416, 0, 0, 0, 0.957416, 0, 0, 0, 0.957416, -7.185, 0.804, -1.918)
 
 [node name="CloudSea" type="MultiMeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -26, 0)
