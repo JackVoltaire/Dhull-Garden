@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" path="res://assets/models/thorn_curl/thorn_curl.glb" id="23_thorn_curl"]
 [ext_resource type="QuadMesh" path="res://scenes/environment/floating_eyes/floating_eye.tres" id="24_eye"]
 [ext_resource type="QuadMesh" path="res://scenes/environment/doodles/doodles.tres" id="25_doodles"]
+[ext_resource type="Shader" path="res://assets/shaders/stained_glass_sky.gdshader" id="26_sky"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -46,15 +47,14 @@ colors = PackedColorArray(0.62, 0.7, 1, 1, 0.62, 0.7, 1, 1, 1, 0.72, 0.68, 1, 1,
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
 colors = PackedColorArray(0.05, 0.05, 0.12, 1, 0.05, 0.05, 0.12, 1, 0.2, 0.09, 0.24, 1, 0.16, 0.1, 0.32, 1, 0.16, 0.1, 0.32, 1, 0.2, 0.08, 0.2, 1, 0.05, 0.05, 0.12, 1, 0.05, 0.05, 0.12, 1)
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dream"]
-sky_top_color = Color(0.15, 0.09, 0.36, 1)
-sky_horizon_color = Color(0.44, 0.31, 0.7, 1)
-ground_bottom_color = Color(0.16, 0.1, 0.3, 1)
-ground_horizon_color = Color(0.44, 0.31, 0.7, 1)
-ground_curve = 0.12
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
+shader = ExtResource("26_sky")
+shader_parameter/top_color = Color(0.15, 0.09, 0.36, 1)
+shader_parameter/horizon_color = Color(0.44, 0.31, 0.7, 1)
+shader_parameter/ground_color = Color(0.16, 0.1, 0.3, 1)
 
 [sub_resource type="Sky" id="Sky_dream"]
-sky_material = SubResource("ProceduralSkyMaterial_dream")
+sky_material = SubResource("ShaderMaterial_sky")
 
 [sub_resource type="Environment" id="Environment_dream"]
 background_mode = 2
@@ -186,15 +186,15 @@ transform = Transform3D(1.46234, 0, -1.74275, 0, 2.275, 0, 1.74275, 0, 1.46234, 
 transform = Transform3D(-1.64446, 0, -0.598535, 0, 1.75, 0, 0.598535, 0, -1.64446, -3, 0.05, 16)
 
 [node name="FloatingEyes" type="MultiMeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 cast_shadow = 0
 script = ExtResource("8_cutout_ring")
 cutout_mesh = ExtResource("24_eye")
-count = 12
-outer_radius = 30.0
-inner_radius = 22.0
-height_variation = 5.0
-size_range = Vector2(2.6, 4.6)
+count = 14
+outer_radius = 34.0
+inner_radius = 20.0
+height_variation = 6.0
+size_range = Vector2(4, 7)
 random_seed = 5
 
 [node name="SkyDoodles" type="MultiMeshInstance3D" parent="."]

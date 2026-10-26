@@ -29,6 +29,7 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   - a day/night sky (`SkyCycle`), and a film-grain screen overlay (`ScreenTexture`)
 - **Look** (PR #10, the latest, after the user agreed the island was still far from the
   moodboard):
+  - a stained-glass sky: a speckled mosaic of broken stained glass, colored by time of day
   - contrast: a deep violet sky (rose dawn, ember dusk, near-black night), dark slate ground,
     distance fog instead of the old milky volumetric fog, and glowing accents
   - ink lines drawn in screen space along silhouettes and folds (`InkOutlines`)
@@ -71,10 +72,8 @@ tools aren't available locally, the summary at the end of this file covers it.
 
 ## Open questions for the user
 
-1. The design doc's Art direction still says the palette "stays free and pastel" and
-   "Outlines: none, or very subtle", but the moodboard and the look now have a dark base and
-   heavy ink lines. Should those lines change? Don't edit the user's words without asking.
-2. Should the film grain, scanlines and vignette stay as they are, get subtler, or go?
+None right now. The user had the design doc updated for the dark base and heavy ink lines,
+and is happy with the film grain, scanlines and vignette for now.
 
 Offered but not started:
 - 3D flowers for the island.

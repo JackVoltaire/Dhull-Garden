@@ -118,11 +118,13 @@ above it.
   and crayon streaks, laid out in world space; tune the marks per material. Instance
   `scenes/environment/ink_outlines.tscn` in a level for ink lines along silhouettes and sharp
   folds, the same width on screen at any distance; tune `line_width`, `silhouette_gap` and
-  `crease_angle` on its material. `SkyCycle` colors the sky, sunlight, fog and shadow tint
-  from gradients that run from midnight to midnight, and shows the drawn sun by day and the moon
-  by night; in the editor, drag its **Preview Hour** to see any time of day.
-  `stylized_water.gdshader` draws the jagged lines on water; tune its lanes, jaggedness, dashes
-  and `line_glow` per material. Instance
+  `crease_angle` on its material. `SkyCycle` colors the sky, sunlight, fog and shadow tint from
+  gradients that run from midnight to midnight, and shows the drawn sun by day and the moon by
+  night; in the editor, drag its **Preview Hour** to see any time of day. The sky itself is
+  `stained_glass_sky.gdshader`, a speckled mosaic of broken stained glass: shards of colored
+  glass in dark lead, some cracked or missing; tune the shards, lead, accents and specks on the
+  sky material. `stylized_water.gdshader` draws the jagged lines on water; tune its lanes,
+  jaggedness, dashes and `line_glow` per material. Instance
   `scenes/environment/screen_texture.tscn` in a level for film grain, faint scanlines and a
   vignette over the whole screen.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
@@ -132,14 +134,14 @@ above it.
   settings. A strip can hold several drawings one after another (`variants`); each copy picks
   one. Next to the image, save a QuadMesh resource, shaped like one frame, whose material uses
   `cardboard_cutout.gdshader`, and set the material's `frames`, `frame_count`, `fps` and
-  `variants`; raise `self_light` for drawings that should glow. Place it with a MeshInstance3D
-  (the tree tops in `scenes/props/goth_tree/`), or a `CutoutRing` to scatter many in a ring (the
-  clouds, floating eyes and sky doodles). Cutouts face the camera and are lit as if they faced
-  the sky; each copy starts on its own frame and may be mirrored. A cutout's shadow is its whole
-  drawing, cast towards the light; set `shadow_offset` to about half the mesh's width so it
-  doesn't shadow itself. The sun and moon use `sky_cutout.gdshader` instead, which ignores light
-  and fog (raise `brightness` above 1 to make them shine); they hang far out along the Sun
-  light's +Z axis.
+  `variants`; raise `self_light` for drawings that should glow, and set `world_light` to 0 to
+  keep their drawn colors in any light. Place it with a MeshInstance3D (the tree tops in
+  `scenes/props/goth_tree/`), or a `CutoutRing` to scatter many in a ring (the clouds, floating
+  eyes and sky doodles). Cutouts face the camera and are lit as if they faced the sky; each copy
+  starts on its own frame and may be mirrored. A cutout's shadow is its whole drawing, cast
+  towards the light; set `shadow_offset` to about half the mesh's width so it doesn't shadow
+  itself. The sun and moon use `sky_cutout.gdshader` instead, which ignores light and fog (raise
+  `brightness` above 1 to make them shine); they hang far out along the Sun light's +Z axis.
 - **Debug menu.** F3 shows the date, day phase, season and active events, and has buttons to
   jump the clock forward, save, load, wipe the save, switch levels and launch any minigame.
 

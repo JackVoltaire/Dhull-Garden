@@ -21,6 +21,9 @@ uniform float alpha_cut : hint_range(0.0, 1.0) = 0.5;
 uniform vec4 tint : source_color = vec4(1.0);
 // Light of the drawing's own, so bright accents keep their color in shade and at night.
 uniform float self_light : hint_range(0.0, 2.0) = 0.0;
+// How much the world's light falls on the drawing. At 0 it keeps exactly its drawn colors by day
+// and night, as bright as self_light makes it.
+uniform float world_light : hint_range(0.0, 1.0) = 1.0;
 // How far the shadow caster sits behind the drawing, along the light, in mesh units; about
 // half the mesh's width. The shadow on the ground stays in place, but the drawing stops
 // shadowing itself.
@@ -81,7 +84,7 @@ void fragment() {
 	uv.x = mix(uv.x, 1.0 - uv.x, flip);
 	uv.x = (uv.x + frame) / float(frame_count * variants);
 	vec4 color = texture(frames, uv) * tint;
-	ALBEDO = color.rgb;
+	ALBEDO = color.rgb * world_light;
 	EMISSION = color.rgb * self_light;
 	ALPHA = color.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_cut;

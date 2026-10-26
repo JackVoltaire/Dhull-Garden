@@ -5,7 +5,8 @@ extends Node
 ## the game. In the editor it shows [member preview_hour] instead, to try out the look.
 ##
 ## Each gradient covers one day, from midnight at the left edge to midnight at the right.
-## Needs a WorldEnvironment whose sky uses a ProceduralSkyMaterial.
+## Needs a WorldEnvironment whose sky material is a ShaderMaterial with top_color,
+## horizon_color and ground_color parameters, like stained_glass_sky.gdshader.
 
 @export var world_environment: WorldEnvironment
 ## Sunlight by day and moonlight by night.
@@ -46,12 +47,11 @@ func _apply() -> void:
 	if not Engine.is_editor_hint():
 		day_fraction = Clock.day_fraction()
 	var environment := world_environment.environment
-	var sky := environment.sky.sky_material as ProceduralSkyMaterial
+	var sky := environment.sky.sky_material as ShaderMaterial
 	if sky:
-		sky.sky_top_color = _sample(sky_top, day_fraction, sky.sky_top_color)
-		sky.sky_horizon_color = _sample(sky_horizon, day_fraction, sky.sky_horizon_color)
-		sky.ground_horizon_color = sky.sky_horizon_color
-		sky.ground_bottom_color = _sample(ground, day_fraction, sky.ground_bottom_color)
+		_set_sky_color(sky, &"top_color", sky_top, day_fraction)
+		_set_sky_color(sky, &"horizon_color", sky_horizon, day_fraction)
+		_set_sky_color(sky, &"ground_color", ground, day_fraction)
 	environment.fog_light_color = _sample(fog_color, day_fraction, environment.fog_light_color)
 	environment.ambient_light_color = _sample(
 		shadow_tint, day_fraction, environment.ambient_light_color
@@ -73,3 +73,11 @@ func _apply() -> void:
 
 static func _sample(gradient: Gradient, offset: float, fallback: Color) -> Color:
 	return gradient.sample(offset) if gradient else fallback
+
+
+static func _set_sky_color(
+	sky: ShaderMaterial, parameter: StringName, gradient: Gradient, offset: float
+) -> void:
+	sky.set_shader_parameter(
+		parameter, _sample(gradient, offset, sky.get_shader_parameter(parameter))
+	)
