@@ -133,11 +133,17 @@ pipx install "gdtoolkit==4.*"
 gdlint . && gdformat --check .   # drop --check to apply formatting
 ```
 
+`tools/godot.sh` runs Godot from the command line, passing on all its arguments. On 64-bit
+x86 Linux it downloads Godot 4.7.2 the first time, verifies it against the official SHA-512
+checksums and caches it in `~/.cache/dhull-garden`. Elsewhere, or to use your own copy, set
+`GODOT` to the path of a Godot binary. `.claude/settings.json` lets Claude Code run this
+script without asking.
+
 Tests live in `tests/unit/`: any `test_*.gd` file extending `TestCase`, with `test_*`
 methods. Run them all with:
 
 ```sh
-godot --headless --path . res://tests/test_runner.tscn
+tools/godot.sh --headless --path . res://tests/test_runner.tscn
 ```
 
 or open `tests/test_runner.tscn` and press F6. A test fails on a failed assertion or on any
