@@ -147,7 +147,10 @@ float glass_blackness(vec3 direction) {
 // A drawing as seen through the black of the window: its dark ink lines turn white, everything
 // else black.
 vec3 glass_line_art(vec3 drawing_color) {
-	float brightness = dot(drawing_color, vec3(0.3, 0.55, 0.15));
-	// Generous, as ink lines blur into their surroundings when a drawing is small on screen.
-	return vec3(1.0 - smoothstep(0.3, 0.45, brightness));
+	// Judged on screen brightness, not the linear color, so mid tones like orange don't pass for
+	// ink. Not named `brightness`: sky_cutout has a uniform by that name, which would win.
+	vec3 on_screen = pow(max(drawing_color, vec3(0.0)), vec3(1.0 / 2.2));
+	float luminance = dot(on_screen, vec3(0.3, 0.55, 0.15));
+	// A little generous, as ink lines blur into their surroundings when a drawing is small.
+	return vec3(1.0 - smoothstep(0.1, 0.18, luminance));
 }
