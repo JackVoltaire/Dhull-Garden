@@ -2,7 +2,7 @@ extends Node
 ## Runs minigames, registered as the [code]Minigames[/code] autoload.
 ##
 ## [method launch] switches to a minigame's scene. The minigame reads [member context] for its
-## input (which creature is playing, difficulty, ...) and calls [method finish] with its result.
+## input (which Dhull is playing, difficulty, ...) and calls [method finish] with its result.
 ## The player then returns to the scene they launched it from, and [signal minigame_finished]
 ## carries the result to whoever hands out rewards.
 ##
