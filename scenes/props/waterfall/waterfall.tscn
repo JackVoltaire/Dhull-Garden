@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/stylized_water.gdshader" id="1_water"]
+[ext_resource type="Script" path="res://scenes/props/waterfall/splash_puffs.gd" id="2_puffs"]
+[ext_resource type="Texture2D" path="res://scenes/props/waterfall/splash_puff.svg" id="3_puff"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_fall"]
+size = Vector2(3, 22)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fall"]
+render_priority = 0
+shader = ExtResource("1_water")
+shader_parameter/flow = Vector2(0, 1)
+shader_parameter/uv_scale = Vector2(1, 7.3)
+
+[node name="Waterfall" type="Node3D"]
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0)
+mesh = SubResource("QuadMesh_fall")
+surface_material_override/0 = SubResource("ShaderMaterial_fall")
+
+[node name="Splash" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -21.5, 0)
+script = ExtResource("2_puffs")
+texture = ExtResource("3_puff")

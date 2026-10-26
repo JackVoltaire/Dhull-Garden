@@ -1,0 +1,294 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/levels/level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/props/floating_island/floating_island.tscn" id="3_island"]
+[ext_resource type="PackedScene" path="res://scenes/props/dream_tree/dream_tree.tscn" id="4_tree"]
+[ext_resource type="PackedScene" path="res://scenes/props/waterfall/waterfall.tscn" id="5_waterfall"]
+[ext_resource type="PackedScene" path="res://scenes/props/shiny_spot/shiny_spot.tscn" id="6_spot"]
+[ext_resource type="Script" path="res://scenes/environment/sky_cycle.gd" id="7_sky_cycle"]
+[ext_resource type="Script" path="res://scenes/environment/cloud_sea.gd" id="8_cloud_sea"]
+[ext_resource type="Shader" path="res://assets/shaders/stylized_water.gdshader" id="9_water"]
+[ext_resource type="Resource" path="res://data/minigames/sample_2d.tres" id="10_sample_2d"]
+[ext_resource type="Material" path="res://assets/materials/toon_grass.tres" id="11_grass"]
+[ext_resource type="Material" path="res://assets/materials/toon_island_rock.tres" id="12_rock"]
+[ext_resource type="Material" path="res://assets/materials/toon_leaves_mint.tres" id="13_mint"]
+[ext_resource type="Material" path="res://assets/materials/toon_cloud.tres" id="14_cloud"]
+[ext_resource type="Material" path="res://assets/materials/toon_spooky.tres" id="15_spooky"]
+[ext_resource type="Material" path="res://assets/materials/toon_snow.tres" id="16_snow"]
+[ext_resource type="Material" path="res://assets/materials/toon_ice.tres" id="17_ice"]
+[ext_resource type="Material" path="res://assets/materials/toon_bark.tres" id="18_bark"]
+
+[sub_resource type="Gradient" id="Gradient_sky_top"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
+colors = PackedColorArray(0.27, 0.24, 0.45, 1, 0.27, 0.24, 0.45, 1, 0.58, 0.56, 0.86, 1, 0.56, 0.72, 0.96, 1, 0.56, 0.72, 0.96, 1, 0.52, 0.44, 0.78, 1, 0.27, 0.24, 0.45, 1, 0.27, 0.24, 0.45, 1)
+
+[sub_resource type="Gradient" id="Gradient_sky_horizon"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
+colors = PackedColorArray(0.42, 0.35, 0.58, 1, 0.42, 0.35, 0.58, 1, 1, 0.79, 0.83, 1, 0.98, 0.88, 0.93, 1, 0.98, 0.88, 0.93, 1, 1, 0.72, 0.7, 1, 0.42, 0.35, 0.58, 1, 0.42, 0.35, 0.58, 1)
+
+[sub_resource type="Gradient" id="Gradient_ground"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
+colors = PackedColorArray(0.33, 0.29, 0.48, 1, 0.33, 0.29, 0.48, 1, 0.96, 0.83, 0.9, 1, 0.95, 0.9, 0.99, 1, 0.95, 0.9, 0.99, 1, 0.92, 0.72, 0.8, 1, 0.33, 0.29, 0.48, 1, 0.33, 0.29, 0.48, 1)
+
+[sub_resource type="Gradient" id="Gradient_light"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
+colors = PackedColorArray(0.62, 0.66, 0.95, 1, 0.62, 0.66, 0.95, 1, 1, 0.82, 0.78, 1, 1, 0.97, 0.93, 1, 1, 0.97, 0.93, 1, 1, 0.74, 0.64, 1, 0.62, 0.66, 0.95, 1, 0.62, 0.66, 0.95, 1)
+
+[sub_resource type="Gradient" id="Gradient_fog"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
+colors = PackedColorArray(0.4, 0.34, 0.56, 1, 0.4, 0.34, 0.56, 1, 0.98, 0.8, 0.86, 1, 0.96, 0.9, 0.97, 1, 0.96, 0.9, 0.97, 1, 0.98, 0.74, 0.76, 1, 0.4, 0.34, 0.56, 1, 0.4, 0.34, 0.56, 1)
+
+[sub_resource type="Gradient" id="Gradient_shadow"]
+offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
+colors = PackedColorArray(0.42, 0.38, 0.68, 1, 0.42, 0.38, 0.68, 1, 0.95, 0.76, 0.9, 1, 0.86, 0.78, 0.98, 1, 0.86, 0.78, 0.98, 1, 0.95, 0.72, 0.86, 1, 0.42, 0.38, 0.68, 1, 0.42, 0.38, 0.68, 1)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dream"]
+sky_top_color = Color(0.56, 0.72, 0.96, 1)
+sky_horizon_color = Color(0.98, 0.88, 0.93, 1)
+ground_bottom_color = Color(0.95, 0.9, 0.99, 1)
+ground_horizon_color = Color(0.95, 0.9, 0.99, 1)
+
+[sub_resource type="Sky" id="Sky_dream"]
+sky_material = SubResource("ProceduralSkyMaterial_dream")
+
+[sub_resource type="Environment" id="Environment_dream"]
+background_mode = 2
+sky = SubResource("Sky_dream")
+ambient_light_color = Color(0.86, 0.78, 0.98, 1)
+ambient_light_sky_contribution = 0.5
+ambient_light_energy = 0.55
+glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.96, 0.9, 0.97, 1)
+fog_density = 0.004
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(1, 0.94, 0.97, 1)
+volumetric_fog_length = 80.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_stream"]
+size = Vector2(9, 1.6)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stream"]
+render_priority = 0
+shader = ExtResource("9_water")
+shader_parameter/flow = Vector2(1, 0)
+shader_parameter/uv_scale = Vector2(5.6, 1)
+shader_parameter/lanes = 3.0
+
+[node name="DreamIsland" type="Node3D"]
+script = ExtResource("1_level")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dream")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 0, 0, 0)
+shadow_enabled = true
+shadow_normal_bias = 4.0
+sky_mode = 1
+directional_shadow_max_distance = 70.0
+
+[node name="SkyCycle" type="Node" parent="." node_paths=PackedStringArray("world_environment", "sun")]
+script = ExtResource("7_sky_cycle")
+world_environment = NodePath("../WorldEnvironment")
+sun = NodePath("../Sun")
+sky_top = SubResource("Gradient_sky_top")
+sky_horizon = SubResource("Gradient_sky_horizon")
+ground = SubResource("Gradient_ground")
+light_color = SubResource("Gradient_light")
+fog_color = SubResource("Gradient_fog")
+shadow_tint = SubResource("Gradient_shadow")
+
+[node name="Island" parent="." instance=ExtResource("3_island")]
+radius = 18.0
+depth = 16.0
+
+[node name="Hill" type="CSGSphere3D" parent="Island"]
+transform = Transform3D(1, 0, 0, 0, 0.45, 0, 0, 0, 1, -6, -1.5, -7)
+radius = 6.0
+radial_segments = 24
+rings = 12
+material = ExtResource("11_grass")
+
+[node name="SpringRock" type="CSGSphere3D" parent="Island"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.4, 0.2, 4)
+radius = 1.3
+radial_segments = 7
+rings = 4
+smooth_faces = false
+material = ExtResource("12_rock")
+
+[node name="DigRock" type="CSGSphere3D" parent="Island"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.3, -1.5)
+radius = 1.2
+radial_segments = 7
+rings = 4
+smooth_faces = false
+material = ExtResource("12_rock")
+
+[node name="TreePink1" parent="." instance=ExtResource("4_tree")]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 3.5, 0, -7)
+
+[node name="TreeMint1" parent="." instance=ExtResource("4_tree")]
+transform = Transform3D(-0.880951, 0, 0.739206, 0, 1.15, 0, -0.739206, 0, -0.880951, -10, 0, 4)
+leaves_material = ExtResource("13_mint")
+
+[node name="TreePink2" parent="." instance=ExtResource("4_tree")]
+transform = Transform3D(0.232937, 0, 0.869333, 0, 0.9, 0, -0.869333, 0, 0.232937, -3, 0, 10)
+
+[node name="TreePink3" parent="." instance=ExtResource("4_tree")]
+transform = Transform3D(-1.12763, 0, -0.410424, 0, 1.2, 0, 0.410424, 0, -1.12763, 9, 0, -10)
+
+[node name="TreeMint2" parent="." instance=ExtResource("4_tree")]
+transform = Transform3D(0.65, 0, -1.12583, 0, 1.3, 0, 1.12583, 0, 0.65, -6, 1.1, -7)
+leaves_material = ExtResource("13_mint")
+
+[node name="TreeMint3" parent="." instance=ExtResource("4_tree")]
+transform = Transform3D(0.601041, 0, 0.601041, 0, 0.85, 0, -0.601041, 0, 0.601041, -13, 0, -5)
+leaves_material = ExtResource("13_mint")
+
+[node name="Stream" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0.03, 4)
+mesh = SubResource("PlaneMesh_stream")
+surface_material_override/0 = SubResource("ShaderMaterial_stream")
+
+[node name="Waterfall" parent="." instance=ExtResource("5_waterfall")]
+transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 17.6, 0.03, 4)
+
+[node name="ShinySpot" parent="." instance=ExtResource("6_spot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.7, -0.2)
+minigame = ExtResource("10_sample_2d")
+
+[node name="CloudSea" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -24, 0)
+script = ExtResource("8_cloud_sea")
+cloud_material = ExtResource("14_cloud")
+count = 700
+outer_radius = 160.0
+height_variation = 1.5
+size_range = Vector2(8, 18)
+
+[node name="SpookyIsland" parent="." instance=ExtResource("3_island")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 6, -80)
+radius = 9.0
+depth = 11.0
+top_material = ExtResource("15_spooky")
+
+[node name="Spire1" type="CSGCylinder3D" parent="SpookyIsland"]
+transform = Transform3D(0.990268, -0.139173, 0, 0.139173, 0.990268, 0, 0, 0, 1, -2, 3.55, -1)
+radius = 0.9
+height = 7.5
+sides = 4
+cone = true
+smooth_faces = false
+material = ExtResource("15_spooky")
+
+[node name="Spire2" type="CSGCylinder3D" parent="SpookyIsland"]
+transform = Transform3D(0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 0, 0, 1, 2.5, 2.55, 1.5)
+radius = 0.9
+height = 5.5
+sides = 4
+cone = true
+smooth_faces = false
+material = ExtResource("15_spooky")
+
+[node name="Spire3" type="CSGCylinder3D" parent="SpookyIsland"]
+transform = Transform3D(0.997564, -0.0697565, 0, 0.0697565, 0.997564, 0, 0, 0, 1, 0.5, 4.55, -4)
+radius = 0.9
+height = 9.5
+sides = 4
+cone = true
+smooth_faces = false
+material = ExtResource("15_spooky")
+
+[node name="Spire4" type="CSGCylinder3D" parent="SpookyIsland"]
+transform = Transform3D(0.951057, 0.309017, 0, -0.309017, 0.951057, 0, 0, 0, 1, -5, 2.05, 3)
+radius = 0.9
+height = 4.5
+sides = 4
+cone = true
+smooth_faces = false
+material = ExtResource("15_spooky")
+
+[node name="DeadTree" type="CSGCylinder3D" parent="SpookyIsland"]
+transform = Transform3D(0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0, 1, 4.5, 1.6, -2)
+radius = 0.25
+height = 3.4
+sides = 5
+smooth_faces = false
+material = ExtResource("18_bark")
+
+[node name="DeadBranch" type="CSGCylinder3D" parent="SpookyIsland"]
+transform = Transform3D(0.573576, -0.819152, 0, 0.819152, 0.573576, 0, 0, 0, 1, 4, 3, -2)
+radius = 0.12
+height = 1.8
+sides = 4
+smooth_faces = false
+material = ExtResource("18_bark")
+
+[node name="ChillyIsland" parent="." instance=ExtResource("3_island")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 10, -72)
+radius = 10.0
+depth = 12.0
+top_material = ExtResource("16_snow")
+rock_material = ExtResource("17_ice")
+
+[node name="Peak1" type="CSGCylinder3D" parent="ChillyIsland"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 3.8, -2)
+radius = 4.0
+height = 8.0
+sides = 6
+cone = true
+smooth_faces = false
+material = ExtResource("17_ice")
+
+[node name="Snowcap1" type="CSGCylinder3D" parent="ChillyIsland"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 6.24, -2)
+radius = 1.68
+height = 3.36
+sides = 6
+cone = true
+smooth_faces = false
+material = ExtResource("16_snow")
+
+[node name="Peak2" type="CSGCylinder3D" parent="ChillyIsland"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.55, 1.5)
+radius = 2.8
+height = 5.5
+sides = 6
+cone = true
+smooth_faces = false
+material = ExtResource("17_ice")
+
+[node name="Snowcap2" type="CSGCylinder3D" parent="ChillyIsland"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 4.29, 1.5)
+radius = 1.18
+height = 2.31
+sides = 6
+cone = true
+smooth_faces = false
+material = ExtResource("16_snow")
+
+[node name="Peak3" type="CSGCylinder3D" parent="ChillyIsland"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.8, 2.5)
+radius = 2.2
+height = 4.0
+sides = 6
+cone = true
+smooth_faces = false
+material = ExtResource("17_ice")
+
+[node name="Snowcap3" type="CSGCylinder3D" parent="ChillyIsland"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 3.12, 2.5)
+radius = 0.924
+height = 1.68
+sides = 6
+cone = true
+smooth_faces = false
+material = ExtResource("16_snow")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 7)

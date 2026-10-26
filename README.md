@@ -9,7 +9,7 @@ with dated events like Animal Crossing, and has minigames in both 2D and 3D.
 1. Install **Godot 4.7** (the standard build; the project uses GDScript, not C#).
 2. In the Project Manager choose **Import**, then select this folder's `project.godot`.
 3. Press **F5** to run. The game continues the save in slot 0 (or starts one) and drops you
-   in the sandbox garden with a third-person character.
+   on the dream island, a look-test level, with a third-person character.
 
 The first time the editor opens the project it generates `*.uid` files next to scripts and
 `*.import` files next to assets. Commit both: Godot uses them to keep references intact when
@@ -50,16 +50,21 @@ data/               Game content as .tres resources
 scenes/
   main/             Entry scene: loads the save and enters the garden
   levels/           Level, the root script of walkable areas
+  levels/dream_island/  Look-test floating island: art direction, sky and effects
   levels/sandbox/   Greybox garden for trying out movement and mechanics
+  environment/      SkyCycle (sky and light by time of day) and CloudSea
   player/           Player scene and its controller script
-  props/            Reusable things placed in levels, such as shiny_spot/
+  props/            Reusable things placed in levels: floating_island/, dream_tree/,
+                    waterfall/, shiny_spot/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
 assets/             Shared imported resources, by type
-  audio/ fonts/ materials/ models/ textures/
+  materials/        The toon material palette (toon_*.tres)
+  shaders/          stylized_water.gdshader and other shared shaders
+  audio/ fonts/ models/ textures/
 ```
 
 Scenes are grouped **by feature**: a scene, its script and any resources only it uses sit
@@ -106,8 +111,13 @@ above it.
 - **Text.** Put player-facing text in `localization/strings.csv` and use the key: Controls
   translate their `text` automatically, and in code use `tr("KEY")`. Add a column to add a
   language.
+- **Look.** The art direction is in the design notes. Toon-shaded pastel materials live in
+  `assets/materials/`; editing one recolors everything that uses it. `SkyCycle` colors the sky,
+  sunlight, fog and shadow tint from gradients that run from midnight to midnight; in the
+  editor, drag its **Preview Hour** to see any time of day. `stylized_water.gdshader` draws the
+  jagged lines on water; tune its lanes, jaggedness and dashes per material.
 - **Debug menu.** F3 shows the date, day phase, season and active events, and has buttons to
-  jump the clock forward, save, load, wipe the save and launch any minigame.
+  jump the clock forward, save, load, wipe the save, switch levels and launch any minigame.
 
 ## Conventions
 

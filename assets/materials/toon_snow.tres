@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "toon_snow"
+albedo_color = Color(0.94, 0.97, 1, 1)
+diffuse_mode = 3
+specular_mode = 2
