@@ -65,18 +65,11 @@ together in one folder. `assets/` is for things shared across features.
 - **Greyboxing:** block out levels with CSG nodes (see `sandbox.tscn`) and replace them with
   real meshes once a layout feels right.
 
-## Tooling and CI
+## Tooling
 
-GitHub Actions runs on every pull request and on pushes to `main`:
+[gdtoolkit](https://github.com/Scony/godot-gdscript-toolkit) lints and formats GDScript:
 
-- **GDScript lint and format:** [gdtoolkit](https://github.com/Scony/godot-gdscript-toolkit)
-  runs `gdlint` and `gdformat --check`. To run them locally:
-
-  ```sh
-  pipx install "gdtoolkit==4.*"
-  gdlint . && gdformat --check .   # drop --check to apply formatting
-  ```
-
-- **Godot import and smoke run:** imports the project headless with Godot 4.7.2, runs the
-  main scene for 120 frames, and fails if the engine prints any error. When upgrading Godot,
-  bump `GODOT_VERSION` in `.github/workflows/ci.yml` along with the editor.
+```sh
+pipx install "gdtoolkit==4.*"
+gdlint . && gdformat --check .   # drop --check to apply formatting
+```
