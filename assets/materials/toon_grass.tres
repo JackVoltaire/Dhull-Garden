@@ -1,10 +1,9 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="ShaderMaterial" format=3]
 
-[ext_resource type="Material" path="res://assets/materials/toon_ink_outline.tres" id="1_ink"]
+[ext_resource type="Shader" path="res://assets/shaders/toon_hatched.gdshader" id="1_shader"]
 
 [resource]
 resource_name = "toon_grass"
-next_pass = ExtResource("1_ink")
-albedo_color = Color(0.22, 0.34, 0.32, 1)
-diffuse_mode = 3
-specular_mode = 2
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/albedo = Color(0.14, 0.22, 0.24, 1)

@@ -16,7 +16,8 @@ extends Node
 @export var moon_cutout: Node3D
 @export var sky_top: Gradient
 @export var sky_horizon: Gradient
-## Below the horizon, behind the sea of clouds.
+## Straight down, below the sea of clouds. Towards the horizon it blends into
+## [member sky_horizon], so there's no seam where the sky meets the ground.
 @export var ground: Gradient
 @export var light_color: Gradient
 @export var fog_color: Gradient
@@ -49,8 +50,8 @@ func _apply() -> void:
 	if sky:
 		sky.sky_top_color = _sample(sky_top, day_fraction, sky.sky_top_color)
 		sky.sky_horizon_color = _sample(sky_horizon, day_fraction, sky.sky_horizon_color)
-		sky.ground_horizon_color = _sample(ground, day_fraction, sky.ground_horizon_color)
-		sky.ground_bottom_color = sky.ground_horizon_color
+		sky.ground_horizon_color = sky.sky_horizon_color
+		sky.ground_bottom_color = _sample(ground, day_fraction, sky.ground_bottom_color)
 	environment.fog_light_color = _sample(fog_color, day_fraction, environment.fog_light_color)
 	environment.ambient_light_color = _sample(
 		shadow_tint, day_fraction, environment.ambient_light_color

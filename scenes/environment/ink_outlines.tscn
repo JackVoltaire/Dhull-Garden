@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/ink_outlines.gdshader" id="1_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ink"]
+render_priority = 0
+shader = ExtResource("1_shader")
+
+[sub_resource type="QuadMesh" id="QuadMesh_screen"]
+material = SubResource("ShaderMaterial_ink")
+size = Vector2(2, 2)
+
+[node name="InkOutlines" type="MeshInstance3D"]
+cast_shadow = 0
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_screen")

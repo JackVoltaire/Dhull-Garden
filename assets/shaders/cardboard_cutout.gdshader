@@ -19,6 +19,8 @@ uniform int billboard : hint_enum("Off", "Upright", "Full") = 2;
 uniform bool random_flip = true;
 uniform float alpha_cut : hint_range(0.0, 1.0) = 0.5;
 uniform vec4 tint : source_color = vec4(1.0);
+// Light of the drawing's own, so bright accents keep their color in shade and at night.
+uniform float self_light : hint_range(0.0, 2.0) = 0.0;
 // How far the shadow caster sits behind the drawing, along the light, in mesh units; about
 // half the mesh's width. The shadow on the ground stays in place, but the drawing stops
 // shadowing itself.
@@ -80,6 +82,7 @@ void fragment() {
 	uv.x = (uv.x + frame) / float(frame_count * variants);
 	vec4 color = texture(frames, uv) * tint;
 	ALBEDO = color.rgb;
+	EMISSION = color.rgb * self_light;
 	ALPHA = color.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_cut;
 	// Also seen from behind (standees), keep the sky-facing normal rather than a flipped one.

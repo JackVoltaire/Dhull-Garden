@@ -52,8 +52,8 @@ scenes/
   levels/           Level, the root script of walkable areas
   levels/dream_island/  Look-test floating island: art direction, sky and effects
   levels/sandbox/   Greybox garden for trying out movement and mechanics
-  environment/      SkyCycle (sky and light by time of day), CloudSea, ScreenTexture, and the
-                    drawn clouds/ and sun_moon/
+  environment/      SkyCycle (sky and light by time of day), CutoutRing, InkOutlines,
+                    ScreenTexture, and the drawn clouds/, sun_moon/, floating_eyes/ and doodles/
   player/           Player scene and its controller script
   props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
@@ -113,12 +113,16 @@ above it.
   translate their `text` automatically, and in code use `tr("KEY")`. Add a column to add a
   language.
 - **Look.** The art direction and moodboard are in the design notes. The toon materials live in
-  `assets/materials/`; editing one recolors everything that uses it. Each draws a thin ink
-  outline through its **Next Pass**, `toon_ink_outline.tres` (an inverted hull: raise its
-  **Grow Amount** for thicker lines). `SkyCycle` colors the sky, sunlight, fog and shadow tint
+  `assets/materials/`; editing one recolors everything that uses it. They all use
+  `toon_hatched.gdshader`: a hard edge between light and shade, ink hatching on the shady side
+  and crayon streaks, laid out in world space; tune the marks per material. Instance
+  `scenes/environment/ink_outlines.tscn` in a level for ink lines along silhouettes and sharp
+  folds, the same width on screen at any distance; tune `line_width`, `silhouette_gap` and
+  `crease_angle` on its material. `SkyCycle` colors the sky, sunlight, fog and shadow tint
   from gradients that run from midnight to midnight, and shows the drawn sun by day and the moon
-  by night; in the editor, drag its **Preview Hour** to see any time of day. `stylized_water.gdshader` draws the jagged lines
-  on water; tune its lanes, jaggedness and dashes per material. Instance
+  by night; in the editor, drag its **Preview Hour** to see any time of day.
+  `stylized_water.gdshader` draws the jagged lines on water; tune its lanes, jaggedness, dashes
+  and `line_glow` per material. Instance
   `scenes/environment/screen_texture.tscn` in a level for film grain, faint scanlines and a
   vignette over the whole screen.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
@@ -128,12 +132,14 @@ above it.
   settings. A strip can hold several drawings one after another (`variants`); each copy picks
   one. Next to the image, save a QuadMesh resource, shaped like one frame, whose material uses
   `cardboard_cutout.gdshader`, and set the material's `frames`, `frame_count`, `fps` and
-  `variants`. Place it with a MeshInstance3D (the tree tops in `scenes/props/goth_tree/`), or a
-  `CloudSea` for many clouds. Cutouts face the camera and are lit as if they faced the sky; each
-  copy starts on its own frame and may be mirrored. A cutout's shadow is its whole drawing, cast
-  towards the light; set `shadow_offset` to about half the mesh's width so it doesn't shadow
-  itself. The sun and moon use `sky_cutout.gdshader` instead, which ignores light and fog; they
-  hang far out along the Sun light's +Z axis.
+  `variants`; raise `self_light` for drawings that should glow. Place it with a MeshInstance3D
+  (the tree tops in `scenes/props/goth_tree/`), or a `CutoutRing` to scatter many in a ring (the
+  clouds, floating eyes and sky doodles). Cutouts face the camera and are lit as if they faced
+  the sky; each copy starts on its own frame and may be mirrored. A cutout's shadow is its whole
+  drawing, cast towards the light; set `shadow_offset` to about half the mesh's width so it
+  doesn't shadow itself. The sun and moon use `sky_cutout.gdshader` instead, which ignores light
+  and fog (raise `brightness` above 1 to make them shine); they hang far out along the Sun
+  light's +Z axis.
 - **Debug menu.** F3 shows the date, day phase, season and active events, and has buttons to
   jump the clock forward, save, load, wipe the save, switch levels and launch any minigame.
 

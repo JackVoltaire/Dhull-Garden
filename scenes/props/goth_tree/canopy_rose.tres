@@ -8,6 +8,7 @@ render_priority = 0
 shader = ExtResource("1_shader")
 shader_parameter/frames = ExtResource("2_frames")
 shader_parameter/frame_count = 4
+shader_parameter/self_light = 0.35
 shader_parameter/fps = 3.0
 shader_parameter/variants = 2
 shader_parameter/shadow_offset = 1.4

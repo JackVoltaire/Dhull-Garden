@@ -21,6 +21,8 @@ uniform float line_width = 0.2;
 // Share of each line that's drawn; the rest are gaps between dashes.
 uniform float dash_fill = 0.7;
 uniform float dash_length = 0.9;
+// Above 0, the lines give off light, and above about 1 the environment's glow makes them shine.
+uniform float line_glow : hint_range(0.0, 4.0) = 1.5;
 
 float hash(float n) {
 	return fract(sin(n * 12.9898) * 43758.5453);
@@ -47,4 +49,5 @@ void fragment() {
 
 	vec3 base = mix(deep_color.rgb, water_color.rgb, step(0.5, lane_seed));
 	ALBEDO = mix(base, line_color.rgb, on_line * on_dash);
+	EMISSION = line_color.rgb * on_line * on_dash * line_glow;
 }
