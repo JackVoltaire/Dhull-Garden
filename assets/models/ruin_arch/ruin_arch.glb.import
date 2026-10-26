@@ -45,10 +45,6 @@ _subresources={
 "use_external/enabled": true,
 "use_external/path": "res://assets/materials/toon_bark.tres"
 },
-"toon_cloud": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/materials/toon_cloud.tres"
-},
 "toon_grass": {
 "use_external/enabled": true,
 "use_external/path": "res://assets/materials/toon_grass.tres"
@@ -60,14 +56,6 @@ _subresources={
 "toon_island_rock": {
 "use_external/enabled": true,
 "use_external/path": "res://assets/materials/toon_island_rock.tres"
-},
-"toon_leaves_mint": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/materials/toon_leaves_mint.tres"
-},
-"toon_leaves_pink": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/materials/toon_leaves_pink.tres"
 },
 "toon_rock_dark": {
 "use_external/enabled": true,

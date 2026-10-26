@@ -13,7 +13,12 @@ run it after Godot has imported a new model, then let Godot import again:
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PALETTE = sorted(path.stem for path in (ROOT / "assets" / "materials").glob("*.tres"))
+# Outline materials are next passes of the palette, not materials of their own.
+PALETTE = sorted(
+    path.stem
+    for path in (ROOT / "assets" / "materials").glob("*.tres")
+    if not path.stem.endswith("_outline")
+)
 
 
 def subresources_line() -> str:

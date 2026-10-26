@@ -52,9 +52,10 @@ scenes/
   levels/           Level, the root script of walkable areas
   levels/dream_island/  Look-test floating island: art direction, sky and effects
   levels/sandbox/   Greybox garden for trying out movement and mechanics
-  environment/      SkyCycle (sky and light by time of day) and CloudSea
+  environment/      SkyCycle (sky and light by time of day), CloudSea, ScreenTexture, and the
+                    drawn clouds/ and sun_moon/
   player/           Player scene and its controller script
-  props/            Reusable things placed in levels: waterfall/, shiny_spot/
+  props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
   debug/            F3 developer menu (autoload, debug builds only)
@@ -111,11 +112,28 @@ above it.
 - **Text.** Put player-facing text in `localization/strings.csv` and use the key: Controls
   translate their `text` automatically, and in code use `tr("KEY")`. Add a column to add a
   language.
-- **Look.** The art direction is in the design notes. Toon-shaded pastel materials live in
-  `assets/materials/`; editing one recolors everything that uses it. `SkyCycle` colors the sky,
-  sunlight, fog and shadow tint from gradients that run from midnight to midnight; in the
-  editor, drag its **Preview Hour** to see any time of day. `stylized_water.gdshader` draws the
-  jagged lines on water; tune its lanes, jaggedness and dashes per material.
+- **Look.** The art direction and moodboard are in the design notes. The toon materials live in
+  `assets/materials/`; editing one recolors everything that uses it. Each draws a thin ink
+  outline through its **Next Pass**, `toon_ink_outline.tres` (an inverted hull: raise its
+  **Grow Amount** for thicker lines). `SkyCycle` colors the sky, sunlight, fog and shadow tint
+  from gradients that run from midnight to midnight, and shows the drawn sun by day and the moon
+  by night; in the editor, drag its **Preview Hour** to see any time of day. `stylized_water.gdshader` draws the jagged lines
+  on water; tune its lanes, jaggedness and dashes per material. Instance
+  `scenes/environment/screen_texture.tscn` in a level for film grain, faint scanlines and a
+  vignette over the whole screen.
+- **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
+  are 2D drawings, like cardboard cutouts, animated in steps with 3 or 4 frames. The drawings in
+  the repo are placeholders. To make one, draw its frames side by side in one image (PNG, or SVG
+  like the placeholders), all the same size, and turn on **Mipmaps > Generate** in its import
+  settings. A strip can hold several drawings one after another (`variants`); each copy picks
+  one. Next to the image, save a QuadMesh resource, shaped like one frame, whose material uses
+  `cardboard_cutout.gdshader`, and set the material's `frames`, `frame_count`, `fps` and
+  `variants`. Place it with a MeshInstance3D (the tree tops in `scenes/props/goth_tree/`), or a
+  `CloudSea` for many clouds. Cutouts face the camera and are lit as if they faced the sky; each
+  copy starts on its own frame and may be mirrored. A cutout's shadow is its whole drawing, cast
+  towards the light; set `shadow_offset` to about half the mesh's width so it doesn't shadow
+  itself. The sun and moon use `sky_cutout.gdshader` instead, which ignores light and fog; they
+  hang far out along the Sun light's +Z axis.
 - **Debug menu.** F3 shows the date, day phase, season and active events, and has buttons to
   jump the clock forward, save, load, wipe the save, switch levels and launch any minigame.
 

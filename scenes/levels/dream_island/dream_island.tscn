@@ -3,31 +3,34 @@
 [ext_resource type="Script" path="res://scenes/levels/level.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://assets/models/island_main/island_main.glb" id="3_island"]
-[ext_resource type="PackedScene" path="res://assets/models/goth_tree_rose/goth_tree_rose.glb" id="4_tree_rose"]
+[ext_resource type="PackedScene" path="res://scenes/props/goth_tree/goth_tree_rose.tscn" id="4_tree_rose"]
 [ext_resource type="PackedScene" path="res://scenes/props/waterfall/waterfall.tscn" id="5_waterfall"]
 [ext_resource type="PackedScene" path="res://scenes/props/shiny_spot/shiny_spot.tscn" id="6_spot"]
 [ext_resource type="Script" path="res://scenes/environment/sky_cycle.gd" id="7_sky_cycle"]
 [ext_resource type="Script" path="res://scenes/environment/cloud_sea.gd" id="8_cloud_sea"]
 [ext_resource type="Shader" path="res://assets/shaders/stylized_water.gdshader" id="9_water"]
 [ext_resource type="Resource" path="res://data/minigames/sample_2d.tres" id="10_sample_2d"]
-[ext_resource type="PackedScene" path="res://assets/models/goth_tree_teal/goth_tree_teal.glb" id="11_tree_teal"]
+[ext_resource type="PackedScene" path="res://scenes/props/goth_tree/goth_tree_teal.tscn" id="11_tree_teal"]
 [ext_resource type="PackedScene" path="res://assets/models/rock_shards/rock_shards.glb" id="12_rocks"]
 [ext_resource type="PackedScene" path="res://assets/models/ruin_arch/ruin_arch.glb" id="13_ruin"]
-[ext_resource type="Material" path="res://assets/materials/toon_cloud.tres" id="14_cloud"]
+[ext_resource type="QuadMesh" path="res://scenes/environment/clouds/cloud.tres" id="14_cloud"]
 [ext_resource type="PackedScene" path="res://assets/models/island_spooky/island_spooky.glb" id="15_spooky"]
 [ext_resource type="PackedScene" path="res://assets/models/island_chilly/island_chilly.glb" id="16_chilly"]
+[ext_resource type="PackedScene" path="res://scenes/environment/screen_texture.tscn" id="17_screen"]
+[ext_resource type="QuadMesh" path="res://scenes/environment/sun_moon/sun.tres" id="18_sun"]
+[ext_resource type="QuadMesh" path="res://scenes/environment/sun_moon/moon.tres" id="19_moon"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.1, 0.09, 0.2, 1, 0.1, 0.09, 0.2, 1, 0.42, 0.42, 0.62, 1, 0.5, 0.6, 0.8, 1, 0.5, 0.6, 0.8, 1, 0.36, 0.3, 0.52, 1, 0.1, 0.09, 0.2, 1, 0.1, 0.09, 0.2, 1)
+colors = PackedColorArray(0.075, 0.0705, 0.12, 1, 0.075, 0.0705, 0.12, 1, 0.282, 0.282, 0.372, 1, 0.345, 0.39, 0.48, 1, 0.345, 0.39, 0.48, 1, 0.24, 0.213, 0.312, 1, 0.075, 0.0705, 0.12, 1, 0.075, 0.0705, 0.12, 1)
 
 [sub_resource type="Gradient" id="Gradient_sky_horizon"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.26, 0.2, 0.36, 1, 0.26, 0.2, 0.36, 1, 0.86, 0.7, 0.72, 1, 0.84, 0.8, 0.86, 1, 0.84, 0.8, 0.86, 1, 0.82, 0.58, 0.6, 1, 0.26, 0.2, 0.36, 1, 0.26, 0.2, 0.36, 1)
+colors = PackedColorArray(0.171, 0.144, 0.216, 1, 0.171, 0.144, 0.216, 1, 0.516, 0.444, 0.453, 1, 0.507, 0.489, 0.516, 1, 0.507, 0.489, 0.516, 1, 0.492, 0.384, 0.393, 1, 0.171, 0.144, 0.216, 1, 0.171, 0.144, 0.216, 1)
 
 [sub_resource type="Gradient" id="Gradient_ground"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.17, 0.14, 0.27, 1, 0.17, 0.14, 0.27, 1, 0.72, 0.62, 0.7, 1, 0.76, 0.74, 0.82, 1, 0.76, 0.74, 0.82, 1, 0.62, 0.46, 0.54, 1, 0.17, 0.14, 0.27, 1, 0.17, 0.14, 0.27, 1)
+colors = PackedColorArray(0.117, 0.1035, 0.162, 1, 0.117, 0.1035, 0.162, 1, 0.432, 0.387, 0.423, 1, 0.465, 0.456, 0.492, 1, 0.465, 0.456, 0.492, 1, 0.372, 0.3, 0.336, 1, 0.117, 0.1035, 0.162, 1, 0.117, 0.1035, 0.162, 1)
 
 [sub_resource type="Gradient" id="Gradient_light"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -35,11 +38,11 @@ colors = PackedColorArray(0.55, 0.6, 0.9, 1, 0.55, 0.6, 0.9, 1, 1, 0.8, 0.72, 1,
 
 [sub_resource type="Gradient" id="Gradient_fog"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.24, 0.19, 0.34, 1, 0.24, 0.19, 0.34, 1, 0.84, 0.68, 0.72, 1, 0.8, 0.77, 0.84, 1, 0.8, 0.77, 0.84, 1, 0.76, 0.54, 0.58, 1, 0.24, 0.19, 0.34, 1, 0.24, 0.19, 0.34, 1)
+colors = PackedColorArray(0.159, 0.1365, 0.204, 1, 0.159, 0.1365, 0.204, 1, 0.504, 0.432, 0.45, 1, 0.486, 0.4725, 0.504, 1, 0.486, 0.4725, 0.504, 1, 0.456, 0.357, 0.375, 1, 0.159, 0.1365, 0.204, 1, 0.159, 0.1365, 0.204, 1)
 
 [sub_resource type="Gradient" id="Gradient_shadow"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.18, 0.16, 0.34, 1, 0.18, 0.16, 0.34, 1, 0.56, 0.44, 0.6, 1, 0.46, 0.44, 0.66, 1, 0.46, 0.44, 0.66, 1, 0.5, 0.36, 0.52, 1, 0.18, 0.16, 0.34, 1, 0.18, 0.16, 0.34, 1)
+colors = PackedColorArray(0.132, 0.123, 0.204, 1, 0.132, 0.123, 0.204, 1, 0.342, 0.288, 0.36, 1, 0.306, 0.297, 0.396, 1, 0.306, 0.297, 0.396, 1, 0.303, 0.24, 0.312, 1, 0.132, 0.123, 0.204, 1, 0.132, 0.123, 0.204, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dream"]
 sky_top_color = Color(0.5, 0.6, 0.8, 1)
@@ -89,17 +92,31 @@ shadow_normal_bias = 4.0
 sky_mode = 1
 directional_shadow_max_distance = 70.0
 
-[node name="SkyCycle" type="Node" parent="." node_paths=PackedStringArray("world_environment", "sun")]
+[node name="SunCutout" type="MeshInstance3D" parent="Sun"]
+transform = Transform3D(96, 0, 0, 0, 96, 0, 0, 0, 96, 0, 0, 400)
+cast_shadow = 0
+extra_cull_margin = 96.0
+mesh = ExtResource("18_sun")
+
+[node name="MoonCutout" type="MeshInstance3D" parent="Sun"]
+transform = Transform3D(84, 0, 0, 0, 84, 0, 0, 0, 84, 0, 0, 400)
+cast_shadow = 0
+extra_cull_margin = 84.0
+mesh = ExtResource("19_moon")
+
+[node name="SkyCycle" type="Node" parent="." node_paths=PackedStringArray("world_environment", "sun", "sun_cutout", "moon_cutout")]
 script = ExtResource("7_sky_cycle")
 world_environment = NodePath("../WorldEnvironment")
 sun = NodePath("../Sun")
+sun_cutout = NodePath("../Sun/SunCutout")
+moon_cutout = NodePath("../Sun/MoonCutout")
 sky_top = SubResource("Gradient_sky_top")
 sky_horizon = SubResource("Gradient_sky_horizon")
 ground = SubResource("Gradient_ground")
 light_color = SubResource("Gradient_light")
 fog_color = SubResource("Gradient_fog")
 shadow_tint = SubResource("Gradient_shadow")
-day_light_energy = 0.8
+day_light_energy = 0.9
 night_light_energy = 0.3
 
 [node name="Island" parent="." instance=ExtResource("3_island")]
@@ -148,18 +165,33 @@ minigame = ExtResource("10_sample_2d")
 
 [node name="CloudSea" type="MultiMeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -26, 0)
+cast_shadow = 0
 script = ExtResource("8_cloud_sea")
-cloud_material = ExtResource("14_cloud")
-count = 700
+cloud_mesh = ExtResource("14_cloud")
+count = 380
 outer_radius = 160.0
-height_variation = 1.5
-size_range = Vector2(8, 18)
+height_variation = 2.0
+size_range = Vector2(18, 40)
+
+[node name="SkyClouds" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22, 0)
+cast_shadow = 0
+script = ExtResource("8_cloud_sea")
+cloud_mesh = ExtResource("14_cloud")
+count = 28
+outer_radius = 170.0
+inner_radius = 75.0
+height_variation = 18.0
+size_range = Vector2(18, 40)
+random_seed = 3
 
 [node name="SpookyIsland" parent="." instance=ExtResource("15_spooky")]
 transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -55, 6, -80)
 
 [node name="ChillyIsland" parent="." instance=ExtResource("16_chilly")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 68, 10, -72)
+
+[node name="ScreenTexture" parent="." instance=ExtResource("17_screen")]
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.441, 7)

@@ -3,9 +3,9 @@
 shader_type spatial;
 render_mode cull_disabled, diffuse_toon, specular_disabled;
 
-uniform vec4 water_color : source_color = vec4(0.5, 0.72, 0.84, 1.0);
-uniform vec4 deep_color : source_color = vec4(0.38, 0.58, 0.74, 1.0);
-uniform vec4 line_color : source_color = vec4(0.9, 0.94, 0.98, 1.0);
+uniform vec4 water_color : source_color = vec4(0.2, 0.72, 0.92, 1.0);
+uniform vec4 deep_color : source_color = vec4(0.12, 0.46, 0.78, 1.0);
+uniform vec4 line_color : source_color = vec4(0.92, 0.97, 1.0, 1.0);
 // Direction the water flows in UV space. (0, 1) runs down a QuadMesh.
 uniform vec2 flow = vec2(0.0, 1.0);
 uniform float speed = 0.6;

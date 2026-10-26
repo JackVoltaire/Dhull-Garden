@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/goth_tree_teal/goth_tree_teal.glb" id="1_trunk"]
+[ext_resource type="QuadMesh" path="res://scenes/props/goth_tree/canopy_teal.tres" id="2_canopy"]
+
+[node name="GothTreeTeal" type="Node3D"]
+
+[node name="Trunk" parent="." instance=ExtResource("1_trunk")]
+
+[node name="Canopy1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.426, 0, 0, 0, 1.426, 0, 0, 0, 1.426, -1.509, 3.17, -0.278)
+extra_cull_margin = 2.71
+mesh = ExtResource("2_canopy")
+
+[node name="Canopy2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.972, 0, 0, 0, 0.972, 0, 0, 0, 0.972, -0.43, 3.941, 0.37)
+extra_cull_margin = 1.85
+mesh = ExtResource("2_canopy")
+
+[node name="Canopy3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.926, 0, 0, 0, 0.926, 0, 0, 0, 0.926, 1.148, 4.975, 1.07)
+extra_cull_margin = 1.76
+mesh = ExtResource("2_canopy")
