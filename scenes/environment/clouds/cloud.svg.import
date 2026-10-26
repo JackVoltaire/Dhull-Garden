@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8ktc3lw4xeqv"
-path="res://.godot/imported/grass_tuft.svg-5bcc54c1ae1316ea2b6486a736cf1919.ctex"
+uid="uid://bhe4ejn5no8uk"
+path="res://.godot/imported/cloud.svg-d1ce5586f5f58dcb05789f16151bf4a3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/props/cutouts/grass_tuft/grass_tuft.svg"
-dest_files=["res://.godot/imported/grass_tuft.svg-5bcc54c1ae1316ea2b6486a736cf1919.ctex"]
+source_file="res://scenes/environment/clouds/cloud.svg"
+dest_files=["res://.godot/imported/cloud.svg-d1ce5586f5f58dcb05789f16151bf4a3.ctex"]
 
 [params]
 

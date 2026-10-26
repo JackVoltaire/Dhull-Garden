@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhy52shx38l1c"
-path="res://.godot/imported/gravestone.svg-9caa533fe2108815d3294311b1dc5099.ctex"
+uid="uid://du6y8b3j4iws"
+path="res://.godot/imported/sun.svg-9147e813827bd89892aab18a67453da9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/props/cutouts/gravestone/gravestone.svg"
-dest_files=["res://.godot/imported/gravestone.svg-9caa533fe2108815d3294311b1dc5099.ctex"]
+source_file="res://scenes/environment/sun_moon/sun.svg"
+dest_files=["res://.godot/imported/sun.svg-9147e813827bd89892aab18a67453da9.ctex"]
 
 [params]
 

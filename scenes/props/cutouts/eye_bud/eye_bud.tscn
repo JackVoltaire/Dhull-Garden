@@ -1,7 +1,0 @@
-[gd_scene format=3]
-
-[ext_resource type="QuadMesh" path="res://scenes/props/cutouts/eye_bud/eye_bud.tres" id="1_mesh"]
-
-[node name="EyeBud" type="MeshInstance3D"]
-extra_cull_margin = 0.32
-mesh = ExtResource("1_mesh")

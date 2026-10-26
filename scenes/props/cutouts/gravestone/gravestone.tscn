@@ -1,7 +1,0 @@
-[gd_scene format=3]
-
-[ext_resource type="QuadMesh" path="res://scenes/props/cutouts/gravestone/gravestone.tres" id="1_mesh"]
-
-[node name="Gravestone" type="MeshInstance3D"]
-extra_cull_margin = 0.5
-mesh = ExtResource("1_mesh")

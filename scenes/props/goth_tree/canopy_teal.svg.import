@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4eir413qvnm2"
-path="res://.godot/imported/eye_bud.svg-d18baf4f66c8722e41fe07d73f9933b0.ctex"
+uid="uid://cs5s17ve8v2wj"
+path="res://.godot/imported/canopy_teal.svg-005bf8d64e2bf7294d91559df4f129df.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/props/cutouts/eye_bud/eye_bud.svg"
-dest_files=["res://.godot/imported/eye_bud.svg-d18baf4f66c8722e41fe07d73f9933b0.ctex"]
+source_file="res://scenes/props/goth_tree/canopy_teal.svg"
+dest_files=["res://.godot/imported/canopy_teal.svg-005bf8d64e2bf7294d91559df4f129df.ctex"]
 
 [params]
 

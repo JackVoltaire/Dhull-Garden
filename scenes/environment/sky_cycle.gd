@@ -10,6 +10,10 @@ extends Node
 @export var world_environment: WorldEnvironment
 ## Sunlight by day and moonlight by night.
 @export var sun: DirectionalLight3D
+## Drawn sun and moon, shown by day and by night. Make them children of [member sun], far
+## along its +Z axis, so they sit where the light comes from.
+@export var sun_cutout: Node3D
+@export var moon_cutout: Node3D
 @export var sky_top: Gradient
 @export var sky_horizon: Gradient
 ## Below the horizon, behind the sea of clouds.
@@ -60,6 +64,10 @@ func _apply() -> void:
 	var daylight := smoothstep(-0.15, 0.25, -cos(angle))
 	sun.light_energy = lerpf(night_light_energy, day_light_energy, daylight)
 	sun.light_color = _sample(light_color, day_fraction, sun.light_color)
+	if sun_cutout:
+		sun_cutout.visible = daylight >= 0.5
+	if moon_cutout:
+		moon_cutout.visible = daylight < 0.5
 
 
 static func _sample(gradient: Gradient, offset: float, fallback: Color) -> Color:

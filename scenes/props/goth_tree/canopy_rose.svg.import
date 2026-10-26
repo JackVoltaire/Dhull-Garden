@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsd3pslgf5r10"
-path="res://.godot/imported/spiral_flower_teal.svg-65e8284ca3b9917fb9db08e7b52fae67.ctex"
+uid="uid://cjxe307h56gn3"
+path="res://.godot/imported/canopy_rose.svg-d28686da726332eedddc406f1d9405e0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/props/cutouts/spiral_flower_teal/spiral_flower_teal.svg"
-dest_files=["res://.godot/imported/spiral_flower_teal.svg-65e8284ca3b9917fb9db08e7b52fae67.ctex"]
+source_file="res://scenes/props/goth_tree/canopy_rose.svg"
+dest_files=["res://.godot/imported/canopy_rose.svg-d28686da726332eedddc406f1d9405e0.ctex"]
 
 [params]
 

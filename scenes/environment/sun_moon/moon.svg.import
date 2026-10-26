@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwcbusvj6bsrs"
-path="res://.godot/imported/spiral_flower_rose.svg-c14925aad55e5ccdb0a25f0da78ebb4a.ctex"
+uid="uid://bjkkgnl3f7m57"
+path="res://.godot/imported/moon.svg-78e22a9709c470bba6185c8e27c7bd88.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/props/cutouts/spiral_flower_rose/spiral_flower_rose.svg"
-dest_files=["res://.godot/imported/spiral_flower_rose.svg-c14925aad55e5ccdb0a25f0da78ebb4a.ctex"]
+source_file="res://scenes/environment/sun_moon/moon.svg"
+dest_files=["res://.godot/imported/moon.svg-78e22a9709c470bba6185c8e27c7bd88.ctex"]
 
 [params]
 
