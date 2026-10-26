@@ -23,6 +23,7 @@ files move. The `*.translation` files generated from `localization/strings.csv` 
 | Look       | Mouse              | Right stick  |
 | Jump       | Space              | A / Cross    |
 | Sprint     | Shift (hold)       | L3 (hold)    |
+| Interact   | E                  | X / Square   |
 | Pause      | Esc                | Start        |
 | Debug menu | F3 (debug builds)  |              |
 
@@ -39,7 +40,8 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   saves/            `Saves`: save slots, backups, migrations, time away
   audio/            `Audio`: music crossfades and one-shot sounds
   scenes/           `Scenes`: fading scene changes with background loading
-  minigames/        `Minigames`: launching minigames and returning results
+  minigames/        `Minigames`: launching minigames and returning results; MinigameSpot
+  interaction/      Interactable things in the world and the player's Interactor
   game/             `Game`: pausing and quitting
   data/             ResourceDir: loads every resource in a data folder
 data/               Game content as .tres resources
@@ -47,8 +49,10 @@ data/               Game content as .tres resources
   minigames/        One MinigameDefinition per file
 scenes/
   main/             Entry scene: loads the save and enters the garden
+  levels/           Level, the root script of walkable areas
   levels/sandbox/   Greybox garden for trying out movement and mechanics
   player/           Player scene and its controller script
+  props/            Reusable things placed in levels, such as shiny_spot/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
   debug/            F3 developer menu (autoload, debug builds only)
@@ -82,11 +86,17 @@ above it.
   `Saves.VERSION` and add a migration step in `_migrate_step()`. `game_loaded` reports
   `seconds_away`, how long the game was closed, for things that should happen in the
   meantime.
+- **Interaction.** The player walks up to things and presses Interact. Anything usable is an
+  `Interactable` (an Area3D with a collision shape for its reach and a `prompt` verb); connect
+  its `interacted` signal or extend it. The player's `Interactor` picks the nearest one and
+  shows "[E] Dig"-style prompts.
 - **Minigames.** Create a scene (2D, 3D or UI) and a `MinigameDefinition` in
-  `data/minigames/`. Start it with `Minigames.launch(definition, context)`. The minigame reads
-  `Minigames.context` and ends with `Minigames.finish({"score": ...})`, which returns the
-  player to where they were and emits `minigame_finished` with the result. Running a minigame
-  scene on its own with F6 restarts it when it finishes.
+  `data/minigames/`. To open it from the world, place a `MinigameSpot` (for example an
+  instance of `scenes/props/shiny_spot/`) and set its `minigame` and `context`. The minigame
+  reads `Minigames.context` and ends with `Minigames.finish({"score": ...})`, which returns the
+  player to the exact spot they left from and emits `minigame_finished` with the result. Code
+  can also call `Minigames.launch(definition, context)` directly. Running a minigame scene on
+  its own with F6 restarts it when it finishes.
 - **Scenes.** Change scenes with `Scenes.change_scene(path, params)`. If the new scene's root
   has `setup(params: Dictionary)`, it gets `params` before `_ready()`.
 - **Settings.** `Settings.get_value("audio/music_volume")` and `set_value()`; every setting
@@ -120,6 +130,7 @@ above it.
   | ----- | ------ | -------------------------------------------- |
   | 1     | world  | Level geometry. The camera spring arm only collides with this layer. |
   | 2     | player | The player body, so the camera doesn't collide with it. |
+  | 3     | interactable | Interactables. Only the player's Interactor detects them. |
 
 - **Greyboxing:** block out levels with CSG nodes (see `sandbox.tscn`) and replace them with
   real meshes once a layout feels right.

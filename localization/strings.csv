@@ -10,3 +10,7 @@ MINIGAME_SAMPLE_2D,Sample 2D Minigame
 MINIGAME_SAMPLE_3D,Sample 3D Minigame
 MINIGAME_SAMPLE_DESCRIPTION,Press Jump as often as you can in ten seconds.
 MINIGAME_SAMPLE_HUD,Score: %d    Time: %d    Press Jump!
+UI_INTERACT_PROMPT,[%s] %s
+PROMPT_INTERACT,Interact
+PROMPT_DIG,Dig
+PROMPT_PLAY,Play
