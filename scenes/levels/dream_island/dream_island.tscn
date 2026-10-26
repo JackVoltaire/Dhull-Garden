@@ -2,22 +2,20 @@
 
 [ext_resource type="Script" path="res://scenes/levels/level.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" path="res://scenes/props/floating_island/floating_island.tscn" id="3_island"]
-[ext_resource type="PackedScene" path="res://scenes/props/dream_tree/dream_tree.tscn" id="4_tree"]
+[ext_resource type="PackedScene" path="res://assets/models/island_main/island_main.glb" id="3_island"]
+[ext_resource type="PackedScene" path="res://assets/models/goth_tree_rose/goth_tree_rose.glb" id="4_tree_rose"]
 [ext_resource type="PackedScene" path="res://scenes/props/waterfall/waterfall.tscn" id="5_waterfall"]
 [ext_resource type="PackedScene" path="res://scenes/props/shiny_spot/shiny_spot.tscn" id="6_spot"]
 [ext_resource type="Script" path="res://scenes/environment/sky_cycle.gd" id="7_sky_cycle"]
 [ext_resource type="Script" path="res://scenes/environment/cloud_sea.gd" id="8_cloud_sea"]
 [ext_resource type="Shader" path="res://assets/shaders/stylized_water.gdshader" id="9_water"]
 [ext_resource type="Resource" path="res://data/minigames/sample_2d.tres" id="10_sample_2d"]
-[ext_resource type="Material" path="res://assets/materials/toon_grass.tres" id="11_grass"]
-[ext_resource type="Material" path="res://assets/materials/toon_island_rock.tres" id="12_rock"]
-[ext_resource type="Material" path="res://assets/materials/toon_leaves_mint.tres" id="13_mint"]
+[ext_resource type="PackedScene" path="res://assets/models/goth_tree_teal/goth_tree_teal.glb" id="11_tree_teal"]
+[ext_resource type="PackedScene" path="res://assets/models/rock_shards/rock_shards.glb" id="12_rocks"]
+[ext_resource type="PackedScene" path="res://assets/models/ruin_arch/ruin_arch.glb" id="13_ruin"]
 [ext_resource type="Material" path="res://assets/materials/toon_cloud.tres" id="14_cloud"]
-[ext_resource type="Material" path="res://assets/materials/toon_spooky.tres" id="15_spooky"]
-[ext_resource type="Material" path="res://assets/materials/toon_snow.tres" id="16_snow"]
-[ext_resource type="Material" path="res://assets/materials/toon_ice.tres" id="17_ice"]
-[ext_resource type="Material" path="res://assets/materials/toon_bark.tres" id="18_bark"]
+[ext_resource type="PackedScene" path="res://assets/models/island_spooky/island_spooky.glb" id="15_spooky"]
+[ext_resource type="PackedScene" path="res://assets/models/island_chilly/island_chilly.glb" id="16_chilly"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -105,67 +103,51 @@ day_light_energy = 0.8
 night_light_energy = 0.3
 
 [node name="Island" parent="." instance=ExtResource("3_island")]
-radius = 18.0
-depth = 16.0
 
-[node name="Hill" type="CSGSphere3D" parent="Island"]
-transform = Transform3D(1, 0, 0, 0, 0.45, 0, 0, 0, 1, -6, -1.5, -7)
-radius = 6.0
-radial_segments = 24
-rings = 12
-material = ExtResource("11_grass")
+[node name="Tree1" parent="." instance=ExtResource("4_tree_rose")]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 3.5, 0.493, -7)
 
-[node name="SpringRock" type="CSGSphere3D" parent="Island"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.4, 0.2, 4)
-radius = 1.3
-radial_segments = 7
-rings = 4
-smooth_faces = false
-material = ExtResource("12_rock")
+[node name="Tree2" parent="." instance=ExtResource("11_tree_teal")]
+transform = Transform3D(-0.880951, 0, 0.739206, 0, 1.15, 0, -0.739206, 0, -0.880951, -10, 0.286, 4)
 
-[node name="DigRock" type="CSGSphere3D" parent="Island"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.3, -1.5)
-radius = 1.2
-radial_segments = 7
-rings = 4
-smooth_faces = false
-material = ExtResource("12_rock")
+[node name="Tree3" parent="." instance=ExtResource("4_tree_rose")]
+transform = Transform3D(0.232937, 0, 0.869333, 0, 0.9, 0, -0.869333, 0, 0.232937, -3, 0.319, 10)
 
-[node name="TreePink1" parent="." instance=ExtResource("4_tree")]
-transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 3.5, 0, -7)
+[node name="Tree4" parent="." instance=ExtResource("11_tree_teal")]
+transform = Transform3D(-1.12763, 0, -0.410424, 0, 1.2, 0, 0.410424, 0, -1.12763, 9, 0.624, -10)
 
-[node name="TreeMint1" parent="." instance=ExtResource("4_tree")]
-transform = Transform3D(-0.880951, 0, 0.739206, 0, 1.15, 0, -0.739206, 0, -0.880951, -10, 0, 4)
-leaves_material = ExtResource("13_mint")
+[node name="Tree5" parent="." instance=ExtResource("4_tree_rose")]
+transform = Transform3D(0.601041, 0, 0.601041, 0, 0.85, 0, -0.601041, 0, 0.601041, -13, 0.189, -5)
 
-[node name="TreePink2" parent="." instance=ExtResource("4_tree")]
-transform = Transform3D(0.232937, 0, 0.869333, 0, 0.9, 0, -0.869333, 0, 0.232937, -3, 0, 10)
+[node name="Tree6" parent="." instance=ExtResource("11_tree_teal")]
+transform = Transform3D(0.65, 0, -1.12583, 0, 1.3, 0, 1.12583, 0, 0.65, -6, 1.89, -7)
 
-[node name="TreePink3" parent="." instance=ExtResource("4_tree")]
-transform = Transform3D(-1.12763, 0, -0.410424, 0, 1.2, 0, 0.410424, 0, -1.12763, 9, 0, -10)
+[node name="Tree7" parent="." instance=ExtResource("4_tree_rose")]
+transform = Transform3D(-0.324919, 0, -0.892708, 0, 0.95, 0, 0.892708, 0, -0.324919, 12, 0.283, 2)
 
-[node name="TreeMint2" parent="." instance=ExtResource("4_tree")]
-transform = Transform3D(0.65, 0, -1.12583, 0, 1.3, 0, 1.12583, 0, 0.65, -6, 1.1, -7)
-leaves_material = ExtResource("13_mint")
+[node name="DigRock" parent="." instance=ExtResource("12_rocks")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 5, 0.418, -1.5)
 
-[node name="TreeMint3" parent="." instance=ExtResource("4_tree")]
-transform = Transform3D(0.601041, 0, 0.601041, 0, 0.85, 0, -0.601041, 0, 0.601041, -13, 0, -5)
-leaves_material = ExtResource("13_mint")
+[node name="SpringRock" parent="." instance=ExtResource("12_rocks")]
+transform = Transform3D(-0.751754, 0, 0.273616, 0, 0.8, 0, -0.273616, 0, -0.751754, 8.4, 0.337, 4)
+
+[node name="Ruin" parent="." instance=ExtResource("13_ruin")]
+transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, -8, 0.423, 1)
 
 [node name="Stream" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0.03, 4)
+transform = Transform3D(1.17722, 0.030646, 0, -0.0360941, 0.99953, 0, 0, 0, 1, 14.3, 0.2225, 4)
 mesh = SubResource("PlaneMesh_stream")
 surface_material_override/0 = SubResource("ShaderMaterial_stream")
 
 [node name="Waterfall" parent="." instance=ExtResource("5_waterfall")]
-transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 17.6, 0.03, 4)
+transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 20.6, 0.05, 4)
 
 [node name="ShinySpot" parent="." instance=ExtResource("6_spot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.7, -0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.918, -0.75)
 minigame = ExtResource("10_sample_2d")
 
 [node name="CloudSea" type="MultiMeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -24, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -26, 0)
 script = ExtResource("8_cloud_sea")
 cloud_material = ExtResource("14_cloud")
 count = 700
@@ -173,124 +155,11 @@ outer_radius = 160.0
 height_variation = 1.5
 size_range = Vector2(8, 18)
 
-[node name="SpookyIsland" parent="." instance=ExtResource("3_island")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55, 6, -80)
-radius = 9.0
-depth = 11.0
-top_material = ExtResource("15_spooky")
+[node name="SpookyIsland" parent="." instance=ExtResource("15_spooky")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -55, 6, -80)
 
-[node name="Spire1" type="CSGCylinder3D" parent="SpookyIsland"]
-transform = Transform3D(0.990268, -0.139173, 0, 0.139173, 0.990268, 0, 0, 0, 1, -2, 3.55, -1)
-radius = 0.9
-height = 7.5
-sides = 4
-cone = true
-smooth_faces = false
-material = ExtResource("15_spooky")
-
-[node name="Spire2" type="CSGCylinder3D" parent="SpookyIsland"]
-transform = Transform3D(0.978148, 0.207912, 0, -0.207912, 0.978148, 0, 0, 0, 1, 2.5, 2.55, 1.5)
-radius = 0.9
-height = 5.5
-sides = 4
-cone = true
-smooth_faces = false
-material = ExtResource("15_spooky")
-
-[node name="Spire3" type="CSGCylinder3D" parent="SpookyIsland"]
-transform = Transform3D(0.997564, -0.0697565, 0, 0.0697565, 0.997564, 0, 0, 0, 1, 0.5, 4.55, -4)
-radius = 0.9
-height = 9.5
-sides = 4
-cone = true
-smooth_faces = false
-material = ExtResource("15_spooky")
-
-[node name="Spire4" type="CSGCylinder3D" parent="SpookyIsland"]
-transform = Transform3D(0.951057, 0.309017, 0, -0.309017, 0.951057, 0, 0, 0, 1, -5, 2.05, 3)
-radius = 0.9
-height = 4.5
-sides = 4
-cone = true
-smooth_faces = false
-material = ExtResource("15_spooky")
-
-[node name="DeadTree" type="CSGCylinder3D" parent="SpookyIsland"]
-transform = Transform3D(0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 0, 0, 1, 4.5, 1.6, -2)
-radius = 0.25
-height = 3.4
-sides = 5
-smooth_faces = false
-material = ExtResource("18_bark")
-
-[node name="DeadBranch" type="CSGCylinder3D" parent="SpookyIsland"]
-transform = Transform3D(0.573576, -0.819152, 0, 0.819152, 0.573576, 0, 0, 0, 1, 4, 3, -2)
-radius = 0.12
-height = 1.8
-sides = 4
-smooth_faces = false
-material = ExtResource("18_bark")
-
-[node name="ChillyIsland" parent="." instance=ExtResource("3_island")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 10, -72)
-radius = 10.0
-depth = 12.0
-top_material = ExtResource("16_snow")
-rock_material = ExtResource("17_ice")
-
-[node name="Peak1" type="CSGCylinder3D" parent="ChillyIsland"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 3.8, -2)
-radius = 4.0
-height = 8.0
-sides = 6
-cone = true
-smooth_faces = false
-material = ExtResource("17_ice")
-
-[node name="Snowcap1" type="CSGCylinder3D" parent="ChillyIsland"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 6.24, -2)
-radius = 1.68
-height = 3.36
-sides = 6
-cone = true
-smooth_faces = false
-material = ExtResource("16_snow")
-
-[node name="Peak2" type="CSGCylinder3D" parent="ChillyIsland"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2.55, 1.5)
-radius = 2.8
-height = 5.5
-sides = 6
-cone = true
-smooth_faces = false
-material = ExtResource("17_ice")
-
-[node name="Snowcap2" type="CSGCylinder3D" parent="ChillyIsland"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 4.29, 1.5)
-radius = 1.18
-height = 2.31
-sides = 6
-cone = true
-smooth_faces = false
-material = ExtResource("16_snow")
-
-[node name="Peak3" type="CSGCylinder3D" parent="ChillyIsland"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 1.8, 2.5)
-radius = 2.2
-height = 4.0
-sides = 6
-cone = true
-smooth_faces = false
-material = ExtResource("17_ice")
-
-[node name="Snowcap3" type="CSGCylinder3D" parent="ChillyIsland"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 3.12, 2.5)
-radius = 0.924
-height = 1.68
-sides = 6
-cone = true
-smooth_faces = false
-material = ExtResource("16_snow")
+[node name="ChillyIsland" parent="." instance=ExtResource("16_chilly")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 68, 10, -72)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.441, 7)
