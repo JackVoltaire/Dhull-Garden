@@ -1,8 +1,11 @@
 // A drawn cutout far out in the sky, like the sun or moon: always faces the camera and ignores
 // light, fog and shadows. Frames sit side by side in the texture, as in cardboard_cutout, and
-// play in steps. Center the QuadMesh on its middle.
+// play in steps. Center the QuadMesh on its middle. It sits behind the sky's stained glass, so
+// where the lead or a missing shard covers it, it shows as white line art on black.
 shader_type spatial;
 render_mode unshaded, fog_disabled, shadows_disabled, cull_disabled;
+
+#include "res://assets/shaders/stained_glass.gdshaderinc"
 
 uniform sampler2D frames : source_color, filter_linear_mipmap;
 uniform int frame_count : hint_range(1, 64) = 4;
@@ -24,7 +27,8 @@ void vertex() {
 
 void fragment() {
 	vec4 color = texture(frames, vec2((UV.x + frame) / float(frame_count), UV.y));
-	ALBEDO = color.rgb * brightness;
+	vec3 view_direction = normalize(mat3(INV_VIEW_MATRIX) * VERTEX);
+	ALBEDO = mix(color.rgb * brightness, glass_line_art(color.rgb), glass_blackness(view_direction));
 	ALPHA = color.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_cut;
 }

@@ -11,6 +11,7 @@ shader_parameter/frame_count = 3
 shader_parameter/fps = 3.0
 shader_parameter/variants = 3
 shader_parameter/self_light = 0.8
+shader_parameter/behind_glass = true
 
 [resource]
 material = SubResource("ShaderMaterial_cutout")
