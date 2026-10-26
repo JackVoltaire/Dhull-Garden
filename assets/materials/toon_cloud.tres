@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "toon_cloud"
-albedo_color = Color(1, 0.93, 0.97, 1)
+albedo_color = Color(0.9, 0.88, 0.93, 1)
 diffuse_mode = 3
 specular_mode = 2

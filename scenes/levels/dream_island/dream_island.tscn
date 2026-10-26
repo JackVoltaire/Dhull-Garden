@@ -21,33 +21,33 @@
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.27, 0.24, 0.45, 1, 0.27, 0.24, 0.45, 1, 0.58, 0.56, 0.86, 1, 0.56, 0.72, 0.96, 1, 0.56, 0.72, 0.96, 1, 0.52, 0.44, 0.78, 1, 0.27, 0.24, 0.45, 1, 0.27, 0.24, 0.45, 1)
+colors = PackedColorArray(0.1, 0.09, 0.2, 1, 0.1, 0.09, 0.2, 1, 0.42, 0.42, 0.62, 1, 0.5, 0.6, 0.8, 1, 0.5, 0.6, 0.8, 1, 0.36, 0.3, 0.52, 1, 0.1, 0.09, 0.2, 1, 0.1, 0.09, 0.2, 1)
 
 [sub_resource type="Gradient" id="Gradient_sky_horizon"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.42, 0.35, 0.58, 1, 0.42, 0.35, 0.58, 1, 1, 0.79, 0.83, 1, 0.98, 0.88, 0.93, 1, 0.98, 0.88, 0.93, 1, 1, 0.72, 0.7, 1, 0.42, 0.35, 0.58, 1, 0.42, 0.35, 0.58, 1)
+colors = PackedColorArray(0.26, 0.2, 0.36, 1, 0.26, 0.2, 0.36, 1, 0.86, 0.7, 0.72, 1, 0.84, 0.8, 0.86, 1, 0.84, 0.8, 0.86, 1, 0.82, 0.58, 0.6, 1, 0.26, 0.2, 0.36, 1, 0.26, 0.2, 0.36, 1)
 
 [sub_resource type="Gradient" id="Gradient_ground"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.33, 0.29, 0.48, 1, 0.33, 0.29, 0.48, 1, 0.96, 0.83, 0.9, 1, 0.95, 0.9, 0.99, 1, 0.95, 0.9, 0.99, 1, 0.92, 0.72, 0.8, 1, 0.33, 0.29, 0.48, 1, 0.33, 0.29, 0.48, 1)
+colors = PackedColorArray(0.17, 0.14, 0.27, 1, 0.17, 0.14, 0.27, 1, 0.72, 0.62, 0.7, 1, 0.76, 0.74, 0.82, 1, 0.76, 0.74, 0.82, 1, 0.62, 0.46, 0.54, 1, 0.17, 0.14, 0.27, 1, 0.17, 0.14, 0.27, 1)
 
 [sub_resource type="Gradient" id="Gradient_light"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.62, 0.66, 0.95, 1, 0.62, 0.66, 0.95, 1, 1, 0.82, 0.78, 1, 1, 0.97, 0.93, 1, 1, 0.97, 0.93, 1, 1, 0.74, 0.64, 1, 0.62, 0.66, 0.95, 1, 0.62, 0.66, 0.95, 1)
+colors = PackedColorArray(0.55, 0.6, 0.9, 1, 0.55, 0.6, 0.9, 1, 1, 0.8, 0.72, 1, 1, 0.96, 0.9, 1, 1, 0.96, 0.9, 1, 1, 0.68, 0.56, 1, 0.55, 0.6, 0.9, 1, 0.55, 0.6, 0.9, 1)
 
 [sub_resource type="Gradient" id="Gradient_fog"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.4, 0.34, 0.56, 1, 0.4, 0.34, 0.56, 1, 0.98, 0.8, 0.86, 1, 0.96, 0.9, 0.97, 1, 0.96, 0.9, 0.97, 1, 0.98, 0.74, 0.76, 1, 0.4, 0.34, 0.56, 1, 0.4, 0.34, 0.56, 1)
+colors = PackedColorArray(0.24, 0.19, 0.34, 1, 0.24, 0.19, 0.34, 1, 0.84, 0.68, 0.72, 1, 0.8, 0.77, 0.84, 1, 0.8, 0.77, 0.84, 1, 0.76, 0.54, 0.58, 1, 0.24, 0.19, 0.34, 1, 0.24, 0.19, 0.34, 1)
 
 [sub_resource type="Gradient" id="Gradient_shadow"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
-colors = PackedColorArray(0.42, 0.38, 0.68, 1, 0.42, 0.38, 0.68, 1, 0.95, 0.76, 0.9, 1, 0.86, 0.78, 0.98, 1, 0.86, 0.78, 0.98, 1, 0.95, 0.72, 0.86, 1, 0.42, 0.38, 0.68, 1, 0.42, 0.38, 0.68, 1)
+colors = PackedColorArray(0.18, 0.16, 0.34, 1, 0.18, 0.16, 0.34, 1, 0.56, 0.44, 0.6, 1, 0.46, 0.44, 0.66, 1, 0.46, 0.44, 0.66, 1, 0.5, 0.36, 0.52, 1, 0.18, 0.16, 0.34, 1, 0.18, 0.16, 0.34, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dream"]
-sky_top_color = Color(0.56, 0.72, 0.96, 1)
-sky_horizon_color = Color(0.98, 0.88, 0.93, 1)
-ground_bottom_color = Color(0.95, 0.9, 0.99, 1)
-ground_horizon_color = Color(0.95, 0.9, 0.99, 1)
+sky_top_color = Color(0.5, 0.6, 0.8, 1)
+sky_horizon_color = Color(0.84, 0.8, 0.86, 1)
+ground_bottom_color = Color(0.76, 0.74, 0.82, 1)
+ground_horizon_color = Color(0.76, 0.74, 0.82, 1)
 
 [sub_resource type="Sky" id="Sky_dream"]
 sky_material = SubResource("ProceduralSkyMaterial_dream")
@@ -55,12 +55,12 @@ sky_material = SubResource("ProceduralSkyMaterial_dream")
 [sub_resource type="Environment" id="Environment_dream"]
 background_mode = 2
 sky = SubResource("Sky_dream")
-ambient_light_color = Color(0.86, 0.78, 0.98, 1)
+ambient_light_color = Color(0.46, 0.44, 0.66, 1)
 ambient_light_sky_contribution = 0.5
-ambient_light_energy = 0.55
+ambient_light_energy = 0.4
 glow_enabled = true
 fog_enabled = true
-fog_light_color = Color(0.96, 0.9, 0.97, 1)
+fog_light_color = Color(0.8, 0.77, 0.84, 1)
 fog_density = 0.004
 fog_sky_affect = 0.0
 volumetric_fog_enabled = true
@@ -101,6 +101,8 @@ ground = SubResource("Gradient_ground")
 light_color = SubResource("Gradient_light")
 fog_color = SubResource("Gradient_fog")
 shadow_tint = SubResource("Gradient_shadow")
+day_light_energy = 0.8
+night_light_energy = 0.3
 
 [node name="Island" parent="." instance=ExtResource("3_island")]
 radius = 18.0

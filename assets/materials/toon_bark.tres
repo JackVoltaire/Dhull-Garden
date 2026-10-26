@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "toon_bark"
-albedo_color = Color(0.48, 0.38, 0.52, 1)
+albedo_color = Color(0.22, 0.17, 0.25, 1)
 diffuse_mode = 3
 specular_mode = 2
