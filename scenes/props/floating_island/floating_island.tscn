@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/props/floating_island/floating_island.gd" id="1_island"]
+[ext_resource type="Material" path="res://assets/materials/toon_grass.tres" id="2_grass"]
+[ext_resource type="Material" path="res://assets/materials/toon_island_rock.tres" id="3_rock"]
+
+[node name="FloatingIsland" type="CSGCombiner3D"]
+use_collision = true
+script = ExtResource("1_island")
+top_material = ExtResource("2_grass")
+rock_material = ExtResource("3_rock")
+
+[node name="Top" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, 0)
+radius = 12.0
+height = 1.5
+sides = 40
+material = ExtResource("2_grass")
+
+[node name="Underside" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 0, -6.5, 0)
+radius = 11.52
+height = 10.0
+sides = 11
+cone = true
+smooth_faces = false
+material = ExtResource("3_rock")
+
+[node name="Lump" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -1, 0, 0, 0, -1, 4.2, -5, -2.4)
+radius = 6.0
+height = 7.0
+sides = 7
+cone = true
+smooth_faces = false
+material = ExtResource("3_rock")

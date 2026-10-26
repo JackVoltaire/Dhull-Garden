@@ -1,13 +1,17 @@
 extends CanvasLayer
 ## Developer tools, toggled with F3 (the debug_menu action): time travel, calendar state,
-## saving and loading, and launching minigames. Registered as the [code]DebugMenu[/code]
-## autoload and removed in release builds.
+## saving and loading, switching levels and launching minigames. Registered as the
+## [code]DebugMenu[/code] autoload and removed in release builds.
 
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const TIME_JUMPS := {"+1 hour": 3600, "+1 day": 86400, "+1 week": 604800, "+30 days": 2592000}
+const LEVELS := {
+	"Dream island": "res://scenes/levels/dream_island/dream_island.tscn",
+	"Sandbox": "res://scenes/levels/sandbox/sandbox.tscn",
+}
 
 var _mouse_mode_before_open := Input.MOUSE_MODE_VISIBLE
-var _status := Label.new()
+var _status: Label
 
 @onready var _items: VBoxContainer = %Items
 
@@ -17,6 +21,7 @@ func _ready() -> void:
 		queue_free()
 		return
 	hide()
+	_status = Label.new()
 	_items.add_child(_status)
 
 	var time_row := _add_row("Time")
@@ -28,6 +33,10 @@ func _ready() -> void:
 	_add_button(save_row, "Save", Saves.save_game)
 	_add_button(save_row, "Load", func() -> void: Saves.load_game(maxi(Saves.current_slot, 0)))
 	_add_button(save_row, "Delete and start over", _restart_save)
+
+	var level_row := _add_row("Levels")
+	for level_name: String in LEVELS:
+		_add_button(level_row, level_name, _change_level.bind(LEVELS[level_name]))
 
 	var minigame_row := _add_row("Minigames")
 	for minigame in Minigames.minigames:
@@ -88,6 +97,11 @@ func _restart_save() -> void:
 	var slot := maxi(Saves.current_slot, 0)
 	Saves.delete_save(slot)
 	Saves.new_game(slot)
+
+
+func _change_level(path: String) -> void:
+	set_open(false)
+	Scenes.change_scene(path)
 
 
 func _launch_minigame(minigame: MinigameDefinition) -> void:

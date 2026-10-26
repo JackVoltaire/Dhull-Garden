@@ -3,7 +3,7 @@ extends Node
 ## A title screen with slot selection will replace this.
 
 const SLOT := 0
-const FIRST_SCENE := "res://scenes/levels/sandbox/sandbox.tscn"
+const FIRST_SCENE := "res://scenes/levels/dream_island/dream_island.tscn"
 
 
 func _ready() -> void:

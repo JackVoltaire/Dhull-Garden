@@ -19,6 +19,7 @@ var current: MinigameDefinition
 var context: Dictionary = {}
 
 var _return_scene_path := ""
+var _return_params: Dictionary = {}
 
 
 func _ready() -> void:
@@ -36,13 +37,16 @@ func get_minigame(id: StringName) -> MinigameDefinition:
 	return null
 
 
-func launch(minigame: MinigameDefinition, launch_context := {}) -> void:
+## Starts [param minigame]. [param return_params] go to the scene the player returns to
+## afterwards (see [method Scenes.change_scene]), e.g. where to put the player back.
+func launch(minigame: MinigameDefinition, launch_context := {}, return_params := {}) -> void:
 	if current or Scenes.is_changing:
 		push_warning("Can't launch '%s' right now." % minigame.id)
 		return
 	current = minigame
 	context = launch_context
 	_return_scene_path = get_tree().current_scene.scene_file_path
+	_return_params = return_params
 	await Scenes.change_scene(minigame.scene_path)
 
 
@@ -55,5 +59,6 @@ func finish(result := {}) -> void:
 	var finished := current
 	current = null
 	context = {}
-	await Scenes.change_scene(_return_scene_path)
+	await Scenes.change_scene(_return_scene_path, _return_params)
+	_return_params = {}
 	minigame_finished.emit(finished, result)

@@ -76,6 +76,24 @@ func _physics_process(delta: float) -> void:
 		_model.rotation.y = lerp_angle(_model.rotation.y, target_yaw, turn_weight)
 
 
+## Where the player stands and which way they and the camera face, so a scene can put them back
+## after a minigame with [method apply_state].
+func get_state() -> Dictionary:
+	return {
+		"transform": global_transform,
+		"model_yaw": _model.rotation.y,
+		"camera_yaw": _camera_pivot.rotation.y,
+		"camera_pitch": _spring_arm.rotation.x,
+	}
+
+
+func apply_state(state: Dictionary) -> void:
+	global_transform = state.get("transform", global_transform)
+	_model.rotation.y = state.get("model_yaw", _model.rotation.y)
+	_camera_pivot.rotation.y = state.get("camera_yaw", _camera_pivot.rotation.y)
+	_spring_arm.rotation.x = state.get("camera_pitch", _spring_arm.rotation.x)
+
+
 func _rotate_camera(amount: Vector2) -> void:
 	if Settings.get_value("controls/invert_y"):
 		amount.y = -amount.y
