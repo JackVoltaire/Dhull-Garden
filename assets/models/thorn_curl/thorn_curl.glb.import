@@ -46,6 +46,10 @@ _subresources={
 "use_external/fallback_path": "res://assets/materials/toon_bark.tres",
 "use_external/path": "res://assets/materials/toon_bark.tres"
 },
+"toon_clay": {
+"use_external/enabled": true,
+"use_external/path": "res://assets/materials/toon_clay.tres"
+},
 "toon_grass": {
 "use_external/enabled": true,
 "use_external/path": "res://assets/materials/toon_grass.tres"

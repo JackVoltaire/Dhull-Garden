@@ -55,6 +55,8 @@ scenes/
   environment/      SkyCycle (sky and light by time of day), CutoutRing, InkOutlines,
                     ScreenTexture, and the drawn clouds/, sun_moon/, floating_eyes/ and doodles/
   player/           Player scene and its controller script
+  dhulls/           The Dhull scene, DhullFace (which eyes and mouth make each emotion) and
+                    the face drawings in face/
   props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
@@ -128,6 +130,15 @@ above it.
   `stylized_water.gdshader` draws the jagged lines on water; tune its lanes, jaggedness, dashes
   and `line_glow` per material. Instance `scenes/environment/screen_texture.tscn` in a level for
   film grain, faint scanlines and a vignette over the whole screen.
+- **Dhulls.** `scenes/dhulls/dhull.tscn` is a Dhull: the model from `assets/models/dhull/` (a
+  body, and a head that floats and bobs above it), a nebula mist of particles round the head,
+  and a face drawn on the head by `dhull_face.gdshader`, like Wind Waker's swappable faces. Set
+  a Dhull's `emotion` to change its face; `DhullFace` picks the eyes and mouth for each emotion,
+  and blinks. The face drawings are strips in `scenes/dhulls/face/`, one frame per shape in the
+  order of `DhullFace.Eyes` and `DhullFace.Mouth`. To add a shape, draw a frame at the end of
+  its strip, add it to the enum and raise the frame count on `dhull_face.tres`; a test checks
+  they match. The clay material, `toon_clay`, has no hatching, so a Dhull reads smooth and the
+  marks don't slide over it as it moves.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
   are 2D drawings, like cardboard cutouts, animated in steps with 3 or 4 frames. The drawings in
   the repo are placeholders. To make one, draw its frames side by side in one image (PNG, or SVG

@@ -36,6 +36,9 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   - hatching in shade and crayon streaks on every 3D surface (`toon_hatched.gdshader`)
   - motifs: the graveyard, thorny curls, glowing pastel eyes floating round the island, and
     chalk spirals, stars and eye glyphs in the sky
+- **Dhulls** (`scenes/dhulls/`): the first Dhull model (clay body with nubs and a lightning J
+  tail, a floating head in nebula mist), with Wind Waker-style swappable eyes and mouths for
+  emotions and blinking. Three stand near the start of the dream island.
   - 2D "cardboard cutout" tree tops, clouds, sun and moon, animated in 3 or 4 stepped frames
   - a grinning sun and moon in the spirit of Soul Eater
   - all the drawings are placeholders for the user's own art
@@ -77,9 +80,11 @@ and is happy with the film grain, scanlines and vignette for now.
 
 Offered but not started:
 - 3D flowers for the island.
-- The face-swap expression and reaction-symbol system. Moodboard motifs: zigzag grins, spiral or
-  glowing eyes, star/spiral/eye symbols.
-- The Dhull model itself.
+- Reaction symbols that pop up beside Dhulls, as in Animal Crossing. Moodboard motifs:
+  spirals, stars, eye glyphs.
+- A player avatar to replace the capsule; it needs a design first.
+- Ground dressing (eye-bud flowers, grass tufts, mushrooms, a graveyard fence, glowing candles)
+  and more crooked, characterful props.
 
 ## Working locally
 

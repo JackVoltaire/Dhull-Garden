@@ -26,6 +26,7 @@
 [ext_resource type="QuadMesh" path="res://scenes/environment/floating_eyes/floating_eye.tres" id="24_eye"]
 [ext_resource type="QuadMesh" path="res://scenes/environment/doodles/doodles.tres" id="25_doodles"]
 [ext_resource type="Shader" path="res://assets/shaders/stained_glass_sky.gdshader" id="26_sky"]
+[ext_resource type="PackedScene" path="res://scenes/dhulls/dhull.tscn" id="27_dhull"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -248,6 +249,18 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -55, 6, -8
 
 [node name="ChillyIsland" parent="." instance=ExtResource("16_chilly")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 68, 10, -72)
+
+[node name="DhullHappy" parent="." instance=ExtResource("27_dhull")]
+transform = Transform3D(0.847998, 0, -0.529999, 0, 1, 0, 0.529999, 0, 0.847998, 2.5, 0.43, 3)
+emotion = 1
+
+[node name="DhullNeutral" parent="." instance=ExtResource("27_dhull")]
+transform = Transform3D(0.874157, 0, 0.485643, 0, 1, 0, -0.485643, 0, 0.874157, -2.5, 0.46, 2.5)
+emotion = 0
+
+[node name="DhullAngry" parent="." instance=ExtResource("27_dhull")]
+transform = Transform3D(0.532813, 0, -0.846233, 0, 1, 0, 0.846233, 0, 0.532813, 5.4, 0.4, 3.6)
+emotion = 3
 
 [node name="InkOutlines" parent="." instance=ExtResource("20_ink")]
 
