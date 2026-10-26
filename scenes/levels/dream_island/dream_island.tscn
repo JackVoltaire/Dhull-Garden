@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/waterfall/waterfall.tscn" id="5_waterfall"]
 [ext_resource type="PackedScene" path="res://scenes/props/shiny_spot/shiny_spot.tscn" id="6_spot"]
 [ext_resource type="Script" path="res://scenes/environment/sky_cycle.gd" id="7_sky_cycle"]
-[ext_resource type="Script" path="res://scenes/environment/cloud_sea.gd" id="8_cloud_sea"]
+[ext_resource type="Script" path="res://scenes/environment/cutout_ring.gd" id="8_cutout_ring"]
 [ext_resource type="Shader" path="res://assets/shaders/stylized_water.gdshader" id="9_water"]
 [ext_resource type="Resource" path="res://data/minigames/sample_2d.tres" id="10_sample_2d"]
 [ext_resource type="PackedScene" path="res://scenes/props/goth_tree/goth_tree_teal.tscn" id="11_tree_teal"]
@@ -20,6 +20,11 @@
 [ext_resource type="QuadMesh" path="res://scenes/environment/sun_moon/sun.tres" id="18_sun"]
 [ext_resource type="QuadMesh" path="res://scenes/environment/sun_moon/moon.tres" id="19_moon"]
 [ext_resource type="PackedScene" path="res://scenes/environment/ink_outlines.tscn" id="20_ink"]
+[ext_resource type="PackedScene" path="res://assets/models/gravestone/gravestone.glb" id="21_gravestone"]
+[ext_resource type="PackedScene" path="res://assets/models/grave_cross/grave_cross.glb" id="22_grave_cross"]
+[ext_resource type="PackedScene" path="res://assets/models/thorn_curl/thorn_curl.glb" id="23_thorn_curl"]
+[ext_resource type="QuadMesh" path="res://scenes/environment/floating_eyes/floating_eye.tres" id="24_eye"]
+[ext_resource type="QuadMesh" path="res://scenes/environment/doodles/doodles.tres" id="25_doodles"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -150,6 +155,60 @@ transform = Transform3D(-0.751754, 0, 0.273616, 0, 0.8, 0, -0.273616, 0, -0.7517
 [node name="Ruin" parent="." instance=ExtResource("13_ruin")]
 transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, -8, 0.423, 1)
 
+[node name="Gravestone1" parent="." instance=ExtResource("21_gravestone")]
+transform = Transform3D(0.121721, -0.00851155, 1.39467, 0.0976591, 1.39659, 0, -1.39128, 0.0972874, 0.122018, -12, 0.2, 1)
+
+[node name="Gravestone2" parent="." instance=ExtResource("21_gravestone")]
+transform = Transform3D(-0.299919, 0.125212, 1.57685, -0.222841, 1.5856, -0.168291, -1.56604, -0.249603, -0.278041, -14, 0.09, 3.5)
+
+[node name="GraveCross1" parent="." instance=ExtResource("22_grave_cross")]
+transform = Transform3D(0.354452, -0.160124, 1.34489, 0.072869, 1.39042, 0.146339, -1.35243, 0.0329501, 0.360361, -12.5, 0.14, 5.5)
+
+[node name="Gravestone3" parent="." instance=ExtResource("21_gravestone")]
+transform = Transform3D(-0.123352, -0.0671591, 1.25215, 0.218264, 1.23784, 0.0878931, -1.23481, 0.225508, -0.109549, -15.2, 0.06, 0.4)
+
+[node name="GraveCross2" parent="." instance=ExtResource("22_grave_cross")]
+transform = Transform3D(-0.584934, -0.0117478, 1.57483, -0.34844, 1.63929, -0.117191, -1.53586, -0.367433, -0.573194, -15.5, 0.03, 6.2)
+
+[node name="ThornCurl1" parent="." instance=ExtResource("23_thorn_curl")]
+transform = Transform3D(1.60869, 0, 1.34985, 0, 2.1, 0, -1.34985, 0, 1.60869, -13, 0.05, -9)
+
+[node name="ThornCurl2" parent="." instance=ExtResource("23_thorn_curl")]
+transform = Transform3D(-2.12177, 0, 1.225, 0, 2.45, 0, -1.225, 0, -2.12177, 13, -0.1, -12)
+
+[node name="ThornCurl3" parent="." instance=ExtResource("23_thorn_curl")]
+transform = Transform3D(-1.23737, 0, -1.47464, 0, 1.925, 0, 1.47464, 0, -1.23737, 11, -0.05, 12)
+
+[node name="ThornCurl4" parent="." instance=ExtResource("23_thorn_curl")]
+transform = Transform3D(1.46234, 0, -1.74275, 0, 2.275, 0, 1.74275, 0, 1.46234, -12, 0.02, 12)
+
+[node name="ThornCurl5" parent="." instance=ExtResource("23_thorn_curl")]
+transform = Transform3D(-1.64446, 0, -0.598535, 0, 1.75, 0, 0.598535, 0, -1.64446, -3, 0.05, 16)
+
+[node name="FloatingEyes" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+cast_shadow = 0
+script = ExtResource("8_cutout_ring")
+cutout_mesh = ExtResource("24_eye")
+count = 12
+outer_radius = 30.0
+inner_radius = 22.0
+height_variation = 5.0
+size_range = Vector2(2.6, 4.6)
+random_seed = 5
+
+[node name="SkyDoodles" type="MultiMeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26, 0)
+cast_shadow = 0
+script = ExtResource("8_cutout_ring")
+cutout_mesh = ExtResource("25_doodles")
+count = 22
+outer_radius = 150.0
+inner_radius = 70.0
+height_variation = 22.0
+size_range = Vector2(7, 14)
+random_seed = 9
+
 [node name="Stream" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.17722, 0.030646, 0, -0.0360941, 0.99953, 0, 0, 0, 1, 14.3, 0.2225, 4)
 mesh = SubResource("PlaneMesh_stream")
@@ -165,8 +224,8 @@ minigame = ExtResource("10_sample_2d")
 [node name="CloudSea" type="MultiMeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -26, 0)
 cast_shadow = 0
-script = ExtResource("8_cloud_sea")
-cloud_mesh = ExtResource("14_cloud")
+script = ExtResource("8_cutout_ring")
+cutout_mesh = ExtResource("14_cloud")
 count = 380
 outer_radius = 160.0
 height_variation = 2.0
@@ -175,8 +234,8 @@ size_range = Vector2(18, 40)
 [node name="SkyClouds" type="MultiMeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 22, 0)
 cast_shadow = 0
-script = ExtResource("8_cloud_sea")
-cloud_mesh = ExtResource("14_cloud")
+script = ExtResource("8_cutout_ring")
+cutout_mesh = ExtResource("14_cloud")
 count = 28
 outer_radius = 170.0
 inner_radius = 75.0

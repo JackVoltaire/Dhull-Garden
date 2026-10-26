@@ -7,7 +7,7 @@ what's still open, and what was learned along the way.
 
 ## Where things stand
 
-Everything is merged into `main` (pull requests #1 to #8). There is no CI; see Workflow below.
+Everything is merged into `main` (pull requests #1 to #10). There is no CI; see Workflow below.
 
 - **Core systems** (autoloads, in `systems/`):
   - `Settings`, `Clock` (real-world time with debug time travel), `Calendar` (dated events and
@@ -22,13 +22,20 @@ Everything is merged into `main` (pull requests #1 to #8). There is no CI; see W
   Sample 2D and 3D minigames exist as placeholders.
 - **Dream island** (`scenes/levels/dream_island/`). A look-test level, and the scene the game
   starts in. It has:
-  - the floating island, goth trees, rock shards and a ruined arch, all modelled in Blender
+  - the floating island, goth trees, rock shards, a ruined arch, a small graveyard (gravestones
+    and crosses) and thorny curls around the rim, all modelled in Blender
   - a stream, and a waterfall with jagged lines and splash puffs
   - a sea of clouds, and the locked spooky and chilly islands in the distance
   - a day/night sky (`SkyCycle`), and a film-grain screen overlay (`ScreenTexture`)
-- **Look** (PR #8, the latest):
-  - a dark base palette with TADC-bright magenta and cyan accents, and thin ink outlines
-  - 2D "cardboard cutout" tree tops, clouds, sun and moon, animated in 4 stepped frames
+- **Look** (PR #10, the latest, after the user agreed the island was still far from the
+  moodboard):
+  - contrast: a deep violet sky (rose dawn, ember dusk, near-black night), dark slate ground,
+    distance fog instead of the old milky volumetric fog, and glowing accents
+  - ink lines drawn in screen space along silhouettes and folds (`InkOutlines`)
+  - hatching in shade and crayon streaks on every 3D surface (`toon_hatched.gdshader`)
+  - motifs: the graveyard, thorny curls, glowing pastel eyes floating round the island, and
+    chalk spirals, stars and eye glyphs in the sky
+  - 2D "cardboard cutout" tree tops, clouds, sun and moon, animated in 3 or 4 stepped frames
   - a grinning sun and moon in the spirit of Soul Eater
   - all the drawings are placeholders for the user's own art
 
@@ -64,17 +71,13 @@ tools aren't available locally, the summary at the end of this file covers it.
 
 ## Open questions for the user
 
-The user merged PR #8 without answering these, so the current look stands until they say
-otherwise:
-
-1. Is the midday sky too grey? A deeper violet or indigo was offered instead.
-2. The design doc still says the palette "stays free and pastel", but the look is now a dark base
-   with bright accents. Should that line change? Don't edit the user's words without asking.
-3. Should the ink outlines and the film grain/scanlines/vignette stay as they are, get subtler,
-   or go?
+1. The design doc's Art direction still says the palette "stays free and pastel" and
+   "Outlines: none, or very subtle", but the moodboard and the look now have a dark base and
+   heavy ink lines. Should those lines change? Don't edit the user's words without asking.
+2. Should the film grain, scanlines and vignette stay as they are, get subtler, or go?
 
 Offered but not started:
-- 3D gravestones and flowers for the island.
+- 3D flowers for the island.
 - The face-swap expression and reaction-symbol system. Moodboard motifs: zigzag grins, spiral or
   glowing eyes, star/spiral/eye symbols.
 - The Dhull model itself.
