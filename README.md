@@ -121,7 +121,7 @@ above it.
   `crease_angle` on its material. `SkyCycle` colors the sky, sunlight, fog and shadow tint from
   gradients that run from midnight to midnight, and shows the drawn sun by day and the moon by
   night; in the editor, drag its **Preview Hour** to see any time of day. The sky itself is
-  `stained_glass_sky.gdshader`, a speckled mosaic of broken stained glass: shards of colored
+  `stained_glass_sky.gdshader`, a speckled mosaic of broken stained glass: long shards of colored
   glass in dark lead, some cracked or missing; tune the shards, lead, accents and specks on the
   sky material. `stylized_water.gdshader` draws the jagged lines on water; tune its lanes,
   jaggedness, dashes and `line_glow` per material. Instance
