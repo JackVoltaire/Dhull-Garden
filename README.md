@@ -1,8 +1,8 @@
 # Dhull Garden
 
-A creature-raising garden game built with [Godot](https://godotengine.org), in the spirit of
-the Sonic Adventure 2 Battle Chao Garden. The garden runs on the real-world clock, with
-dated events like Animal Crossing, and has minigames in both 2D and 3D.
+A game about raising Dhulls in a garden, built with [Godot](https://godotengine.org), in the
+spirit of the Sonic Adventure 2 Battle Chao Garden. The garden runs on the real-world clock,
+with dated events like Animal Crossing, and has minigames in both 2D and 3D.
 
 ## Getting started
 

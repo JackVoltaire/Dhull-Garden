@@ -1,8 +1,14 @@
 # Dhull Garden
 
-Godot 4.7 creature-raising garden game in GDScript (Chao Garden successor with real-world
-time, Animal Crossing-style events, and 2D/3D minigames). See README.md for layout, systems and
-code conventions.
+Godot 4.7 game in GDScript about raising Dhulls in a garden (Chao Garden successor with
+real-world time, Animal Crossing-style events, and 2D/3D minigames). See README.md for layout,
+systems and code conventions.
+
+## Naming
+
+- The creatures are **Dhulls**, singular **Dhull**. Use that name in code, data and game text,
+  e.g. a `Dhull` class, `data/dhulls/`, `dhull_id`, not "creature" or "pet".
+- "Chao" is Sega's name. Keep it out of code, data and game text.
 
 ## Workflow
 
