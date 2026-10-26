@@ -27,15 +27,6 @@
 [ext_resource type="QuadMesh" path="res://scenes/environment/doodles/doodles.tres" id="25_doodles"]
 [ext_resource type="Shader" path="res://assets/shaders/stained_glass_sky.gdshader" id="26_sky"]
 [ext_resource type="PackedScene" path="res://scenes/dhulls/dhull.tscn" id="27_dhull"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/apricot.tres" id="28_apricot"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/harlequin.tres" id="29_harlequin"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/porcelain.tres" id="30_porcelain"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/sunny.tres" id="31_sunny"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/cherry.tres" id="32_cherry"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/lilac.tres" id="33_lilac"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/lagoon.tres" id="34_lagoon"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/ink.tres" id="35_ink"]
-[ext_resource type="Resource" path="res://data/dhulls/colorings/moth.tres" id="36_moth"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -259,50 +250,17 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -55, 6, -8
 [node name="ChillyIsland" parent="." instance=ExtResource("16_chilly")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 68, 10, -72)
 
-[node name="DhullApricot" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.73994, 0, 0.672673, 0, 1, 0, -0.672673, 0, 0.73994, -4, 0.438, 2.6)
-eye_style = 0
-coloring = ExtResource("28_apricot")
-
-[node name="DhullHarlequin" parent="." instance=ExtResource("27_dhull")]
+[node name="DhullRound" parent="." instance=ExtResource("27_dhull")]
 transform = Transform3D(0.910366, 0, 0.413803, 0, 1, 0, -0.413803, 0, 0.910366, -2, 0.455, 2.6)
-eye_style = 1
-coloring = ExtResource("29_harlequin")
+eye_style = 0
 
-[node name="DhullPorcelain" parent="." instance=ExtResource("27_dhull")]
+[node name="DhullDroopy" parent="." instance=ExtResource("27_dhull")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0.455, 2.6)
-eye_style = 2
-coloring = ExtResource("30_porcelain")
-
-[node name="DhullSunny" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.910366, 0, -0.413803, 0, 1, 0, 0.413803, 0, 0.910366, 2, 0.437, 2.6)
-eye_style = 3
-coloring = ExtResource("31_sunny")
-
-[node name="DhullCherry" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.73994, 0, -0.672673, 0, 1, 0, 0.672673, 0, 0.73994, 4, 0.418, 2.6)
-eye_style = 0
-coloring = ExtResource("32_cherry")
-
-[node name="DhullLilac" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.905459, 0, 0.424434, 0, 1, 0, -0.424434, 0, 0.905459, -3, 0.528, 0.6)
 eye_style = 1
-coloring = ExtResource("33_lilac")
 
-[node name="DhullLagoon" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.988012, 0, 0.154377, 0, 1, 0, -0.154377, 0, 0.988012, -1, 0.528, 0.6)
+[node name="DhullIntense" parent="." instance=ExtResource("27_dhull")]
+transform = Transform3D(0.910366, 0, -0.413803, 0, 1, 0, 0.413803, 0, 0.910366, 2, 0.437, 2.6)
 eye_style = 2
-coloring = ExtResource("34_lagoon")
-
-[node name="DhullInk" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.988012, 0, -0.154377, 0, 1, 0, 0.154377, 0, 0.988012, 1, 0.508, 0.6)
-eye_style = 3
-coloring = ExtResource("35_ink")
-
-[node name="DhullMoth" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.905459, 0, -0.424434, 0, 1, 0, 0.424434, 0, 0.905459, 3, 0.468, 0.6)
-eye_style = 0
-coloring = ExtResource("36_moth")
 
 [node name="InkOutlines" parent="." instance=ExtResource("20_ink")]
 

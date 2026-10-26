@@ -17,7 +17,7 @@ extends Node3D
 		eye_style = value
 		if is_node_ready():
 			_show_face()
-## The colors of its clay. Without one, it keeps the clay shader's default colors.
+## The colors of its clay; Sunny unless set. Without one, it keeps the clay shader's defaults.
 @export var coloring: DhullColoring:
 	set(value):
 		coloring = value

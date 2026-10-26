@@ -11,8 +11,8 @@ const int PATTERN_SPOTS = 2;
 
 // Fixed instance slots 0-3, apart from the face overlay's (dhull_face.gdshader), since a head
 // carries both and Godot would otherwise number each shader's slots from 0, so they'd collide.
-instance uniform vec4 part_color : source_color, instance_index(0) = vec4(1.0, 0.64, 0.4, 1.0);
-instance uniform vec4 tip_color : source_color, instance_index(1) = vec4(1.0, 0.62, 0.76, 1.0);
+instance uniform vec4 part_color : source_color, instance_index(0) = vec4(1.0, 0.83, 0.25, 1.0);
+instance uniform vec4 tip_color : source_color, instance_index(1) = vec4(1.0, 0.55, 0.25, 1.0);
 instance uniform vec4 pattern_color : source_color, instance_index(2) = vec4(0.36, 0.24, 0.8, 1.0);
 instance uniform int pattern : instance_index(3) = 0;
 // Size of a pattern's diamonds and spots, in meters.
