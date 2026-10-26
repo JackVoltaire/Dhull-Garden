@@ -4,6 +4,8 @@
 shader_type spatial;
 render_mode cull_disabled, diffuse_toon, specular_disabled;
 
+#include "res://assets/shaders/stained_glass.gdshaderinc"
+
 uniform sampler2D frames : source_color, filter_linear_mipmap;
 uniform int frame_count : hint_range(1, 64) = 4;
 // Frames per second. Low rates (3-8) read as drawn animation; 0 holds the first frame.
@@ -24,6 +26,9 @@ uniform float self_light : hint_range(0.0, 2.0) = 0.0;
 // How much the world's light falls on the drawing. At 0 it keeps exactly its drawn colors by day
 // and night, as bright as self_light makes it.
 uniform float world_light : hint_range(0.0, 1.0) = 1.0;
+// For drawings in the sky, like floating eyes: they sit behind the sky's stained glass, so where
+// the lead or a missing shard covers them they show as white line art on black.
+uniform bool behind_glass = false;
 // How far the shadow caster sits behind the drawing, along the light, in mesh units; about
 // half the mesh's width. The shadow on the ground stays in place, but the drawing stops
 // shadowing itself.
@@ -86,6 +91,11 @@ void fragment() {
 	vec4 color = texture(frames, uv) * tint;
 	ALBEDO = color.rgb * world_light;
 	EMISSION = color.rgb * self_light;
+	if (behind_glass) {
+		float blackness = glass_blackness(normalize(mat3(INV_VIEW_MATRIX) * VERTEX));
+		ALBEDO *= 1.0 - blackness;
+		EMISSION = mix(EMISSION, glass_line_art(color.rgb), blackness);
+	}
 	ALPHA = color.a;
 	ALPHA_SCISSOR_THRESHOLD = alpha_cut;
 	// Also seen from behind (standees), keep the sky-facing normal rather than a flipped one.
