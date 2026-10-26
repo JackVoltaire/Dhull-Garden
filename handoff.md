@@ -82,11 +82,15 @@ Offered but not started:
 ## Working locally
 
 - **Godot 4.7.2**, Forward+.
-  - `tools/godot.sh` downloads and verifies Godot only on 64-bit x86 Linux. Elsewhere, set
-    `GODOT` to your Godot binary.
-  - The script needs bash: on Windows, use Git Bash or WSL, or just use the editor.
+  - `tools/godot.sh` downloads and verifies Godot on 64-bit x86 Linux and Windows. Elsewhere,
+    set `GODOT` to your Godot binary.
+  - The script needs bash: on Windows, run it from Git Bash. `tools/godot.sh --path . -e`
+    opens the editor.
 - **Blender 5.2.3 LTS.** Same idea with `tools/blender.sh` and `BLENDER`.
-- **Lint and format:** `pipx install "gdtoolkit==4.*"`, then `gdlint . && gdformat --check .`.
+- **Lint and format:** `pipx install "gdtoolkit==4.*"` (or `uv tool install "gdtoolkit==4.*"`),
+  then `gdlint . && gdformat --check .`.
+- **Python.** On Windows the interpreter is `python`, not `python3`, e.g.
+  `python tools/link_model_materials.py`.
 - **Tests:** `tools/godot.sh --headless --path . res://tests/test_runner.tscn`. A test fails on
   any error logged while it runs, not just failed assertions.
 - **First open.** The first time the editor opens the project it may regenerate `*.import` and
