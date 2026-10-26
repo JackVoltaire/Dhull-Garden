@@ -9,5 +9,7 @@ code conventions.
 - When a branch's work is done, open a pull request and merge it into `main` yourself.
   Don't wait for a review.
 - This project has no CI. Don't add GitHub Actions workflows. Before merging, run
-  `gdlint . && gdformat --check .` locally instead, plus the tests
-  (`godot --headless --path . res://tests/test_runner.tscn`) when a Godot binary is available.
+  `gdlint . && gdformat --check .` locally instead, plus the tests:
+  `tools/godot.sh --headless --path . res://tests/test_runner.tscn`.
+- Run Godot only through `tools/godot.sh`. It downloads and verifies the right version, and
+  it's the command `.claude/settings.json` allows.
