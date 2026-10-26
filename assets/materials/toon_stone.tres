@@ -1,7 +1,9 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/toon_hatched.gdshader" id="1_shader"]
 
 [resource]
 resource_name = "toon_stone"
-albedo_color = Color(0.42, 0.39, 0.47, 1)
-diffuse_mode = 3
-specular_mode = 2
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/albedo = Color(0.42, 0.39, 0.47, 1)
