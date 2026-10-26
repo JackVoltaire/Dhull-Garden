@@ -1,7 +1,16 @@
 [gd_resource type="StandardMaterial3D" format=3]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ink"]
+resource_name = "toon_cloud_outline"
+cull_mode = 1
+shading_mode = 0
+albedo_color = Color(0.3, 0.26, 0.4, 1)
+grow = true
+grow_amount = 0.008
+
 [resource]
 resource_name = "toon_cloud"
-albedo_color = Color(0.9, 0.88, 0.93, 1)
+next_pass = SubResource("StandardMaterial3D_ink")
+albedo_color = Color(0.58, 0.54, 0.68, 1)
 diffuse_mode = 3
 specular_mode = 2

@@ -52,7 +52,7 @@ scenes/
   levels/           Level, the root script of walkable areas
   levels/dream_island/  Look-test floating island: art direction, sky and effects
   levels/sandbox/   Greybox garden for trying out movement and mechanics
-  environment/      SkyCycle (sky and light by time of day) and CloudSea
+  environment/      SkyCycle (sky and light by time of day), CloudSea, ScreenTexture
   player/           Player scene and its controller script
   props/            Reusable things placed in levels: waterfall/, shiny_spot/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
@@ -111,11 +111,16 @@ above it.
 - **Text.** Put player-facing text in `localization/strings.csv` and use the key: Controls
   translate their `text` automatically, and in code use `tr("KEY")`. Add a column to add a
   language.
-- **Look.** The art direction is in the design notes. Toon-shaded pastel materials live in
-  `assets/materials/`; editing one recolors everything that uses it. `SkyCycle` colors the sky,
-  sunlight, fog and shadow tint from gradients that run from midnight to midnight; in the
-  editor, drag its **Preview Hour** to see any time of day. `stylized_water.gdshader` draws the
-  jagged lines on water; tune its lanes, jaggedness and dashes per material.
+- **Look.** The art direction and moodboard are in the design notes. The toon materials live in
+  `assets/materials/`; editing one recolors everything that uses it. Each draws a thin ink
+  outline through its **Next Pass**, `toon_ink_outline.tres` (an inverted hull: raise its
+  **Grow Amount** for thicker lines). Clouds use their own finer outline, because the cloud
+  puffs are scaled up and scaling thickens the line too. `SkyCycle` colors the sky, sunlight,
+  fog and shadow tint from gradients that run from midnight to midnight; in the editor, drag
+  its **Preview Hour** to see any time of day. `stylized_water.gdshader` draws the jagged lines
+  on water; tune its lanes, jaggedness and dashes per material. Instance
+  `scenes/environment/screen_texture.tscn` in a level for film grain, faint scanlines and a
+  vignette over the whole screen.
 - **Debug menu.** F3 shows the date, day phase, season and active events, and has buttons to
   jump the clock forward, save, load, wipe the save, switch levels and launch any minigame.
 

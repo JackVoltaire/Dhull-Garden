@@ -1,7 +1,10 @@
 [gd_resource type="StandardMaterial3D" format=3]
 
+[ext_resource type="Material" path="res://assets/materials/toon_ink_outline.tres" id="1_ink"]
+
 [resource]
 resource_name = "toon_bark"
-albedo_color = Color(0.22, 0.17, 0.25, 1)
+next_pass = ExtResource("1_ink")
+albedo_color = Color(0.09, 0.07, 0.11, 1)
 diffuse_mode = 3
 specular_mode = 2
