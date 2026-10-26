@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "toon_grass"
-albedo_color = Color(0.56, 0.8, 0.62, 1)
+albedo_color = Color(0.47, 0.62, 0.5, 1)
 diffuse_mode = 3
 specular_mode = 2
