@@ -160,6 +160,10 @@ checksums and caches it in `~/.cache/dhull-garden`. Elsewhere, or to use your ow
 `GODOT` to the path of a Godot binary. `.claude/settings.json` lets Claude Code run this
 script without asking.
 
+`tools/blender.sh` does the same for Blender 5.2.3 LTS, the version models are made with
+(SHA-256 checked; set `BLENDER` to use your own copy). For example,
+`tools/blender.sh --background --python script.py` runs a Blender script without the interface.
+
 Tests live in `tests/unit/`: any `test_*.gd` file extending `TestCase`, with `test_*`
 methods. Run them all with:
 
