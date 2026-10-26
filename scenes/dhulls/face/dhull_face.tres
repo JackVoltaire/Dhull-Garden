@@ -9,5 +9,5 @@ render_priority = 0
 shader = ExtResource("1_shader")
 shader_parameter/eyes = ExtResource("2_eyes")
 shader_parameter/mouths = ExtResource("3_mouths")
-shader_parameter/eye_frames = 7
+shader_parameter/eye_frames = 10
 shader_parameter/mouth_frames = 6

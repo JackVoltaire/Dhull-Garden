@@ -250,17 +250,21 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -55, 6, -8
 [node name="ChillyIsland" parent="." instance=ExtResource("16_chilly")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 68, 10, -72)
 
-[node name="DhullHappy" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.847998, 0, -0.529999, 0, 1, 0, 0.529999, 0, 0.847998, 2.5, 0.43, 3)
-emotion = 1
+[node name="DhullRound" parent="." instance=ExtResource("27_dhull")]
+transform = Transform3D(0.826227, 0, 0.563337, 0, 1, 0, -0.563337, 0, 0.826227, -3, 0.455, 2.6)
+eye_style = 0
 
-[node name="DhullNeutral" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.874157, 0, 0.485643, 0, 1, 0, -0.485643, 0, 0.874157, -2.5, 0.46, 2.5)
-emotion = 0
+[node name="DhullDroopy" parent="." instance=ExtResource("27_dhull")]
+transform = Transform3D(0.975133, 0, 0.221621, 0, 1, 0, -0.221621, 0, 0.975133, -1, 0.455, 2.6)
+eye_style = 1
 
-[node name="DhullAngry" parent="." instance=ExtResource("27_dhull")]
-transform = Transform3D(0.532813, 0, -0.846233, 0, 1, 0, 0.846233, 0, 0.532813, 5.4, 0.4, 3.6)
-emotion = 3
+[node name="DhullIntense" parent="." instance=ExtResource("27_dhull")]
+transform = Transform3D(0.975133, 0, -0.221621, 0, 1, 0, 0.221621, 0, 0.975133, 1, 0.446, 2.6)
+eye_style = 2
+
+[node name="DhullDumb" parent="." instance=ExtResource("27_dhull")]
+transform = Transform3D(0.826227, 0, -0.563337, 0, 1, 0, 0.563337, 0, 0.826227, 3, 0.428, 2.6)
+eye_style = 3
 
 [node name="InkOutlines" parent="." instance=ExtResource("20_ink")]
 

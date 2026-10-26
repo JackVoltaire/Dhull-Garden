@@ -36,9 +36,11 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   - hatching in shade and crayon streaks on every 3D surface (`toon_hatched.gdshader`)
   - motifs: the graveyard, thorny curls, glowing pastel eyes floating round the island, and
     chalk spirals, stars and eye glyphs in the sky
-- **Dhulls** (`scenes/dhulls/`): the first Dhull model (clay body with nubs and a lightning J
-  tail, a floating head in nebula mist), with Wind Waker-style swappable eyes and mouths for
-  emotions and blinking. Three stand near the start of the dream island.
+- **Dhulls** (`scenes/dhulls/`): the first Dhull model, with a Chao's body shape in separate,
+  outlined parts (nub arms, round feet, a lightning J tail) and a floating head in nebula mist,
+  in apricot orange clay with pink nub tips. Wind Waker-style swappable anime eyes and mouths
+  show emotions; each Dhull has an eye style (round, droopy, intense, dumb). An idle animation
+  swings the parts. Four stand near the start of the dream island, one per eye style.
   - 2D "cardboard cutout" tree tops, clouds, sun and moon, animated in 3 or 4 stepped frames
   - a grinning sun and moon in the spirit of Soul Eater
   - all the drawings are placeholders for the user's own art

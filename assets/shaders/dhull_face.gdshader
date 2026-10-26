@@ -8,14 +8,14 @@ render_mode unshaded, depth_draw_never, cull_back, shadows_disabled;
 
 uniform sampler2D eyes : source_color, filter_linear_mipmap, repeat_disable;
 uniform sampler2D mouths : source_color, filter_linear_mipmap, repeat_disable;
-uniform int eye_frames = 7;
+uniform int eye_frames = 10;
 uniform int mouth_frames = 6;
 // Where the eyes and the mouth sit on the front of the head, in meters from the head's middle,
 // and how wide and tall each drawing is.
-uniform vec2 eyes_center = vec2(0.0, 0.0);
-uniform vec2 eyes_size = vec2(0.34, 0.17);
-uniform vec2 mouth_center = vec2(0.0, -0.105);
-uniform vec2 mouth_size = vec2(0.14, 0.07);
+uniform vec2 eyes_center = vec2(0.0, 0.015);
+uniform vec2 eyes_size = vec2(0.36, 0.225);
+uniform vec2 mouth_center = vec2(0.0, -0.135);
+uniform vec2 mouth_size = vec2(0.13, 0.065);
 instance uniform int eye_frame = 0;
 instance uniform int mouth_frame = 0;
 

@@ -11,6 +11,12 @@ extends Node3D
 		emotion = value
 		if is_node_ready():
 			_show_face()
+## Its everyday eyes, when no emotion swaps in eyes of its own.
+@export var eye_style := DhullFace.EyeStyle.ROUND:
+	set(value):
+		eye_style = value
+		if is_node_ready():
+			_show_face()
 ## Draws the face on the head; see dhull_face.gdshader.
 @export var face_material: Material
 ## How far the head bobs up and down, and how many times a second.
@@ -54,5 +60,7 @@ func _process(delta: float) -> void:
 
 
 func _show_face() -> void:
-	_head.set_instance_shader_parameter(&"eye_frame", DhullFace.eyes_for(emotion, _blinking))
+	_head.set_instance_shader_parameter(
+		&"eye_frame", DhullFace.eyes_for(emotion, eye_style, _blinking)
+	)
 	_head.set_instance_shader_parameter(&"mouth_frame", DhullFace.mouth_for(emotion))

@@ -1,13 +1,8 @@
 [gd_resource type="ShaderMaterial" format=3]
 
-[ext_resource type="Shader" path="res://assets/shaders/toon_hatched.gdshader" id="1_shader"]
+[ext_resource type="Shader" path="res://assets/shaders/clay.gdshader" id="1_shader"]
 
 [resource]
 resource_name = "toon_clay"
 render_priority = 0
 shader = ExtResource("1_shader")
-shader_parameter/albedo = Color(0.9, 0.86, 0.95, 1)
-shader_parameter/shade_fill = 0.6
-shader_parameter/hatch_width = 0.0
-shader_parameter/crayon_strength = 0.05
-shader_parameter/crayon_density = 10.0

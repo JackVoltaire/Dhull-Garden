@@ -132,16 +132,19 @@ above it.
   film grain, faint scanlines and a vignette over the whole screen.
 - **Dhulls.** `scenes/dhulls/dhull.tscn` is a Dhull: the model from `assets/models/dhull/`, a
   nebula mist of particles round the head, and a face drawn on the head by
-  `dhull_face.gdshader`, like Wind Waker's swappable faces. Set a Dhull's `emotion` to change
-  its face; `DhullFace` picks the eyes and mouth for each emotion, and blinks. The face drawings
-  are strips in `scenes/dhulls/face/`, one frame per shape in the order of `DhullFace.Eyes` and
+  `dhull_face.gdshader`, like Wind Waker's swappable faces. Set a Dhull's `eye_style` for its
+  everyday anime eyes (round, droopy, intense or dumb) and its `emotion` to change its face;
+  `DhullFace` picks the eyes and mouth, and blinks. The face drawings are strips in
+  `scenes/dhulls/face/`, one frame per shape in the order of `DhullFace.Eyes` and
   `DhullFace.Mouth`. To add a shape, draw a frame at the end of its strip, add it to the enum
   and raise the frame count on `dhull_face.tres`; a test checks they match. The clay material,
-  `toon_clay`, has no hatching, so a Dhull reads smooth and the marks don't slide over it as it
-  moves. The model is separate parts, so each gets its own ink outline and can move on its own:
-  a body shaped like a Chao's, arms, legs and a tail that are children of the body, each with
-  its origin at its joint, and a head that floats and bobs above it. The scene's AnimationPlayer
-  has an `idle` loop that swings the parts from their joints; add more animations there.
+  `toon_clay`, uses `clay.gdshader` rather than the world's hatching: soft toon shading, lumps
+  and smears laid out on the model so they move with it, and a color that runs from `base_color`
+  to `tip_color` towards the nub tips, as painted into the model's vertex color. The model is
+  separate parts, so each gets its own ink outline and can move on its own: a body shaped like a
+  Chao's, arms, legs and a tail that are children of the body, each with its origin at its
+  joint, and a head that floats and bobs above it. The scene's AnimationPlayer has an `idle`
+  loop that swings the parts from their joints; add more animations there.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
   are 2D drawings, like cardboard cutouts, animated in steps with 3 or 4 frames. The drawings in
   the repo are placeholders. To make one, draw its frames side by side in one image (PNG, or SVG
