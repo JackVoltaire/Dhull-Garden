@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CalendarEvent" format=3]
+
+[ext_resource type="Script" path="res://systems/calendar/calendar_event.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"halloween"
+display_name = "EVENT_HALLOWEEN"
+start_month = 10
+start_day = 31
+end_month = 10
+end_day = 31
+start_hour = 17

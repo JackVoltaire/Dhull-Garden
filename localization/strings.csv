@@ -1,0 +1,12 @@
+keys,en
+UI_PAUSED,Paused
+UI_RESUME,Resume
+UI_QUIT,Quit
+EVENT_NEW_YEAR,New Year
+EVENT_HALLOWEEN,Halloween Night
+EVENT_WEEKEND_MARKET,Weekend Market
+EVENT_HARVEST_FESTIVAL,Harvest Festival
+MINIGAME_SAMPLE_2D,Sample 2D Minigame
+MINIGAME_SAMPLE_3D,Sample 3D Minigame
+MINIGAME_SAMPLE_DESCRIPTION,Press Jump as often as you can in ten seconds.
+MINIGAME_SAMPLE_HUD,Score: %d    Time: %d    Press Jump!

@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/minigames/sample/sample_minigame.gd" id="1_sample"]
+
+[node name="Sample2D" type="Node2D"]
+script = ExtResource("1_sample")
+
+[node name="Toy" type="Polygon2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(576, 324)
+color = Color(0.5, 0.78, 0.36, 1)
+polygon = PackedVector2Array(-60, -60, 60, -60, 60, 60, -60, 60)
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 720.0
+offset_bottom = 72.0

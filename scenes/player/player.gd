@@ -18,6 +18,7 @@ extends CharacterBody3D
 @export var turn_speed := 12.0
 
 @export_group("Camera")
+## Radians per pixel of mouse movement, before the player's sensitivity setting is applied.
 @export var mouse_sensitivity := 0.003
 ## Gamepad look speed in radians per second at full stick deflection.
 @export var stick_sensitivity := 3.0
@@ -36,7 +37,8 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		# screen_relative ignores window stretching, so sensitivity doesn't change with window size.
-		_rotate_camera(-event.screen_relative * mouse_sensitivity)
+		var setting: float = Settings.get_value("controls/mouse_sensitivity")
+		_rotate_camera(-event.screen_relative * mouse_sensitivity * setting)
 	elif event is InputEventMouseButton and event.pressed:
 		# Recapture the cursor after it was released, e.g. by alt-tabbing.
 		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
@@ -75,6 +77,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _rotate_camera(amount: Vector2) -> void:
+	if Settings.get_value("controls/invert_y"):
+		amount.y = -amount.y
 	_camera_pivot.rotation.y += amount.x
 	_spring_arm.rotation.x = clampf(
 		_spring_arm.rotation.x + amount.y,

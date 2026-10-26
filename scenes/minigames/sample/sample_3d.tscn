@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/minigames/sample/sample_minigame.gd" id="1_sample"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_toy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_toy"]
+albedo_color = Color(0.72, 0.42, 0.3, 1)
+
+[node name="Sample3D" type="Node3D"]
+script = ExtResource("1_sample")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.936329, 0.351123, 0, -0.351123, 0.936329, 0, 1.5, 4)
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Toy" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+mesh = SubResource("BoxMesh_toy")
+surface_material_override/0 = SubResource("StandardMaterial3D_toy")
+
+[node name="Label" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 720.0
+offset_bottom = 72.0
