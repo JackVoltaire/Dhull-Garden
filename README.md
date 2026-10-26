@@ -113,9 +113,10 @@ above it.
   translate their `text` automatically, and in code use `tr("KEY")`. Add a column to add a
   language.
 - **Look.** The art direction and moodboard are in the design notes. The toon materials live in
-  `assets/materials/`; editing one recolors everything that uses it. Each draws a thin ink
-  outline through its **Next Pass**, `toon_ink_outline.tres` (an inverted hull: raise its
-  **Grow Amount** for thicker lines). `SkyCycle` colors the sky, sunlight, fog and shadow tint
+  `assets/materials/`; editing one recolors everything that uses it. Instance
+  `scenes/environment/ink_outlines.tscn` in a level for ink lines along silhouettes and sharp
+  folds, the same width on screen at any distance; tune `line_width`, `silhouette_gap` and
+  `crease_angle` on its material. `SkyCycle` colors the sky, sunlight, fog and shadow tint
   from gradients that run from midnight to midnight, and shows the drawn sun by day and the moon
   by night; in the editor, drag its **Preview Hour** to see any time of day. `stylized_water.gdshader` draws the jagged lines
   on water; tune its lanes, jaggedness and dashes per material. Instance

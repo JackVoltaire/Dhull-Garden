@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" path="res://scenes/environment/screen_texture.tscn" id="17_screen"]
 [ext_resource type="QuadMesh" path="res://scenes/environment/sun_moon/sun.tres" id="18_sun"]
 [ext_resource type="QuadMesh" path="res://scenes/environment/sun_moon/moon.tres" id="19_moon"]
+[ext_resource type="PackedScene" path="res://scenes/environment/ink_outlines.tscn" id="20_ink"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -188,6 +189,8 @@ transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -55, 6, -8
 
 [node name="ChillyIsland" parent="." instance=ExtResource("16_chilly")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 68, 10, -72)
+
+[node name="InkOutlines" parent="." instance=ExtResource("20_ink")]
 
 [node name="ScreenTexture" parent="." instance=ExtResource("17_screen")]
 
