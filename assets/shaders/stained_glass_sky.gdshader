@@ -10,9 +10,9 @@ uniform vec4 horizon_color : source_color = vec4(0.44, 0.31, 0.7, 1.0);
 uniform vec4 ground_color : source_color = vec4(0.16, 0.1, 0.3, 1.0);
 uniform vec4 lead_color : source_color = vec4(0.07, 0.04, 0.1, 1.0);
 // Shards across one radian of sky; higher makes smaller shards.
-uniform float shard_density : hint_range(2.0, 40.0) = 13.0;
+uniform float shard_density : hint_range(2.0, 40.0) = 7.0;
 // Width of the lead between shards, as a fraction of a shard.
-uniform float lead_width : hint_range(0.0, 0.3) = 0.1;
+uniform float lead_width : hint_range(0.0, 0.3) = 0.07;
 // Share of shards tinted towards an accent color, and how strongly.
 uniform float accent_share : hint_range(0.0, 1.0) = 0.35;
 uniform float accent_strength : hint_range(0.0, 1.0) = 0.45;
@@ -22,8 +22,10 @@ uniform float shard_variation : hint_range(0.0, 0.5) = 0.18;
 uniform float missing_share : hint_range(0.0, 0.3) = 0.04;
 // Share of the remaining shards with a crack through them.
 uniform float cracked_share : hint_range(0.0, 1.0) = 0.3;
-// How strongly the glass is flecked with lighter and darker specks.
+// How strongly the glass is flecked with lighter and darker specks, and how many there are
+// across one radian of sky.
 uniform float speckle_strength : hint_range(0.0, 1.0) = 0.35;
+uniform float speckle_density : hint_range(10.0, 500.0) = 200.0;
 // How much shards near the sun or moon brighten.
 uniform float backlight : hint_range(0.0, 2.0) = 0.7;
 
@@ -124,7 +126,7 @@ void sky() {
 		}
 
 		// Specks in the glass.
-		float speck = value_noise(EYEDIR * shard_density * 16.0);
+		float speck = value_noise(EYEDIR * speckle_density);
 		color *= 1.0 + (smoothstep(0.75, 0.85, speck) - smoothstep(0.25, 0.15, speck)) * speckle_strength;
 
 		// A broken-out shard: a dark hole with the odd glint.
