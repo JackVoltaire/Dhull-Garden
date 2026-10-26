@@ -54,14 +54,14 @@ scenes/
   levels/sandbox/   Greybox garden for trying out movement and mechanics
   environment/      SkyCycle (sky and light by time of day) and CloudSea
   player/           Player scene and its controller script
-  props/            Reusable things placed in levels: floating_island/, dream_tree/,
-                    waterfall/, shiny_spot/
+  props/            Reusable things placed in levels: waterfall/, shiny_spot/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
 assets/             Shared imported resources, by type
+  models/           One folder per model: <name>.blend (the source) and <name>.glb
   materials/        The toon material palette (toon_*.tres)
   shaders/          stylized_water.gdshader and other shared shaders
   audio/ fonts/ models/ textures/
@@ -143,7 +143,25 @@ above it.
   | 3     | interactable | Interactables. Only the player's Interactor detects them. |
 
 - **Greyboxing:** block out levels with CSG nodes (see `sandbox.tscn`) and replace them with
-  real meshes once a layout feels right.
+  Blender models once a layout feels right.
+
+## Models (Blender)
+
+Models are made in **Blender 5.2 LTS**. Each one lives in its own folder,
+`assets/models/<name>/`, as `<name>.blend`, the file you edit, and `<name>.glb`, the export Godot
+uses. Godot is set not to read `.blend` files itself, so the project works on machines without
+Blender.
+
+1. Edit or create `<name>.blend`.
+2. Name each material after a palette file in `assets/materials/`, such as `toon_grass` or
+   `toon_bark`. Godot then uses the shared toon material instead of the Blender one.
+3. Name objects with a collision suffix where needed: `-col` (the mesh plus matching collision),
+   `-convcol` (the mesh plus simpler convex collision), or `-colonly` / `-convcolonly` (an
+   invisible collider only).
+4. Export with **File > Export > glTF 2.0**, format **glTF Binary (.glb)**, to
+   `<name>.glb` in the same folder. The default settings are right (+Y up, apply modifiers).
+5. For a new model, after Godot imports it once, run `python3 tools/link_model_materials.py` to
+   link its materials to the palette, then let Godot import again.
 
 ## Tooling
 

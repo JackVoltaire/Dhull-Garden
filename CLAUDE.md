@@ -24,5 +24,9 @@ systems and code conventions.
 - This project has no CI. Don't add GitHub Actions workflows. Before merging, run
   `gdlint . && gdformat --check .` locally instead, plus the tests:
   `tools/godot.sh --headless --path . res://tests/test_runner.tscn`.
-- Run Godot only through `tools/godot.sh`. It downloads and verifies the right version, and
-  it's the command `.claude/settings.json` allows.
+- Run Godot only through `tools/godot.sh`, and Blender only through `tools/blender.sh`. They
+  download and verify the right versions, and they're the commands `.claude/settings.json`
+  allows.
+- Models: the `.blend` in `assets/models/<name>/` is the source. Change models by running Blender
+  scripts on it (`tools/blender.sh --background <file>.blend --python <script>`), save it, and
+  re-export the `.glb` next to it. See "Models (Blender)" in README.md.
