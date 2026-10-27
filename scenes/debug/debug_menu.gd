@@ -8,6 +8,7 @@ const TIME_JUMPS := {"+1 hour": 3600, "+1 day": 86400, "+1 week": 604800, "+30 d
 const LEVELS := {
 	"Dream island": "res://scenes/levels/dream_island/dream_island.tscn",
 	"Sandbox": "res://scenes/levels/sandbox/sandbox.tscn",
+	"Dhull gallery": "res://scenes/levels/dhull_gallery/dhull_gallery.tscn",
 }
 
 var _mouse_mode_before_open := Input.MOUSE_MODE_VISIBLE
@@ -40,6 +41,14 @@ func _ready() -> void:
 
 	var dhull_row := _add_row("Dhulls")
 	_add_button(dhull_row, "New random genes", _reroll_dhulls)
+	var activity_row := _add_row("Dhull activity")
+	for activity: DhullState.Activity in DhullState.Activity.values():
+		var activity_name: String = DhullState.Activity.keys()[activity].capitalize()
+		_add_button(activity_row, activity_name, _set_dhulls.bind(&"activity", activity))
+	var mood_row := _add_row("Dhull mood")
+	for mood: DhullState.Mood in DhullState.Mood.values():
+		var mood_name: String = DhullState.Mood.keys()[mood].capitalize()
+		_add_button(mood_row, mood_name, _set_dhulls.bind(&"mood", mood))
 
 	var minigame_row := _add_row("Minigames")
 	for minigame in Minigames.minigames:
@@ -112,6 +121,12 @@ func _reroll_dhulls() -> void:
 	rng.randomize()
 	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
 		dhull.genome = DhullGenome.random(rng)
+
+
+## Sets a property, such as activity or mood, on every Dhull in the level.
+func _set_dhulls(property: StringName, value: int) -> void:
+	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
+		dhull.set(property, value)
 
 
 func _launch_minigame(minigame: MinigameDefinition) -> void:
