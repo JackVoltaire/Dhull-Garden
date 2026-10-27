@@ -152,20 +152,20 @@ above it.
   faces, while the world stays ink-drawn. The part models are low-poly and flat-shaded, and
   `ps1_character.gdshader` (the `toon_character` material) lights them in a few dithered bands.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
-  eyes with banded irises and a starburst round a tiny pupil, black wedge lashes, eye bags drawn
-  as lines, and gritted teeth. The drawings are pixel-art PNG strips in `scenes/dhulls/face/`,
-  edited in any pixel editor and shown with hard pixels; keep them lossless and with mipmaps in
-  their import settings. A Dhull's genes give its everyday eyes (round, droopy, intense or
-  dumb); set its `emotion` to change its face. `DhullFace` picks the eyes and mouth, and blinks;
-  the mouth only shows when it's open. Frames follow the order of `DhullFace.Eyes` and
-  `DhullFace.Mouth`; to add a shape, draw a frame at the end of its strip, add it to the enum
-  and raise the frame count on `dhull_face.tres`, and a test checks they match. A Dhull's colors
-  come from its `coloring`, a `DhullColoring` resource in `data/dhulls/colorings/`: a color per
-  part, the color the nubs turn towards at their tips (painted into the model's vertex color,
-  and stepped like the light), and an optional pattern, harlequin diamonds or spots. The Dhull
-  sets them on its parts through the shader's instance uniforms, so every Dhull can differ while
-  sharing one material; the character and face shaders keep their instance uniforms in separate
-  slots, as a head carries both.
+  eyes with big banded irises and a starburst round a tiny pupil, black wedge lashes, eye bags
+  dithered under the eyes, and gritted teeth. The drawings are pixel-art PNG strips in
+  `scenes/dhulls/face/`, edited in any pixel editor and shown with hard pixels; keep them
+  lossless and with mipmaps in their import settings. A Dhull's genes give its everyday eyes
+  (round, droopy, intense or dumb); set its `emotion` to change its face. `DhullFace` picks the
+  eyes and mouth, and blinks; the mouth only shows when it's open. Frames follow the order of
+  `DhullFace.Eyes` and `DhullFace.Mouth`; to add a shape, draw a frame at the end of its strip,
+  add it to the enum and raise the frame count on `dhull_face.tres`, and a test checks they
+  match. A Dhull's colors come from its `coloring`, a `DhullColoring` resource in
+  `data/dhulls/colorings/`: a color per part, the color the nubs turn towards at their tips
+  (painted into the model's vertex color, and stepped like the light), and an optional pattern,
+  harlequin diamonds or spots. The Dhull sets them on its parts through the shader's instance
+  uniforms, so every Dhull can differ while sharing one material; the character and face shaders
+  keep their instance uniforms in separate slots, as a head carries both.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
   are 2D drawings, like cardboard cutouts, animated in steps with 3 or 4 frames. The drawings in
   the repo are placeholders. To make one, draw its frames side by side in one image (PNG, or SVG

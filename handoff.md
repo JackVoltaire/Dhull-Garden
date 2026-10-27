@@ -42,10 +42,10 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   bean), all only lightly warped from round; the user wants shapes that gently warp, never
   protrusions like ears or points. Characters look like House of Decay's (the user's
   reference): low-poly, flat-shaded PS1-style models with dithered banded light, and crunchy
-  pixel-art faces (clean, crisp eye shapes, banded irises with a starburst round a tiny pupil,
-  wedge lashes, eye bags drawn as lines, gritted teeth), swapped like Wind Waker's to show
-  emotions (the mouth only when open). The user rejected wobbly eye shapes, smooth lines and
-  soft shading for bags. The
+  low-resolution pixel-art faces (clean, crisp eye shapes, big banded irises with a starburst
+  round a tiny pupil, wedge lashes, dithered eye bags, gritted teeth), swapped like Wind
+  Waker's to show emotions (the mouth only when open). The user rejected wobbly eye shapes,
+  smooth lines, finer pixels, and soft shading or drawn lines for bags. The
   world keeps its ink-drawn look. An idle animation swings the parts. Colorings live in
   `data/dhulls/colorings/`: Sunny (yellow, tangerine tips) is the default; Ink and Harlequin
   are kept for later. Five stand near the start of the dream island.
