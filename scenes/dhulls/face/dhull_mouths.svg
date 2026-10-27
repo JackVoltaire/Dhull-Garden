@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="64" viewBox="0 0 256 64">
+
+<g transform="translate(0,0)"><ellipse cx="64" cy="32" rx="16" ry="18" fill="#7a1438" stroke="#150d1d" stroke-width="6"/><ellipse cx="64" cy="41" rx="9" ry="6" fill="#ff8fb8"/></g>
+<g transform="translate(128,0)"><polygon points="18.0,18.0 27.2,19.4 36.4,20.6 45.6,21.4 54.8,21.8 64.0,22.0 73.2,21.8 82.4,21.4 91.6,20.6 100.8,19.4 110.0,18.0 100.8,26.3 91.6,32.7 82.4,37.3 73.2,40.1 64.0,41.0 54.8,40.1 45.6,37.3 36.4,32.7 27.2,26.3" fill="#7a1438" stroke="#150d1d" stroke-width="6" stroke-linejoin="round"/><polygon points="18.0,18.0 27.2,31.4 36.4,20.6 45.6,33.4 54.8,21.8 64.0,34.0 73.2,21.8 82.4,33.4 91.6,20.6 100.8,31.4 110.0,18.0 110.0,18.0 100.8,19.4 91.6,20.6 82.4,21.4 73.2,21.8 64.0,22.0 54.8,21.8 45.6,21.4 36.4,20.6 27.2,19.4 18.0,18.0" fill="#fffaf2" stroke="#150d1d" stroke-width="4" stroke-linejoin="round"/></g>
+</svg>

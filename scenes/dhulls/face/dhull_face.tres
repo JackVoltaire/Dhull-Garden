@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/dhull_face.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://scenes/dhulls/face/dhull_eyes.svg" id="2_eyes"]
+[ext_resource type="Texture2D" path="res://scenes/dhulls/face/dhull_mouths.svg" id="3_mouths"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/eyes = ExtResource("2_eyes")
+shader_parameter/mouths = ExtResource("3_mouths")
+shader_parameter/eye_frames = 10
+shader_parameter/mouth_frames = 2
