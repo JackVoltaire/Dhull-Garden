@@ -1,7 +1,8 @@
 extends TestCase
 
-const EYE_FRAME_WIDTH := 256
-const MOUTH_FRAME_WIDTH := 128
+## Width over height of one frame of each strip, whatever size the drawings are imported at.
+const EYE_FRAME_ASPECT := 1.6
+const MOUTH_FRAME_ASPECT := 2.0
 
 
 func test_every_eye_style_has_everyday_eyes() -> void:
@@ -51,5 +52,10 @@ func test_face_images_match_the_shapes() -> void:
 	assert_eq(material.get_shader_parameter("mouth_frames"), DhullFace.Mouth.size())
 	var eyes: Texture2D = material.get_shader_parameter("eyes")
 	var mouths: Texture2D = material.get_shader_parameter("mouths")
-	assert_eq(eyes.get_width(), EYE_FRAME_WIDTH * DhullFace.Eyes.size())
-	assert_eq(mouths.get_width(), MOUTH_FRAME_WIDTH * DhullFace.Mouth.size())
+	assert_eq(
+		eyes.get_width(), roundi(eyes.get_height() * EYE_FRAME_ASPECT) * DhullFace.Eyes.size()
+	)
+	assert_eq(
+		mouths.get_width(),
+		roundi(mouths.get_height() * MOUTH_FRAME_ASPECT) * DhullFace.Mouth.size()
+	)

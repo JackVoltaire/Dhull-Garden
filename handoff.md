@@ -37,11 +37,14 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   - motifs: the graveyard, thorny curls, glowing pastel eyes floating round the island, and
     chalk spirals, stars and eye glyphs in the sky
 - **Dhulls** (`scenes/dhulls/`): a Chao-like body in separate, outlined parts (nub arms, round
-  feet, a lightning J tail) and a floating head in nebula mist, in smooth clay. The model is put
+  feet, a lightning J tail) and a floating head in nebula mist. The model is put
   together from part models: two body shapes (bell, bean) and three head shapes (moon, mooncat,
   bean), all only lightly warped from round; the user wants shapes that gently warp, never
-  protrusions like ears or points. Wind Waker-style swappable anime eyes and mouths show
-  emotions (the mouth only when open). An idle animation swings the parts. Colorings live in
+  protrusions like ears or points. Characters look like House of Decay's (the user's
+  reference): low-poly, flat-shaded PS1-style models with dithered banded light, and crunchy
+  painted faces (big wonky eyes, pale irises, tiny pupils, wedge lashes, maroon eye bags,
+  gritted teeth), swapped like Wind Waker's to show emotions (the mouth only when open). The
+  world keeps its ink-drawn look. An idle animation swings the parts. Colorings live in
   `data/dhulls/colorings/`: Sunny (yellow, tangerine tips) is the default; Ink and Harlequin
   are kept for later. Five stand near the start of the dream island.
 - **Genetics** (`DhullGenome`): hidden genes, never shown, decide head shape, body shape, eye
