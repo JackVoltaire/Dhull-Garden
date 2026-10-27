@@ -55,8 +55,8 @@ scenes/
   environment/      SkyCycle (sky and light by time of day), CutoutRing, InkOutlines,
                     ScreenTexture, and the drawn clouds/, sun_moon/, floating_eyes/ and doodles/
   player/           Player scene and its controller script
-  dhulls/           The Dhull scene, DhullFace (which eyes and mouth make each emotion) and
-                    the face drawings in face/
+  dhulls/           The Dhull scene, its genes (DhullGenome), DhullFace (which eyes and
+                    mouth make each emotion), DhullColoring and the face drawings in face/
   props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
@@ -130,26 +130,38 @@ above it.
   `stylized_water.gdshader` draws the jagged lines on water; tune its lanes, jaggedness, dashes
   and `line_glow` per material. Instance `scenes/environment/screen_texture.tscn` in a level for
   film grain, faint scanlines and a vignette over the whole screen.
-- **Dhulls.** `scenes/dhulls/dhull.tscn` is a Dhull: the model from `assets/models/dhull/`, a
-  nebula mist of particles round the head, and a face drawn on the head by
-  `dhull_face.gdshader`, like Wind Waker's swappable faces. Set a Dhull's `eye_style` for its
-  everyday anime eyes (round, droopy, intense or dumb) and its `emotion` to change its face;
-  `DhullFace` picks the eyes and mouth, and blinks. The face drawings are strips in
+- **Dhulls.** `scenes/dhulls/dhull.tscn` is a Dhull. Its model is put together from parts when
+  it's ready, in the editor too: a body (`assets/models/dhull_body_*/`: the body, with arms,
+  legs and a tail as its children, each with its origin at its joint) and a head
+  (`assets/models/dhull_head_*/`) that floats and bobs above it in a nebula mist. The parts are
+  separate, so each gets its own ink outline and can move on its own; the scene's
+  AnimationPlayer has an `idle` loop that swings them from their joints, so add more animations
+  there. To add a body or head shape, model it like the others, add it to
+  `DhullGenome.BodyShape` or `HeadShape` with its dominance and commonness, and to
+  `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is missing.
+- **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
+  Each gene is a pair of alleles, one from each parent. Head shape, body shape and eye style
+  show the more dominant of the two, so recessive variants can skip a generation; personality
+  genes (energy, boldness, curiosity, friendliness) are levels from 0 to 100 and show the
+  average. `DhullGenome.random()` makes genes from scratch, weighted by how common each variant
+  is; `DhullGenome.bred()` gives a child one allele of each gene from each parent, with
+  occasional mutations and a little drift in personality. `to_dict()` and `from_dict()` save and
+  load genes by name, so saves survive new genes. A Dhull without a genome gets a random one
+  when the game runs; the F3 menu's "New random genes" rerolls every Dhull in the level.
+- **Dhull faces and colors.** The face is drawn on the head by `dhull_face.gdshader`, like Wind
+  Waker's swappable faces. A Dhull's genes give its everyday anime eyes (round, droopy, intense
+  or dumb); set its `emotion` to change its face. `DhullFace` picks the eyes and mouth, and
+  blinks; the mouth only shows when it's open. The face drawings are strips in
   `scenes/dhulls/face/`, one frame per shape in the order of `DhullFace.Eyes` and
   `DhullFace.Mouth`. To add a shape, draw a frame at the end of its strip, add it to the enum
-  and raise the frame count on `dhull_face.tres`; a test checks they match. The mouth only shows
-  when it's open. The clay material, `toon_clay`, uses `clay.gdshader` rather than the world's
-  hatching: soft toon shading, gentle undulations laid out on the model so they move with it,
-  and a waxy sheen. A Dhull's colors come from its `coloring`, a `DhullColoring` resource in
-  `data/dhulls/colorings/`: a color per part, the color the nubs turn towards at their tips
-  (painted into the model's vertex color), and an optional pattern, harlequin diamonds or spots.
-  The Dhull sets them on its parts through the shader's instance uniforms, so every Dhull can
-  differ while sharing one material; the clay and face shaders keep their instance uniforms in
-  separate slots, as a head carries both. The model is separate parts, so each gets its own ink
-  outline and can move on its own: a body shaped like a Chao's, arms, legs and a tail that are
-  children of the body, each with its origin at its joint, and a head that floats and bobs above
-  it. The scene's AnimationPlayer has an `idle` loop that swings the parts from their joints;
-  add more animations there.
+  and raise the frame count on `dhull_face.tres`; a test checks they match. The clay material,
+  `toon_clay`, uses `clay.gdshader` rather than the world's hatching: soft toon shading, gentle
+  undulations laid out on the model so they move with it, and a waxy sheen. A Dhull's colors
+  come from its `coloring`, a `DhullColoring` resource in `data/dhulls/colorings/`: a color per
+  part, the color the nubs turn towards at their tips (painted into the model's vertex color),
+  and an optional pattern, harlequin diamonds or spots. The Dhull sets them on its parts through
+  the shader's instance uniforms, so every Dhull can differ while sharing one material; the clay
+  and face shaders keep their instance uniforms in separate slots, as a head carries both.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
   are 2D drawings, like cardboard cutouts, animated in steps with 3 or 4 frames. The drawings in
   the repo are placeholders. To make one, draw its frames side by side in one image (PNG, or SVG

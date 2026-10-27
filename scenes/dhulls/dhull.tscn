@@ -1,7 +1,6 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/dhulls/dhull.gd" id="1_dhull"]
-[ext_resource type="PackedScene" path="res://assets/models/dhull/dhull.glb" id="2_model"]
 [ext_resource type="Material" path="res://scenes/dhulls/face/dhull_face.tres" id="3_face"]
 [ext_resource type="Resource" path="res://data/dhulls/colorings/sunny.tres" id="4_coloring"]
 
@@ -132,10 +131,10 @@ script = ExtResource("1_dhull")
 face_material = ExtResource("3_face")
 coloring = ExtResource("4_coloring")
 
-[node name="Model" parent="." instance=ExtResource("2_model")]
+[node name="Model" type="Node3D" parent="."]
 
 [node name="NebulaMist" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.635, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
 cast_shadow = 0
 amount = 70
 lifetime = 2.5
@@ -145,7 +144,7 @@ process_material = SubResource("ParticleProcessMaterial_mist")
 draw_pass_1 = SubResource("QuadMesh_puff")
 
 [node name="NebulaStars" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 cast_shadow = 0
 amount = 10
 lifetime = 1.5
@@ -158,4 +157,3 @@ draw_pass_1 = SubResource("QuadMesh_star")
 libraries = {
 &"": SubResource("AnimationLibrary_dhull")
 }
-autoplay = &"idle"

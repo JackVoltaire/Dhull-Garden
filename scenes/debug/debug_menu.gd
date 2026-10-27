@@ -1,7 +1,7 @@
 extends CanvasLayer
 ## Developer tools, toggled with F3 (the debug_menu action): time travel, calendar state,
-## saving and loading, switching levels and launching minigames. Registered as the
-## [code]DebugMenu[/code] autoload and removed in release builds.
+## saving and loading, switching levels, launching minigames and giving Dhulls new genes.
+## Registered as the [code]DebugMenu[/code] autoload and removed in release builds.
 
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const TIME_JUMPS := {"+1 hour": 3600, "+1 day": 86400, "+1 week": 604800, "+30 days": 2592000}
@@ -37,6 +37,9 @@ func _ready() -> void:
 	var level_row := _add_row("Levels")
 	for level_name: String in LEVELS:
 		_add_button(level_row, level_name, _change_level.bind(LEVELS[level_name]))
+
+	var dhull_row := _add_row("Dhulls")
+	_add_button(dhull_row, "New random genes", _reroll_dhulls)
 
 	var minigame_row := _add_row("Minigames")
 	for minigame in Minigames.minigames:
@@ -102,6 +105,13 @@ func _restart_save() -> void:
 func _change_level(path: String) -> void:
 	set_open(false)
 	Scenes.change_scene(path)
+
+
+func _reroll_dhulls() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
+		dhull.genome = DhullGenome.random(rng)
 
 
 func _launch_minigame(minigame: MinigameDefinition) -> void:

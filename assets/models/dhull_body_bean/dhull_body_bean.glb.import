@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bj6ebskvdf6iu"
-path="res://.godot/imported/dhull.glb-76c82d7db64b0727b81b37f7910cbd78.scn"
+uid="uid://bmrdq54te0svw"
+path="res://.godot/imported/dhull_body_bean.glb-e5fb4c000787963860bad3e1cc1a90a0.scn"
 
 [deps]
 
-source_file="res://assets/models/dhull/dhull.glb"
-dest_files=["res://.godot/imported/dhull.glb-76c82d7db64b0727b81b37f7910cbd78.scn"]
+source_file="res://assets/models/dhull_body_bean/dhull_body_bean.glb"
+dest_files=["res://.godot/imported/dhull_body_bean.glb-e5fb4c000787963860bad3e1cc1a90a0.scn"]
 
 [params]
 
