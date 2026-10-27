@@ -3,10 +3,10 @@ class_name Dhull
 extends Node3D
 ## A Dhull: a Chao-like body with its head floating close above it in a nebula mist. Its hidden
 ## [member genome] decides its head shape, body shape, eye style and eye color; the model is put
-## together from those parts when it's ready, in the editor too. The face is drawn on the head from
-## swappable eye and mouth images, like Wind Waker's, showing its [member emotion]. The head bobs
-## gently and the eyes blink now and then. The arms, legs and tail are separate parts that swing
-## from their joints; the AnimationPlayer plays an idle loop.
+## together from those parts when it's ready, in the editor too. What it's doing and how it feels,
+## its [member activity] and [member mood], pick its animation and face (see DhullState); its
+## energy sets how fast it moves. The face is drawn on the head from swappable eye and mouth
+## images, like Wind Waker's, and the eyes blink now and then.
 
 const BODY_MODELS: Dictionary[DhullGenome.BodyShape, PackedScene] = {
 	DhullGenome.BodyShape.BELL: preload("res://assets/models/dhull_body_bell/dhull_body_bell.glb"),
@@ -18,8 +18,21 @@ const HEAD_MODELS: Dictionary[DhullGenome.HeadShape, PackedScene] = {
 	preload("res://assets/models/dhull_head_mooncat/dhull_head_mooncat.glb"),
 	DhullGenome.HeadShape.BEAN: preload("res://assets/models/dhull_head_bean/dhull_head_bean.glb"),
 }
-## Where the middle of the head floats when it isn't bobbing.
-const HEAD_REST := Vector3(0.0, 0.65, 0.01)
+## The parts every animation moves. The head is a holder that carries the head model and its mist.
+const ANIMATED_TRACKS: Array[NodePath] = [
+	^"Model:position",
+	^"Model:rotation",
+	^"Model/Body:scale",
+	^"Model/Body/ArmLeft:rotation",
+	^"Model/Body/ArmRight:rotation",
+	^"Model/Body/LegLeft:rotation",
+	^"Model/Body/LegRight:rotation",
+	^"Model/Body/Tail:rotation",
+	^"Model/Head:position",
+	^"Model/Head:rotation",
+]
+## Seconds to blend from one animation into the next when the activity or mood changes.
+const BLEND_TIME := 0.4
 ## Every Dhull in the game is in this group.
 const GROUP := &"dhulls"
 
@@ -30,12 +43,18 @@ const GROUP := &"dhulls"
 		genome = value
 		if is_node_ready():
 			_build_model()
-## The emotion its face shows.
-@export var emotion := DhullFace.Emotion.NEUTRAL:
+## What it's doing.
+@export var activity := DhullState.Activity.STANDING:
 	set(value):
-		emotion = value
+		activity = value
 		if is_node_ready():
-			_show_face()
+			_show_state()
+## How it feels.
+@export var mood := DhullState.Mood.CONTENT:
+	set(value):
+		mood = value
+		if is_node_ready():
+			_show_state()
 ## The colors of its clay; Sunny unless set. Without one, it keeps the clay shader's defaults.
 @export var coloring: DhullColoring:
 	set(value):
@@ -44,20 +63,17 @@ const GROUP := &"dhulls"
 			_apply_coloring()
 ## Draws the face on the head; see dhull_face.gdshader.
 @export var face_material: Material
-## How far the head bobs up and down, and how many times a second.
-@export_range(0.0, 0.2, 0.005, "suffix:m") var head_bob_height := 0.02
-@export_range(0.0, 3.0, 0.05) var head_bob_rate := 0.4
 ## Seconds between blinks, picked at random between x and y, and how long a blink lasts.
 @export var blink_interval := Vector2(2.0, 5.0)
 @export_range(0.05, 1.0, 0.01, "suffix:s") var blink_duration := 0.14
 
 var _blinking := false
 var _until_blink_change := 0.0
-var _time := 0.0
 var _rng := RandomNumberGenerator.new()
-var _head: MeshInstance3D
+var _head_shape: MeshInstance3D
 
 @onready var _model: Node3D = $Model
+@onready var _head: Node3D = $Model/Head
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
 
 
@@ -69,18 +85,14 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	add_to_group(GROUP)
-	# Start each Dhull at its own point in its idle, bob and blinks, so a group isn't in step.
-	_time = _rng.randf() * 10.0
 	_until_blink_change = _rng.randf_range(blink_interval.x, blink_interval.y)
-	_animation_player.play(&"idle")
+	# Start each Dhull at its own point in its loop, so Dhulls doing the same thing aren't in step.
 	_animation_player.seek(_rng.randf() * _animation_player.current_animation_length, true)
 
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
-	_time += delta
-	_head.position = HEAD_REST + Vector3.UP * sin(_time * TAU * head_bob_rate) * head_bob_height
 	_until_blink_change -= delta
 	if _until_blink_change <= 0.0:
 		_blinking = not _blinking
@@ -93,18 +105,24 @@ func _process(delta: float) -> void:
 
 ## Puts the model together from the body and head its genes call for.
 func _build_model() -> void:
-	for part in _model.get_children():
-		_model.remove_child(part)
-		part.queue_free()
+	var old_body := _model.get_node_or_null(^"Body")
+	if old_body:
+		_model.remove_child(old_body)
+		old_body.queue_free()
+	if _head_shape:
+		_head.remove_child(_head_shape)
+		_head_shape.queue_free()
 	var body_shape := genome.body_shape() if genome else DhullGenome.BodyShape.BELL
 	var head_shape := genome.head_shape() if genome else DhullGenome.HeadShape.MOON
 	_model.add_child(_take_part(BODY_MODELS[body_shape], &"Body"))
-	_head = _take_part(HEAD_MODELS[head_shape], &"Head")
-	_head.position = HEAD_REST
-	_head.material_overlay = face_material
-	_model.add_child(_head)
-	_show_face()
+	_head_shape = _take_part(HEAD_MODELS[head_shape], &"Head")
+	_head_shape.name = &"Shape"
+	_head_shape.material_overlay = face_material
+	_head.add_child(_head_shape)
+	# The animation player holds on to the parts it moved last; these are new ones.
+	_animation_player.clear_caches()
 	_apply_coloring()
+	_show_state()
 
 
 ## The named part of a model, with its children, taken out of the rest of the model.
@@ -116,14 +134,25 @@ static func _take_part(model: PackedScene, part_name: StringName) -> Node3D:
 	return part
 
 
+func _show_state() -> void:
+	_show_face()
+	# Animating in the editor would save the animated pose into the scene.
+	if Engine.is_editor_hint():
+		return
+	if genome:
+		_animation_player.speed_scale = DhullState.speed_scale(genome)
+	_animation_player.play(DhullState.animation_for(activity, mood), BLEND_TIME)
+
+
 func _show_face() -> void:
+	var emotion := DhullState.emotion_for(activity, mood)
 	var eye_style := genome.eye_style() if genome else DhullFace.EyeStyle.ROUND
 	var eye_color := genome.eye_color() if genome else DhullGenome.EyeColor.TEAL
-	_head.set_instance_shader_parameter(&"eye_color", eye_color)
-	_head.set_instance_shader_parameter(
+	_head_shape.set_instance_shader_parameter(&"eye_color", eye_color)
+	_head_shape.set_instance_shader_parameter(
 		&"eye_frame", DhullFace.eyes_for(emotion, eye_style, _blinking)
 	)
-	_head.set_instance_shader_parameter(&"mouth_frame", DhullFace.mouth_for(emotion))
+	_head_shape.set_instance_shader_parameter(&"mouth_frame", DhullFace.mouth_for(emotion))
 
 
 func _apply_coloring() -> void:
@@ -131,7 +160,7 @@ func _apply_coloring() -> void:
 		return
 	_paint($Model/Body, coloring.body_color, coloring.body_pattern)
 	_paint($Model/Body/Tail, coloring.body_color)
-	_paint(_head, coloring.head_color)
+	_paint(_head_shape, coloring.head_color)
 	_paint($Model/Body/ArmLeft, coloring.limb_color)
 	_paint($Model/Body/LegRight, coloring.limb_color)
 	_paint($Model/Body/ArmRight, coloring.other_limb_color)

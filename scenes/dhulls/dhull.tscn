@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scenes/dhulls/dhull.gd" id="1_dhull"]
 [ext_resource type="Material" path="res://scenes/dhulls/face/dhull_face.tres" id="3_face"]
 [ext_resource type="Resource" path="res://data/dhulls/colorings/sunny.tres" id="4_coloring"]
+[ext_resource type="AnimationLibrary" path="res://scenes/dhulls/dhull_animations.tres" id="5_animations"]
 
 [sub_resource type="Gradient" id="Gradient_mist"]
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
@@ -68,64 +69,6 @@ color_ramp = SubResource("GradientTexture1D_stars")
 material = SubResource("StandardMaterial3D_puff")
 size = Vector2(0.035, 0.035)
 
-[sub_resource type="Animation" id="Animation_idle"]
-resource_name = &"idle"
-length = 2.4
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Model/Body/ArmLeft:rotation")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.2, 2.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.2), Vector3(0, 0, 0)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Model/Body/ArmRight:rotation")
-tracks/1/interp = 2
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1.2, 2.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, -0.2), Vector3(0, 0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Model/Body/Tail:rotation")
-tracks/2/interp = 2
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.6, 1.2, 1.8, 2.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0.35, 0), Vector3(0, 0, 0), Vector3(0, -0.35, 0), Vector3(0, 0, 0)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Model/Body:scale")
-tracks/3/interp = 2
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 1.2, 2.4),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector3(1, 1, 1), Vector3(1.035, 0.965, 1.035), Vector3(1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_dhull"]
-_data = {
-&"idle": SubResource("Animation_idle")
-}
-
 [node name="Dhull" type="Node3D"]
 script = ExtResource("1_dhull")
 face_material = ExtResource("3_face")
@@ -133,8 +76,10 @@ coloring = ExtResource("4_coloring")
 
 [node name="Model" type="Node3D" parent="."]
 
-[node name="NebulaMist" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+[node name="Head" type="Node3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0.01)
+
+[node name="NebulaMist" type="GPUParticles3D" parent="Model/Head"]
 cast_shadow = 0
 amount = 70
 lifetime = 2.5
@@ -143,8 +88,8 @@ visibility_aabb = AABB(-0.6, -0.5, -0.6, 1.2, 1, 1.2)
 process_material = SubResource("ParticleProcessMaterial_mist")
 draw_pass_1 = SubResource("QuadMesh_puff")
 
-[node name="NebulaStars" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+[node name="NebulaStars" type="GPUParticles3D" parent="Model/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
 cast_shadow = 0
 amount = 10
 lifetime = 1.5
@@ -155,5 +100,5 @@ draw_pass_1 = SubResource("QuadMesh_star")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-&"": SubResource("AnimationLibrary_dhull")
+&"": ExtResource("5_animations")
 }

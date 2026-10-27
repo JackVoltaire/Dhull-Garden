@@ -48,14 +48,18 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   faces (clean, crisp eye shapes, big banded irises with a starburst round a tiny pupil, wedge
   lashes, dithered eye bags, gritted teeth), swapped like Wind Waker's to show emotions (the
   mouth only when open). The user rejected wobbly eye shapes, smooth lines, finer pixels, and
-  soft shading or drawn lines for bags. The world keeps its ink-drawn look. An idle animation
-  swings the parts. Colorings live in `data/dhulls/colorings/`: Sunny (yellow, tangerine tips)
-  is the default; Ink and Harlequin are kept for later. Five stand near the start of the dream
-  island.
+  soft shading or drawn lines for bags. The world keeps its ink-drawn look. Colorings live in
+  `data/dhulls/colorings/`: Sunny (yellow, tangerine tips) is the default; Ink and Harlequin are
+  kept for later. Five stand near the start of the dream island.
+- **Animations** (`DhullState`, `dhull_animations.tres`): an idle, an in-place walk cycle and a
+  sitting loop for each mood (content, happy, playful, sleepy, hungry, sad, grumpy), and two
+  sleeping loops. The user's rule: animations are never random; they always reflect a Dhull's
+  state and what it's doing. Interactions (with the player, objects or other Dhulls, such as
+  holding hands) were left out for now. Nothing moves Dhulls around yet.
 - **Genetics** (`DhullGenome`): hidden genes, never shown, decide head shape, body shape, eye
   style, eye color (teal, violet, amber, rose, mint, silver) and personality (energy, boldness,
-  curiosity, friendliness), for random Dhulls and breeding. Personality isn't used by anything
-  yet.
+  curiosity, friendliness), for random Dhulls and breeding. Energy sets how fast a Dhull's
+  animations play; the other traits aren't used yet.
 
 ## The user's decisions
 

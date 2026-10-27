@@ -3,9 +3,9 @@ extends RefCounted
 ## Which eye and mouth images make a Dhull's face. Like Wind Waker's faces, the eyes and the mouth
 ## are separate images, swapped on their own. Each Dhull has an eye style for its everyday eyes;
 ## most emotions swap in eyes of their own. The mouth only shows when it's open. The frames in
-## face/dhull_eyes.svg and face/dhull_mouths.svg follow the order of [enum Eyes] and [enum Mouth].
+## face/dhull_eyes.png and face/dhull_mouths.png follow the order of [enum Eyes] and [enum Mouth].
 
-enum Emotion { NEUTRAL, HAPPY, SAD, ANGRY, DIZZY, SURPRISED, SLEEPY }
+enum Emotion { NEUTRAL, HAPPY, SAD, ANGRY, DIZZY, SURPRISED, SLEEPY, TIRED, HUNGRY }
 enum EyeStyle { ROUND, DROOPY, INTENSE, DUMB }
 enum Eyes { ROUND, DROOPY, INTENSE, DUMB, HAPPY, SAD, ANGRY, SPIRAL, CLOSED, WIDE }
 enum Mouth { OPEN, GRIN }
@@ -24,12 +24,14 @@ const EMOTION_EYES: Dictionary[Emotion, Eyes] = {
 	Emotion.DIZZY: Eyes.SPIRAL,
 	Emotion.SURPRISED: Eyes.WIDE,
 	Emotion.SLEEPY: Eyes.CLOSED,
+	Emotion.TIRED: Eyes.DROOPY,
 }
 ## Emotions that open the mouth. In the others it stays shut, which doesn't show.
 const OPEN_MOUTHS: Dictionary[Emotion, Mouth] = {
 	Emotion.HAPPY: Mouth.OPEN,
 	Emotion.ANGRY: Mouth.GRIN,
 	Emotion.SURPRISED: Mouth.OPEN,
+	Emotion.HUNGRY: Mouth.OPEN,
 }
 ## What [method mouth_for] returns for a shut mouth.
 const NO_MOUTH := -1

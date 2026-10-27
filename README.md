@@ -52,11 +52,13 @@ scenes/
   levels/           Level, the root script of walkable areas
   levels/dream_island/  Look-test floating island: art direction, sky and effects
   levels/sandbox/   Greybox garden for trying out movement and mechanics
+  levels/dhull_gallery/  Every Dhull animation side by side, for checking them
   environment/      SkyCycle (sky and light by time of day), CutoutRing, InkOutlines,
                     ScreenTexture, and the drawn clouds/, sun_moon/, floating_eyes/ and doodles/
   player/           Player scene and its controller script
-  dhulls/           The Dhull scene, its genes (DhullGenome), DhullFace (which eyes and
-                    mouth make each emotion), DhullColoring and the face drawings in face/
+  dhulls/           The Dhull scene, its genes (DhullGenome), DhullState (which animation and
+                    face show each activity and mood), its animations, DhullFace, DhullColoring
+                    and the face drawings in face/
   props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
@@ -134,11 +136,20 @@ above it.
   it's ready, in the editor too: a body (`assets/models/dhull_body_*/`: the body, with arms,
   legs and a tail as its children, each with its origin at its joint) and a head
   (`assets/models/dhull_head_*/`) that floats and bobs above it in a nebula mist. The parts are
-  separate, so each gets its own ink outline and can move on its own; the scene's
-  AnimationPlayer has an `idle` loop that swings them from their joints, so add more animations
-  there. To add a body or head shape, model it like the others, add it to
-  `DhullGenome.BodyShape` or `HeadShape` with its dominance and commonness, and to
-  `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is missing.
+  separate, so each gets its own ink outline and can move on its own. To add a body or head
+  shape, model it like the others, add it to `DhullGenome.BodyShape` or `HeadShape` with its
+  dominance and commonness, and to `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is
+  missing.
+- **Dhull animations.** A Dhull's `activity` (standing, walking, sitting, sleeping) and `mood`
+  (content, happy, playful, sleepy, hungry, sad, grumpy) pick its animation and face from the
+  tables in `DhullState`, never at random; its energy gene sets how fast they play. The
+  animations are loops in `scenes/dhulls/dhull_animations.tres`, an AnimationLibrary you can
+  edit in Godot's animation editor. Every animation keys every part in `Dhull.ANIMATED_TRACKS`
+  (the model, body, limbs, tail, and the head holder that carries the head model and its mist),
+  so blending from one into another never leaves a part behind; a test checks it, and that every
+  activity and mood has an animation. Walk cycles play in place: moving the Dhull is up to
+  whatever makes it walk. The Dhull gallery level (F3 menu) shows every activity and mood side
+  by side, and the F3 menu can set every Dhull's activity and mood.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
   Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
   eye color show the more dominant of the two, so recessive variants can skip a generation;

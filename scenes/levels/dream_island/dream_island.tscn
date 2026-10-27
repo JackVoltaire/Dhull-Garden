@@ -252,18 +252,24 @@ transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 68
 
 [node name="Dhull1" parent="." instance=ExtResource("27_dhull")]
 transform = Transform3D(0.826227, 0, 0.563337, 0, 1, 0, -0.563337, 0, 0.826227, -3, 0.448, 2.6)
+activity = 2
+mood = 1
 
 [node name="Dhull2" parent="." instance=ExtResource("27_dhull")]
 transform = Transform3D(0.94651, 0, 0.322674, 0, 1, 0, -0.322674, 0, 0.94651, -1.5, 0.457, 2.6)
+mood = 2
 
 [node name="Dhull3" parent="." instance=ExtResource("27_dhull")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -0, 0, 1, 0, 0.455, 2.6)
 
 [node name="Dhull4" parent="." instance=ExtResource("27_dhull")]
 transform = Transform3D(0.94651, 0, -0.322674, 0, 1, 0, 0.322674, 0, 0.94651, 1.5, 0.444, 2.6)
+activity = 3
 
 [node name="Dhull5" parent="." instance=ExtResource("27_dhull")]
 transform = Transform3D(0.826227, 0, -0.563337, 0, 1, 0, 0.563337, 0, 0.826227, 3, 0.428, 2.6)
+activity = 2
+mood = 4
 
 [node name="InkOutlines" parent="." instance=ExtResource("20_ink")]
 

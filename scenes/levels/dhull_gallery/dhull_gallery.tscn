@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/levels/dhull_gallery/dhull_gallery.gd" id="1_gallery"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="Material" path="res://assets/materials/toon_grass.tres" id="3_grass"]
+[ext_resource type="PackedScene" path="res://scenes/environment/ink_outlines.tscn" id="4_ink"]
+
+[sub_resource type="Environment" id="Environment_gallery"]
+background_mode = 1
+background_color = Color(0.15, 0.09, 0.3, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.32, 0.24, 0.5, 1)
+ambient_light_energy = 0.6
+
+[node name="DhullGallery" type="Node3D"]
+script = ExtResource("1_gallery")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gallery")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 0, 0)
+light_color = Color(1, 0.95, 0.85, 1)
+shadow_enabled = true
+
+[node name="Stage" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -2.5)
+use_collision = true
+size = Vector3(14, 1, 12)
+material = ExtResource("3_grass")
+
+[node name="Dhulls" type="Node3D" parent="."]
+
+[node name="InkOutlines" parent="." instance=ExtResource("4_ink")]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
