@@ -36,13 +36,17 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   - hatching in shade and crayon streaks on every 3D surface (`toon_hatched.gdshader`)
   - motifs: the graveyard, thorny curls, glowing pastel eyes floating round the island, and
     chalk spirals, stars and eye glyphs in the sky
-- **Dhulls** (`scenes/dhulls/`): the first Dhull model, with a Chao's body shape in separate,
-  outlined parts (nub arms, round feet, a lightning J tail) and a floating head in nebula mist,
-  in smooth clay. Wind Waker-style swappable anime eyes and mouths show emotions (the mouth only
-  when open); each Dhull has an eye style (round, droopy, intense, dumb). An idle animation
-  swings the parts. Colorings live in `data/dhulls/colorings/`: Sunny (yellow, tangerine tips)
-  is the default; Ink and Harlequin are kept for later variants. Three stand near the start of
-  the dream island.
+- **Dhulls** (`scenes/dhulls/`): a Chao-like body in separate, outlined parts (nub arms, round
+  feet, a lightning J tail) and a floating head in nebula mist, in smooth clay. The model is put
+  together from part models: two body shapes (bell, bean) and three head shapes (moon, mooncat,
+  bean), all only lightly warped from round; the user wants shapes that gently warp, never
+  protrusions like ears or points. Wind Waker-style swappable anime eyes and mouths show
+  emotions (the mouth only when open). An idle animation swings the parts. Colorings live in
+  `data/dhulls/colorings/`: Sunny (yellow, tangerine tips) is the default; Ink and Harlequin
+  are kept for later. Five stand near the start of the dream island.
+- **Genetics** (`DhullGenome`): hidden genes, never shown, decide head shape, body shape, eye
+  style and personality (energy, boldness, curiosity, friendliness), for random Dhulls and
+  breeding. Personality isn't used by anything yet.
   - 2D "cardboard cutout" tree tops, clouds, sun and moon, animated in 3 or 4 stepped frames
   - a grinning sun and moon in the spirit of Soul Eater
   - all the drawings are placeholders for the user's own art
@@ -83,6 +87,9 @@ None right now. The user had the design doc updated for the dark base and heavy 
 and is happy with the film grain, scanlines and vignette for now.
 
 Offered but not started:
+- Personality from the genes driving behavior and a resting pose (curious lean, shy, relaxed,
+  proud were tried in a brainstorm).
+- Coloring as a gene, once more colorings are wanted.
 - 3D flowers for the island.
 - Reaction symbols that pop up beside Dhulls, as in Animal Crossing. Moodboard motifs:
   spirals, stars, eye glyphs.
