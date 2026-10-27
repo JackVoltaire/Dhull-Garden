@@ -27,6 +27,11 @@ systems and code conventions.
 - Run Godot only through `tools/godot.sh`, and Blender only through `tools/blender.sh`. They
   download and verify the right versions, and they're the commands `.claude/settings.json`
   allows.
+- Import new assets with `tools/godot.sh --headless --path . --import`, with the editor closed.
+- Never edit `project.godot` while the editor is open: it writes over the edit when it saves.
+- Tests that save or change settings first point `Saves.save_dir` or `Settings.path` at a test
+  location and restore it afterwards (as `tests/unit/test_saves.gd` does), so a test run never
+  touches the player's own save or settings.
 - Models: the `.blend` in `assets/models/<name>/` is the source. Change models by running Blender
   scripts on it (`tools/blender.sh --background <file>.blend --python <script>`), save it, and
   re-export the `.glb` next to it. See "Models (Blender)" in README.md.
