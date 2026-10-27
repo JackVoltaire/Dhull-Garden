@@ -50,8 +50,8 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   `data/dhulls/colorings/`: Sunny (yellow, tangerine tips) is the default; Ink and Harlequin
   are kept for later. Five stand near the start of the dream island.
 - **Genetics** (`DhullGenome`): hidden genes, never shown, decide head shape, body shape, eye
-  style and personality (energy, boldness, curiosity, friendliness), for random Dhulls and
-  breeding. Personality isn't used by anything yet.
+  style, eye color (teal, violet, amber, rose, mint, silver) and personality (energy,
+  boldness, curiosity, friendliness), for random Dhulls and breeding. Personality isn't used by anything yet.
   - 2D "cardboard cutout" tree tops, clouds, sun and moon, animated in 3 or 4 stepped frames
   - a grinning sun and moon in the spirit of Soul Eater
   - all the drawings are placeholders for the user's own art

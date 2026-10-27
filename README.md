@@ -140,11 +140,11 @@ above it.
   `DhullGenome.BodyShape` or `HeadShape` with its dominance and commonness, and to
   `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is missing.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
-  Each gene is a pair of alleles, one from each parent. Head shape, body shape and eye style
-  show the more dominant of the two, so recessive variants can skip a generation; personality
-  genes (energy, boldness, curiosity, friendliness) are levels from 0 to 100 and show the
-  average. `DhullGenome.random()` makes genes from scratch, weighted by how common each variant
-  is; `DhullGenome.bred()` gives a child one allele of each gene from each parent, with
+  Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
+  eye color show the more dominant of the two, so recessive variants can skip a generation;
+  personality genes (energy, boldness, curiosity, friendliness) are levels from 0 to 100 and
+  show the average. `DhullGenome.random()` makes genes from scratch, weighted by how common each
+  variant is; `DhullGenome.bred()` gives a child one allele of each gene from each parent, with
   occasional mutations and a little drift in personality. `to_dict()` and `from_dict()` save and
   load genes by name, so saves survive new genes. A Dhull without a genome gets a random one
   when the game runs; the F3 menu's "New random genes" rerolls every Dhull in the level.
@@ -156,8 +156,10 @@ above it.
   dithered under the eyes, and gritted teeth. The drawings are pixel-art PNG strips in
   `scenes/dhulls/face/`, edited in any pixel editor and shown with hard pixels; keep them
   lossless and with mipmaps in their import settings. A Dhull's genes give its everyday eyes
-  (round, droopy, intense or dumb); set its `emotion` to change its face. `DhullFace` picks the
-  eyes and mouth, and blinks; the mouth only shows when it's open. Frames follow the order of
+  (round, droopy, intense or dumb) and its eye color (teal, violet, amber, rose, mint or
+  silver): the eye strip has a row per color, in the order of `DhullGenome.EyeColor`, and angry
+  eyes are red in every row; set its `emotion` to change its face. `DhullFace` picks the eyes
+  and mouth, and blinks; the mouth only shows when it's open. Frames follow the order of
   `DhullFace.Eyes` and `DhullFace.Mouth`; to add a shape, draw a frame at the end of its strip,
   add it to the enum and raise the frame count on `dhull_face.tres`, and a test checks they
   match. A Dhull's colors come from its `coloring`, a `DhullColoring` resource in

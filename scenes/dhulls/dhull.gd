@@ -1,8 +1,8 @@
 @tool
 class_name Dhull
 extends Node3D
-## A Dhull: a smooth, clay-like body with its head floating close above it in a nebula mist. Its
-## hidden [member genome] decides its head shape, body shape and eye style; the model is put
+## A Dhull: a Chao-like body with its head floating close above it in a nebula mist. Its hidden
+## [member genome] decides its head shape, body shape, eye style and eye color; the model is put
 ## together from those parts when it's ready, in the editor too. The face is drawn on the head from
 ## swappable eye and mouth images, like Wind Waker's, showing its [member emotion]. The head bobs
 ## gently and the eyes blink now and then. The arms, legs and tail are separate parts that swing
@@ -118,6 +118,8 @@ static func _take_part(model: PackedScene, part_name: StringName) -> Node3D:
 
 func _show_face() -> void:
 	var eye_style := genome.eye_style() if genome else DhullFace.EyeStyle.ROUND
+	var eye_color := genome.eye_color() if genome else DhullGenome.EyeColor.TEAL
+	_head.set_instance_shader_parameter(&"eye_color", eye_color)
 	_head.set_instance_shader_parameter(
 		&"eye_frame", DhullFace.eyes_for(emotion, eye_style, _blinking)
 	)
