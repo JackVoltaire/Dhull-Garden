@@ -4,6 +4,7 @@ const VARIANT_COUNTS := {
 	DhullGenome.Gene.HEAD_SHAPE: DhullGenome.HeadShape,
 	DhullGenome.Gene.BODY_SHAPE: DhullGenome.BodyShape,
 	DhullGenome.Gene.EYE_STYLE: DhullFace.EyeStyle,
+	DhullGenome.Gene.EYE_COLOR: DhullGenome.EyeColor,
 }
 
 var _rng: RandomNumberGenerator

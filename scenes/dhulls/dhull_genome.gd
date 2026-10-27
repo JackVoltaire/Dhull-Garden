@@ -4,12 +4,14 @@ extends Resource
 ## and what it's like, and Dhulls pass them on when they breed.
 ##
 ## Every gene is a pair of alleles, one from each parent. Genes with set variants (head shape,
-## body shape, eye style) show the more dominant of the two, so a recessive variant can skip a
-## generation. Personality genes are levels from 0 to 100 and show the average of the two.
+## body shape, eye style, eye color) show the more dominant of the two, so a recessive variant can
+## skip a generation. Personality genes are levels from 0 to 100 and show the average of the two.
 
-enum Gene { HEAD_SHAPE, BODY_SHAPE, EYE_STYLE, ENERGY, BOLDNESS, CURIOSITY, FRIENDLINESS }
+enum Gene {HEAD_SHAPE, BODY_SHAPE, EYE_STYLE, ENERGY, BOLDNESS, CURIOSITY, FRIENDLINESS, EYE_COLOR}
 enum HeadShape { MOON, MOONCAT, BEAN }
 enum BodyShape { BELL, BEAN }
+## Numbered as the rows of scenes/dhulls/face/dhull_eyes.png.
+enum EyeColor { TEAL, VIOLET, AMBER, ROSE, MINT, SILVER }
 
 ## For each gene with set variants, how dominant each variant is, in variant order: when a Dhull
 ## carries two different variants, the higher number shows. Other genes are personality levels.
@@ -17,12 +19,14 @@ const DOMINANCE: Dictionary[Gene, Array] = {
 	Gene.HEAD_SHAPE: [2, 0, 1],
 	Gene.BODY_SHAPE: [1, 0],
 	Gene.EYE_STYLE: [3, 1, 2, 0],
+	Gene.EYE_COLOR: [5, 3, 4, 1, 2, 0],
 }
 ## How common each variant is in Dhulls made from scratch, in variant order. Need not add to 1.
 const COMMONNESS: Dictionary[Gene, Array] = {
 	Gene.HEAD_SHAPE: [0.5, 0.15, 0.35],
 	Gene.BODY_SHAPE: [0.6, 0.4],
 	Gene.EYE_STYLE: [0.4, 0.25, 0.25, 0.1],
+	Gene.EYE_COLOR: [0.3, 0.2, 0.2, 0.12, 0.12, 0.06],
 }
 const MAX_LEVEL := 100
 ## Spread of personality levels in Dhulls made from scratch, around the middle.
@@ -120,6 +124,10 @@ func body_shape() -> BodyShape:
 
 func eye_style() -> DhullFace.EyeStyle:
 	return expressed_variant(Gene.EYE_STYLE) as DhullFace.EyeStyle
+
+
+func eye_color() -> EyeColor:
+	return expressed_variant(Gene.EYE_COLOR) as EyeColor
 
 
 static func _random_allele(gene: Gene, rng: RandomNumberGenerator) -> int:

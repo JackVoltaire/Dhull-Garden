@@ -27,7 +27,7 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   - a stream, and a waterfall with jagged lines and splash puffs
   - a sea of clouds, and the locked spooky and chilly islands in the distance
   - a day/night sky (`SkyCycle`), and a film-grain screen overlay (`ScreenTexture`)
-- **Look** (PR #10, the latest, after the user agreed the island was still far from the
+- **Look** (PR #10 to #12, after the user agreed the island was still far from the
   moodboard):
   - a stained-glass sky: a speckled mosaic of broken stained glass, colored by time of day
   - contrast: a deep violet sky (rose dawn, ember dusk, near-black night), dark slate ground,
@@ -36,20 +36,26 @@ Everything is merged into `main` (pull requests #1 to #10). There is no CI; see 
   - hatching in shade and crayon streaks on every 3D surface (`toon_hatched.gdshader`)
   - motifs: the graveyard, thorny curls, glowing pastel eyes floating round the island, and
     chalk spirals, stars and eye glyphs in the sky
-- **Dhulls** (`scenes/dhulls/`): a Chao-like body in separate, outlined parts (nub arms, round
-  feet, a lightning J tail) and a floating head in nebula mist, in smooth clay. The model is put
-  together from part models: two body shapes (bell, bean) and three head shapes (moon, mooncat,
-  bean), all only lightly warped from round; the user wants shapes that gently warp, never
-  protrusions like ears or points. Wind Waker-style swappable anime eyes and mouths show
-  emotions (the mouth only when open). An idle animation swings the parts. Colorings live in
-  `data/dhulls/colorings/`: Sunny (yellow, tangerine tips) is the default; Ink and Harlequin
-  are kept for later. Five stand near the start of the dream island.
-- **Genetics** (`DhullGenome`): hidden genes, never shown, decide head shape, body shape, eye
-  style and personality (energy, boldness, curiosity, friendliness), for random Dhulls and
-  breeding. Personality isn't used by anything yet.
   - 2D "cardboard cutout" tree tops, clouds, sun and moon, animated in 3 or 4 stepped frames
   - a grinning sun and moon in the spirit of Soul Eater
   - all the drawings are placeholders for the user's own art
+- **Dhulls** (`scenes/dhulls/`): a Chao-like body in separate, outlined parts (nub arms, round
+  feet, a lightning J tail) and a floating head in nebula mist. The model is put together from
+  part models: two body shapes (bell, bean) and three head shapes (moon, mooncat, bean), all
+  only lightly warped from round; the user wants shapes that gently warp, never protrusions like
+  ears or points. Characters look like House of Decay's (the user's reference): low-poly,
+  flat-shaded PS1-style models with dithered banded light, and crunchy low-resolution pixel-art
+  faces (clean, crisp eye shapes, big banded irises with a starburst round a tiny pupil, wedge
+  lashes, dithered eye bags, gritted teeth), swapped like Wind Waker's to show emotions (the
+  mouth only when open). The user rejected wobbly eye shapes, smooth lines, finer pixels, and
+  soft shading or drawn lines for bags. The world keeps its ink-drawn look. An idle animation
+  swings the parts. Colorings live in `data/dhulls/colorings/`: Sunny (yellow, tangerine tips)
+  is the default; Ink and Harlequin are kept for later. Five stand near the start of the dream
+  island.
+- **Genetics** (`DhullGenome`): hidden genes, never shown, decide head shape, body shape, eye
+  style, eye color (teal, violet, amber, rose, mint, silver) and personality (energy, boldness,
+  curiosity, friendliness), for random Dhulls and breeding. Personality isn't used by anything
+  yet.
 
 ## The user's decisions
 

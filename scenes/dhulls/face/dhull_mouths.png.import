@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bau4fwveoilbh"
-path="res://.godot/imported/dhull_eyes.svg-b1a9ae89830c862ed49c3b955775fd9f.ctex"
+uid="uid://j8p8nett3ka7"
+path="res://.godot/imported/dhull_mouths.png-390ca524427bbcdc69e552d1d1e13459.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/dhulls/face/dhull_eyes.svg"
-dest_files=["res://.godot/imported/dhull_eyes.svg-b1a9ae89830c862ed49c3b955775fd9f.ctex"]
+source_file="res://scenes/dhulls/face/dhull_mouths.png"
+dest_files=["res://.godot/imported/dhull_mouths.png-390ca524427bbcdc69e552d1d1e13459.ctex"]
 
 [params]
 
@@ -37,7 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
+detect_3d/compress_to=0
