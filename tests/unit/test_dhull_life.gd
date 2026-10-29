@@ -62,7 +62,6 @@ func test_dhulls_nap_when_tired_and_wake_up_rested() -> void:
 	adult.tiredness = _tuning.nap_at - 0.001
 	_live(adult, 1.0 / 60.0)
 	assert_true(adult.napping, "dozes off")
-	assert_eq(DhullLife.activity_for(adult), DhullState.Activity.SLEEPING)
 	var napping_minutes := 0
 	while adult.napping and napping_minutes < 24 * 60:
 		_live(adult, 1.0 / 60.0)

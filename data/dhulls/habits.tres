@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="DhullHabits" format=3]
+
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_habits.gd" id="1_habits"]
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_habit.gd" id="2_habit"]
+
+[sub_resource type="Resource" id="Resource_content"]
+script = ExtResource("2_habit")
+heads_to = 1
+outing_every_seconds = 25.0
+
+[sub_resource type="Resource" id="Resource_happy"]
+script = ExtResource("2_habit")
+heads_to = 1
+outing_every_seconds = 12.0
+
+[sub_resource type="Resource" id="Resource_playful"]
+script = ExtResource("2_habit")
+heads_to = 3
+outing_every_seconds = 6.0
+
+[sub_resource type="Resource" id="Resource_sleepy"]
+script = ExtResource("2_habit")
+rests_by = 2
+
+[sub_resource type="Resource" id="Resource_hungry"]
+script = ExtResource("2_habit")
+heads_to = 1
+outing_every_seconds = 8.0
+
+[sub_resource type="Resource" id="Resource_sad"]
+script = ExtResource("2_habit")
+heads_to = 2
+rests_by = 2
+
+[sub_resource type="Resource" id="Resource_grumpy"]
+script = ExtResource("2_habit")
+heads_to = 2
+
+[resource]
+script = ExtResource("1_habits")
+content = SubResource("Resource_content")
+happy = SubResource("Resource_happy")
+playful = SubResource("Resource_playful")
+sleepy = SubResource("Resource_sleepy")
+hungry = SubResource("Resource_hungry")
+sad = SubResource("Resource_sad")
+grumpy = SubResource("Resource_grumpy")

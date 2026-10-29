@@ -4,6 +4,8 @@
 [ext_resource type="Material" path="res://scenes/dhulls/face/dhull_face.tres" id="3_face"]
 [ext_resource type="Resource" path="res://data/dhulls/colorings/sunny.tres" id="4_coloring"]
 [ext_resource type="AnimationLibrary" path="res://scenes/dhulls/dhull_animations.tres" id="5_animations"]
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_brain.gd" id="6_brain"]
+[ext_resource type="Resource" path="res://data/dhulls/habits.tres" id="7_habits"]
 
 [sub_resource type="Gradient" id="Gradient_mist"]
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
@@ -102,3 +104,15 @@ draw_pass_1 = SubResource("QuadMesh_star")
 libraries = {
 &"": ExtResource("5_animations")
 }
+
+[node name="NavigationAgent" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.3
+target_desired_distance = 0.3
+height = 1.0
+radius = 0.25
+
+[node name="Brain" type="Node" parent="." node_paths=PackedStringArray("dhull", "navigation_agent")]
+script = ExtResource("6_brain")
+habits = ExtResource("7_habits")
+dhull = NodePath("..")
+navigation_agent = NodePath("../NavigationAgent")

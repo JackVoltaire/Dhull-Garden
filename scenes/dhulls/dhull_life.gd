@@ -1,6 +1,6 @@
 class_name DhullLife
 extends RefCounted
-## How a Dhull's needs change as real time passes, and which mood and activity show them. Plain
+## How a Dhull's needs change as real time passes, and which mood shows them. Plain
 ## functions on DhullRecords with no engine calls, so the Garden runs the same rules live and
 ## for the time the player was away.
 
@@ -54,12 +54,6 @@ static func mood_for(record: DhullRecord, tuning: DhullLifeTuning) -> DhullState
 			return DhullState.Mood.PLAYFUL
 		return DhullState.Mood.HAPPY
 	return DhullState.Mood.CONTENT
-
-
-static func activity_for(record: DhullRecord) -> DhullState.Activity:
-	if record.napping:
-		return DhullState.Activity.SLEEPING
-	return DhullState.Activity.STANDING
 
 
 static func _advance_hunger(

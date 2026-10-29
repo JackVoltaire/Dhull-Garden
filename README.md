@@ -49,7 +49,8 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
 data/               Game content as .tres resources
   events/           One CalendarEvent per file
   minigames/        One MinigameDefinition per file
-  dhulls/           Dhull colorings, and life.tres: how fast needs change and when moods show
+  dhulls/           Dhull colorings; life.tres, how fast needs change and when moods show;
+                    habits.tres, what Dhulls do in each mood
   garden/           new_garden.tres: the Dhulls a new game starts with
 scenes/
   main/             Entry scene: loads the save and enters the garden
@@ -63,7 +64,8 @@ scenes/
   dhulls/           The Dhull scene, its genes (DhullGenome), DhullState (which animation and
                     face show each activity and mood), its animations, DhullFace, DhullColoring
                     and the face drawings in face/; DhullRecord and DhullLife (a Dhull's saved
-                    life and the rules its needs follow) and DhullSpawner
+                    life and the rules its needs follow), DhullHabits and DhullBrain (what it
+                    does in each mood, and walking it there) and DhullSpawner
   props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
@@ -167,6 +169,15 @@ above it.
   without one they starve and grow unhappy. A Dhull's mood comes from its needs
   (`DhullLife.mood_for`), and its activity and mood pick its animation and face as before. Tune
   it all in `data/dhulls/life.tres`. The F3 menu lists every Dhull's needs and can set them.
+- **Dhull habits.** What an awake Dhull does comes from its mood's `DhullHabit` in
+  `data/dhulls/habits.tres`: where it heads (nowhere, somewhere nearby, a spot away from the
+  others, or up to another Dhull), whether it stands or sits once there, and how long it rests
+  before heading out again (sooner for energetic Dhulls). A sad Dhull goes off alone and sits in
+  a corner; a playful one keeps running up to the others. The Dhull's `Brain` (`DhullBrain`)
+  walks it there along the level's navigation mesh and keeps it on the ground. A level with
+  Dhulls needs a `NavigationRegion3D`: its mesh is built from the static colliders of everything
+  in the level root's `navigation_mesh_source_group`, so after changing the level, select the
+  region and press **Bake NavigationMesh** in the editor.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
   Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
   eye color show the more dominant of the two, so recessive variants can skip a generation;

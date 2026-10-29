@@ -9,8 +9,9 @@ extends Node3D
 ## images, like Wind Waker's, and the eyes blink now and then.
 ##
 ## A Dhull in the garden shows its [member record], the life the Garden autoload keeps for it:
-## its needs set its activity and mood (see DhullLife), and the young are smaller. Without a
-## record, as in the Dhull gallery, it shows whatever activity and mood are set on it.
+## its needs set its mood (see DhullLife), its Brain walks it about as that mood's habit says
+## (see DhullBrain) unless it's napping, and the young are smaller. Without a record, as in the
+## Dhull gallery, it shows whatever activity and mood are set on it and stays where it is.
 
 const BODY_MODELS: Dictionary[DhullGenome.BodyShape, PackedScene] = {
 	DhullGenome.BodyShape.BELL: preload("res://assets/models/dhull_body_bell/dhull_body_bell.glb"),
@@ -88,6 +89,7 @@ var _head_shape: MeshInstance3D
 @onready var _model: Node3D = $Model
 @onready var _head: Node3D = $Model/Head
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
+@onready var _brain: DhullBrain = $Brain
 
 
 func _ready() -> void:
@@ -99,6 +101,7 @@ func _ready() -> void:
 		return
 	add_to_group(GROUP)
 	if record:
+		_brain.activity_changed.connect(_on_brain_activity_changed)
 		Garden.lives_changed.connect(_show_life)
 		_show_life()
 	_until_blink_change = _rng.randf_range(blink_interval.x, blink_interval.y)
@@ -119,15 +122,32 @@ func _process(delta: float) -> void:
 		_show_face()
 
 
+## How big it is next to a grown Dhull.
+func size_scale() -> float:
+	return young_scale if record and record.is_young() else 1.0
+
+
 func _show_life() -> void:
-	var new_activity := DhullLife.activity_for(record)
 	var new_mood := DhullLife.mood_for(record, Garden.tuning)
-	# Setting either one blends into its animation again, so only change what changed.
-	if new_activity != activity:
-		activity = new_activity
+	# Setting a mood or activity blends into its animation again, so only change what changed.
 	if new_mood != mood:
 		mood = new_mood
-	_model.scale = Vector3.ONE * (young_scale if record.is_young() else 1.0)
+	if record.napping:
+		_brain.rest()
+		_set_activity(DhullState.Activity.SLEEPING)
+	else:
+		_brain.follow_mood(mood)
+	_model.scale = Vector3.ONE * size_scale()
+
+
+func _on_brain_activity_changed(new_activity: DhullState.Activity) -> void:
+	if not record.napping:
+		_set_activity(new_activity)
+
+
+func _set_activity(new_activity: DhullState.Activity) -> void:
+	if new_activity != activity:
+		activity = new_activity
 
 
 ## Puts the model together from the body and head its genes call for.
