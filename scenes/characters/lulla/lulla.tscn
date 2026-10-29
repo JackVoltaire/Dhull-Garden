@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/characters/lulla/lulla.gd" id="1_lulla"]
+[ext_resource type="Script" path="res://systems/interaction/interactable.gd" id="2_interactable"]
+[ext_resource type="Material" path="res://assets/materials/toon_spooky.tres" id="3_nightwear"]
+[ext_resource type="Material" path="res://assets/materials/toon_snow.tres" id="4_pale"]
+[ext_resource type="Material" path="res://assets/materials/toon_bark.tres" id="5_horn"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+radius = 0.28
+height = 1.1
+radial_segments = 10
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+radius = 0.25
+height = 0.48
+radial_segments = 10
+rings = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_horn"]
+top_radius = 0.0
+bottom_radius = 0.055
+height = 0.26
+radial_segments = 6
+rings = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillow"]
+size = Vector3(0.6, 0.36, 0.2)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 0.9
+
+[node name="Lulla" type="Node3D"]
+script = ExtResource("1_lulla")
+first_meeting = PackedStringArray("LULLA_FIRST_1", "LULLA_FIRST_2", "LULLA_FIRST_3", "LULLA_FIRST_4")
+mumbling = PackedStringArray("LULLA_MUMBLE_1", "LULLA_MUMBLE_2", "LULLA_MUMBLE_3", "LULLA_MUMBLE_4")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+mesh = SubResource("CapsuleMesh_body")
+surface_material_override/0 = ExtResource("3_nightwear")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
+mesh = SubResource("SphereMesh_head")
+surface_material_override/0 = ExtResource("4_pale")
+
+[node name="HornLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.94, 0.342, 0, -0.342, 0.94, 0, 0, 0, 1, -0.16, 1.55, -0.02)
+mesh = SubResource("CylinderMesh_horn")
+surface_material_override/0 = ExtResource("5_horn")
+
+[node name="HornRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.94, -0.342, 0, 0.342, 0.94, 0, 0, 0, 1, 0.16, 1.55, -0.02)
+mesh = SubResource("CylinderMesh_horn")
+surface_material_override/0 = ExtResource("5_horn")
+
+[node name="Pillow" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.985, -0.174, 0, 0.174, 0.985, 0, 0.78, 0.3)
+mesh = SubResource("BoxMesh_pillow")
+surface_material_override/0 = ExtResource("4_pale")
+
+[node name="Talk" type="Area3D" parent="."]
+script = ExtResource("2_interactable")
+prompt = "PROMPT_TALK"
+
+[node name="Shape" type="CollisionShape3D" parent="Talk"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("SphereShape3D_reach")

@@ -1,7 +1,8 @@
 class_name CareMenu
 extends PanelContainer
 ## The menu for caring for a Dhull in person: pet it, feed it something from your pockets, or
-## pick it up. There's nothing to say to it here; words only go through the feed.
+## pick it up. There's nothing to say to it here; words only go through the feed. An egg can only
+## be picked up.
 
 var _dhull: Dhull
 var _player: Player
@@ -9,13 +10,15 @@ var _player: Player
 @onready var _actions: Container = %Actions
 @onready var _foods: Container = %Foods
 @onready var _pet: Button = %Pet
+@onready var _feed: Button = %Feed
+@onready var _pick_up: Button = %PickUp
 
 
 func _ready() -> void:
 	hide()
 	_pet.pressed.connect(_on_pet)
-	%Feed.pressed.connect(_show_foods)
-	%PickUp.pressed.connect(_on_pick_up)
+	_feed.pressed.connect(_show_foods)
+	_pick_up.pressed.connect(_on_pick_up)
 	%Leave.pressed.connect(close)
 
 
@@ -44,9 +47,12 @@ func _input(event: InputEvent) -> void:
 
 
 func _show_actions() -> void:
+	var egg := _dhull.record.is_egg()
+	_pet.visible = not egg
+	_feed.visible = not egg
 	_foods.hide()
 	_actions.show()
-	_pet.grab_focus()
+	(_pick_up if egg else _pet).grab_focus()
 
 
 func _show_foods() -> void:

@@ -4,6 +4,12 @@ extends Resource
 ## young, and at what levels each mood shows. Needs run from 0 to 1; see DhullRecord. The tuning
 ## the game uses is data/dhulls/life.tres.
 
+@export_group("Growing up")
+## Real hours from being laid to hatching.
+@export_range(0.0, 240.0, 0.5, "suffix:h") var hatch_after_hours := 24.0
+## Real hours a hatched Dhull spends as a kid before it's grown.
+@export_range(0.0, 2000.0, 1.0, "suffix:h") var kid_phase_hours := 168.0
+
 @export_group("Needs")
 @export var adult_rates: DhullNeedRates
 @export var young_rates: DhullNeedRates

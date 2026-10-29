@@ -10,23 +10,59 @@ var _garden: Node
 func before_each() -> void:
 	_garden = GARDEN_SCRIPT.new()
 	_garden.apply_save_data({})
+	var home: StringName = _garden.new_garden.home_area
+	for life_stage in [DhullRecord.LifeStage.ADULT, DhullRecord.LifeStage.YOUNG]:
+		for _dhull in 2:
+			_garden.add_dhull(life_stage, home)
 
 
 func after_each() -> void:
 	_garden.free()
 
 
-func test_a_new_garden_has_its_starting_dhulls() -> void:
-	var new_garden: NewGarden = _garden.new_garden
-	assert_eq(_garden.dhulls.size(), new_garden.adults + new_garden.young)
+func test_a_new_garden_starts_empty_until_lulla_hands_over_an_egg() -> void:
+	var fresh: Node = GARDEN_SCRIPT.new()
+	fresh.apply_save_data({})
+	assert_true(fresh.dhulls.is_empty(), "nobody yet")
+	assert_false(fresh.first_egg_given, "no egg yet")
+	var added := []
+	fresh.dhull_added.connect(func(record: DhullRecord) -> void: added.append(record))
+	var egg: DhullRecord = fresh.give_first_egg(Vector3(1, 0, 2))
+	assert_true(fresh.first_egg_given, "egg given")
+	assert_eq(fresh.dhulls.size(), 1)
+	assert_true(egg.is_egg(), "it's an egg")
+	assert_true(egg.placed, "placed")
+	assert_eq(egg.position, Vector3(1, 0, 2))
+	assert_eq(egg.home_area, fresh.new_garden.home_area)
+	assert_true(egg.coloring == fresh.new_garden.coloring, "has the garden's coloring")
+	assert_eq(added.size(), 1, "told the levels")
+	fresh.free()
+
+
+func test_every_dhull_gets_its_own_id() -> void:
 	var ids := {}
 	for record: DhullRecord in _garden.dhulls:
 		ids[record.id] = true
-		assert_eq(record.home_area, new_garden.home_area)
-		assert_true(record.coloring == new_garden.coloring, "%s has the coloring" % record.id)
-	assert_eq(ids.size(), _garden.dhulls.size(), "every id is unique")
-	assert_eq(_garden.dhulls_in(new_garden.home_area).size(), _garden.dhulls.size())
+	assert_eq(ids.size(), _garden.dhulls.size())
 	assert_true(_garden.dhulls_in(&"nowhere").is_empty(), "nobody lives nowhere")
+
+
+func test_whether_the_first_egg_was_given_survives_saving() -> void:
+	_garden.give_first_egg(Vector3.ZERO)
+	var saved: Dictionary = JSON.to_native(JSON.from_native(_garden.get_save_data()))
+	var loaded: Node = GARDEN_SCRIPT.new()
+	loaded.apply_save_data(saved)
+	assert_true(loaded.first_egg_given, "still given")
+	loaded.free()
+
+
+func test_gardens_saved_before_eggs_count_as_given_one() -> void:
+	var saved: Dictionary = _garden.get_save_data()
+	saved.erase("first_egg_given")
+	var loaded: Node = GARDEN_SCRIPT.new()
+	loaded.apply_save_data(saved)
+	assert_true(loaded.first_egg_given, "it already has Dhulls")
+	loaded.free()
 
 
 func test_lives_move_on_with_the_clock() -> void:

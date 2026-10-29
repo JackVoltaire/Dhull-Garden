@@ -76,6 +76,8 @@ scenes/
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
   ui/care_menu/     The menu for petting, feeding and picking up a Dhull
   ui/hud/           Bits of the player's HUD, like the money label
+  ui/dialogue_box/  What characters say to the dreamer, a line at a time
+  characters/       The island's characters: lulla/ so far, with placeholder looks
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
@@ -165,8 +167,11 @@ above it.
   whatever makes it walk. The Dhull gallery level (F3 menu) shows every activity and mood side
   by side, and the F3 menu can set every Dhull's activity and mood.
 - **Dhull lives.** Dhulls live in the `Garden` autoload, not in level scenes: each is a
-  `DhullRecord` with its genes, coloring, life stage (young or adult), home area, needs and where
-  it was last. A level shows the Dhulls living in it with a `DhullSpawner` (named after the area,
+  `DhullRecord` with its genes, coloring, life stage (egg, young or adult), age, home area, needs
+  and where it was last. A new garden starts empty: the first time the dreamer talks to Lulla she
+  hands over an egg (`Garden.give_first_egg()`), which hatches about a day later and grows up
+  after about a week as a kid (`hatch_after_hours` and `kid_phase_hours` in `life.tres`). An egg
+  only shows its shell and can only be carried; eggs and kids never look after the young. A level shows the Dhulls living in it with a `DhullSpawner` (named after the area,
   like `dream_island`); Dhulls not placed yet appear at its Marker3D children. Needs (hunger,
   tiredness, happiness, each from 0 to 1) keep going on the real-world clock: the Garden moves
   them on a minute at a time with `DhullLife`'s rules, live, after a clock jump and for the time
@@ -198,6 +203,10 @@ above it.
   `dhull_face.gdshader`). The weather and symbols are cutout drawings in
   `scenes/dhulls/weather/` and `scenes/dhulls/reactions/`, placeholders like the rest. The F3
   menu can pop any reaction.
+- **Characters.** A character is a scene in `scenes/characters/` with an `Interactable` for "[E]
+  Talk to". What it says is translation keys in exported lists, shown with `Player.listen()` in
+  the dialogue box; the dreamer only listens, and Interact moves on a line. Lulla's lines are
+  placeholders in her voice.
 - **Items and money.** Every kind of item is an `ItemDefinition` in `data/items/`: a stable `id`,
   a translated name, a kind (material, food or drink), what Pebble asks for it and pays for it,
   and for food and drink how much it fills, cheers and wakes a Dhull. The `Inventory` autoload

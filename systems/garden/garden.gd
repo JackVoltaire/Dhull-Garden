@@ -10,6 +10,8 @@ extends Node
 signal lives_changed
 ## A new game or a load replaced the whole garden, so the old records are gone.
 signal garden_replaced
+## A Dhull joined the garden, such as an egg Lulla handed over.
+signal dhull_added(record: DhullRecord)
 ## Mess turned up in [param area], or was cleaned up there.
 signal mess_changed(area: StringName)
 
@@ -26,6 +28,8 @@ var new_garden: NewGarden = preload("res://data/garden/new_garden.tres")
 var mess_tuning: MessTuning = preload("res://data/garden/mess.tres")
 var dhulls: Array[DhullRecord] = []
 var mess: Array[MessRecord] = []
+## Whether Lulla has handed the dreamer their first egg yet.
+var first_egg_given := false
 
 var _colorings: Dictionary[StringName, DhullColoring] = {}
 ## Unix time up to which the Dhulls' lives have been worked out.
@@ -42,7 +46,6 @@ func _ready() -> void:
 	_rng.randomize()
 	for coloring: DhullColoring in ResourceDir.load_all(COLORINGS_DIR):
 		_colorings[coloring.id] = coloring
-	# A level run on its own, without a game started, still has Dhulls to show.
 	_start_new_garden()
 	Saves.register(SAVE_ID, self)
 	Clock.minute_changed.connect(catch_up)
@@ -63,6 +66,34 @@ func mess_in(area: StringName) -> Array[MessRecord]:
 		if bit.area == area:
 			lying_there.append(bit)
 	return lying_there
+
+
+## Adds a Dhull at [param life_stage] to [param area], with random genes, as old as a Dhull that
+## just reached that stage. If [param at] is given it's placed there; otherwise the area's
+## spawner places it.
+func add_dhull(
+	life_stage: DhullRecord.LifeStage, area: StringName, at: Variant = null
+) -> DhullRecord:
+	var record := DhullRecord.new()
+	record.id = StringName("dhull_%d" % _next_number)
+	_next_number += 1
+	record.genome = DhullGenome.random(_rng)
+	record.coloring = new_garden.coloring
+	record.life_stage = life_stage
+	record.age_hours = _age_at(life_stage)
+	record.home_area = area
+	if at is Vector3:
+		record.position = at
+		record.placed = true
+	dhulls.append(record)
+	dhull_added.emit(record)
+	return record
+
+
+## Lulla hands over the dreamer's first egg, at [param at] in the first area.
+func give_first_egg(at: Vector3) -> DhullRecord:
+	first_egg_given = true
+	return add_dhull(DhullRecord.LifeStage.EGG, new_garden.home_area, at)
 
 
 ## Leaves a bit of mess near a young Dhull, unless its area is already as messy as it gets.
@@ -100,16 +131,19 @@ func advance_to(unix_time: int) -> void:
 	var steps := (unix_time - _simulated_until) / STEP_SECONDS
 	if steps == 0:
 		return
-	# Who looks after whom only changes as Dhulls grow up or move, never within a catch-up.
-	var carers: Dictionary[DhullRecord, DhullRecord] = {}
-	for record in dhulls:
-		carers[record] = DhullLife.carer_for(record, dhulls)
+	var carers := _carers()
 	var step_hours := STEP_SECONDS / 3600.0
 	for _step in steps:
+		var anyone_grew := false
 		for record in dhulls:
+			var life_stage := record.life_stage
 			DhullLife.advance(record, step_hours, carers[record], tuning)
+			anyone_grew = anyone_grew or record.life_stage != life_stage
 			if record.is_young() and carers[record] == null:
 				_leave_untended(record, step_hours)
+		# Who looks after whom only changes when someone hatches or grows up.
+		if anyone_grew:
+			carers = _carers()
 	_simulated_until += steps * STEP_SECONDS
 	lives_changed.emit()
 
@@ -137,6 +171,7 @@ func get_save_data() -> Dictionary:
 		"mess": saved_mess,
 		"next_mess_number": _next_mess_number,
 		"untended_hours": untended_hours,
+		"first_egg_given": first_egg_given,
 	}
 
 
@@ -151,34 +186,41 @@ func apply_save_data(data: Dictionary) -> void:
 					DhullRecord.from_dict(dhull_data, _colorings, new_garden.coloring, _rng)
 				)
 		_next_number = int(data.get("next_number", dhulls.size() + 1))
+		# Gardens saved before Lulla handed out eggs already have their Dhulls.
+		first_egg_given = data.get("first_egg_given", not dhulls.is_empty()) == true
 		_load_mess(data)
 		_simulated_until = int(data.get("simulated_until", Clock.now_unix()))
 		catch_up()
 	garden_replaced.emit()
 
 
+## A new garden starts with nobody in it, until Lulla hands over the first egg.
 func _start_new_garden() -> void:
 	dhulls.clear()
 	_next_number = 1
+	first_egg_given = false
 	mess.clear()
 	_next_mess_number = 1
 	_untended_hours.clear()
-	for _adult in new_garden.adults:
-		dhulls.append(_new_dhull(DhullRecord.LifeStage.ADULT))
-	for _young in new_garden.young:
-		dhulls.append(_new_dhull(DhullRecord.LifeStage.YOUNG))
 	_simulated_until = Clock.now_unix()
 
 
-func _new_dhull(life_stage: DhullRecord.LifeStage) -> DhullRecord:
-	var record := DhullRecord.new()
-	record.id = StringName("dhull_%d" % _next_number)
-	_next_number += 1
-	record.genome = DhullGenome.random(_rng)
-	record.coloring = new_garden.coloring
-	record.life_stage = life_stage
-	record.home_area = new_garden.home_area
-	return record
+## Who looks after each Dhull: the most nurturing adult at home for the young, nobody for others.
+func _carers() -> Dictionary[DhullRecord, DhullRecord]:
+	var carers: Dictionary[DhullRecord, DhullRecord] = {}
+	for record in dhulls:
+		carers[record] = DhullLife.carer_for(record, dhulls)
+	return carers
+
+
+## How old a Dhull is when it has just reached [param life_stage].
+func _age_at(life_stage: DhullRecord.LifeStage) -> float:
+	match life_stage:
+		DhullRecord.LifeStage.YOUNG:
+			return tuning.hatch_after_hours
+		DhullRecord.LifeStage.ADULT:
+			return tuning.hatch_after_hours + tuning.kid_phase_hours
+	return 0.0
 
 
 func _load_mess(data: Dictionary) -> void:

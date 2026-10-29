@@ -42,6 +42,9 @@ func _ready() -> void:
 
 	var dhull_row := _add_row("Dhulls")
 	_add_button(dhull_row, "New random genes", _reroll_dhulls)
+	_add_button(dhull_row, "Add an egg", _add_dhull.bind(DhullRecord.LifeStage.EGG))
+	_add_button(dhull_row, "Add a kid", _add_dhull.bind(DhullRecord.LifeStage.YOUNG))
+	_add_button(dhull_row, "Add an adult", _add_dhull.bind(DhullRecord.LifeStage.ADULT))
 	var needs_row := _add_row("Dhull needs")
 	_add_button(needs_row, "Starving", _change_needs.bind(_starve))
 	_add_button(needs_row, "Fed", _change_needs.bind(_feed))
@@ -161,6 +164,10 @@ func _reroll_dhulls() -> void:
 		dhull.genome = DhullGenome.random(rng)
 		if dhull.record:
 			dhull.record.genome = dhull.genome
+
+
+func _add_dhull(life_stage: DhullRecord.LifeStage) -> void:
+	Garden.add_dhull(life_stage, Garden.new_garden.home_area)
 
 
 ## Sets a property, such as activity or mood, on every Dhull in the level.

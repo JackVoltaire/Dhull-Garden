@@ -9,6 +9,8 @@ extends Node3D
 ## images, like Wind Waker's, and the eyes blink now and then. Its mood also shows as weather in
 ## its nebula, and reaction symbols pop up beside its head (see DhullReaction).
 ##
+## An egg is a Dhull too: it shows only its shell until it hatches, and can only be carried.
+##
 ## A Dhull in the garden shows its [member record], the life the Garden autoload keeps for it:
 ## its needs set its mood (see DhullLife), its Brain walks it about as that mood's habit says
 ## (see DhullBrain) unless it's napping, and the young are smaller. It reacts when its mood
@@ -99,6 +101,8 @@ var _rng := RandomNumberGenerator.new()
 var _head_shape: MeshInstance3D
 ## Whether its life has been shown yet. The first time isn't a change of mood to react to.
 var _life_shown := false
+## The life stage shown last, to notice it hatching or growing up.
+var _shown_life_stage := DhullRecord.LifeStage.ADULT
 
 @onready var _model: Node3D = $Model
 @onready var _head: Node3D = $Model/Head
@@ -110,6 +114,7 @@ var _life_shown := false
 @onready var _notice_shape: CollisionShape3D = $Notice/Shape
 @onready var _sigh_timer: Timer = $SighTimer
 @onready var _care: Interactable = $Care
+@onready var _egg: MeshInstance3D = $Egg
 
 
 func _ready() -> void:
@@ -190,14 +195,24 @@ func _on_care(player: Player) -> void:
 
 func _show_life() -> void:
 	var new_mood := DhullLife.mood_for(record, Garden.tuning)
+	var hatched := _life_shown and _shown_life_stage == DhullRecord.LifeStage.EGG
+	hatched = hatched and not record.is_egg()
 	# Setting a mood or activity blends into its animation again, so only change what changed.
 	if new_mood != mood:
-		if _life_shown:
+		if _life_shown and not record.is_egg():
 			react(DhullReaction.on_mood_change(mood, new_mood))
 		mood = new_mood
+	if hatched:
+		react(DhullReaction.Symbol.STAR)
 	_life_shown = true
+	_shown_life_stage = record.life_stage
 	_care.enabled = not carried
-	if record.napping:
+	_model.visible = not record.is_egg()
+	_egg.visible = record.is_egg()
+	if record.is_egg():
+		_brain.rest()
+		_set_activity(DhullState.Activity.STANDING)
+	elif record.napping:
 		_brain.rest()
 		_set_activity(DhullState.Activity.SLEEPING)
 	elif carried:
@@ -221,7 +236,7 @@ func _set_activity(new_activity: DhullState.Activity) -> void:
 
 
 func _on_noticed(_player: Node3D) -> void:
-	if not record.napping:
+	if not record.napping and not record.is_egg():
 		react(DhullReaction.Symbol.EYE)
 
 
@@ -306,6 +321,7 @@ func _apply_coloring() -> void:
 	_paint($Model/Body, coloring.body_color, coloring.body_pattern)
 	_paint($Model/Body/Tail, coloring.body_color)
 	_paint(_head_shape, coloring.head_color)
+	_paint(_egg, coloring.head_color, DhullColoring.Pattern.SPOTS)
 	_paint($Model/Body/ArmLeft, coloring.limb_color)
 	_paint($Model/Body/LegRight, coloring.limb_color)
 	_paint($Model/Body/ArmRight, coloring.other_limb_color)

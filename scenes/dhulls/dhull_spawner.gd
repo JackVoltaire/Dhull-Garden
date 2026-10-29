@@ -11,7 +11,13 @@ const DHULL_SCENE := preload("res://scenes/dhulls/dhull.tscn")
 
 func _ready() -> void:
 	Garden.garden_replaced.connect(_respawn)
+	Garden.dhull_added.connect(_on_dhull_added)
 	_spawn()
+
+
+func _on_dhull_added(record: DhullRecord) -> void:
+	if record.home_area == area:
+		_spawn_one(record, find_children("*", "Marker3D", false), 0)
 
 
 func _respawn() -> void:
@@ -27,16 +33,23 @@ func _spawn() -> void:
 	var next_spawn_point := 0
 	for record in Garden.dhulls_in(area):
 		if not record.placed:
-			var spawn_point: Node3D = self
-			if not spawn_points.is_empty():
-				spawn_point = spawn_points[next_spawn_point % spawn_points.size()]
-				next_spawn_point += 1
-			record.position = spawn_point.global_position
-			record.facing = spawn_point.global_rotation.y
-			record.placed = true
-		var dhull: Dhull = DHULL_SCENE.instantiate()
-		dhull.name = record.id
-		dhull.record = record
-		add_child(dhull)
-		dhull.global_position = record.position
-		dhull.global_rotation.y = record.facing
+			next_spawn_point += 1
+		_spawn_one(record, spawn_points, next_spawn_point - 1)
+
+
+## Puts [param record]'s Dhull in the level. If it hasn't been placed yet, it goes to the spawn
+## point numbered [param spawn_point], counting round.
+func _spawn_one(record: DhullRecord, spawn_points: Array[Node], spawn_point: int) -> void:
+	if not record.placed:
+		var spot: Node3D = self
+		if not spawn_points.is_empty():
+			spot = spawn_points[spawn_point % spawn_points.size()]
+		record.position = spot.global_position
+		record.facing = spot.global_rotation.y
+		record.placed = true
+	var dhull: Dhull = DHULL_SCENE.instantiate()
+	dhull.name = record.id
+	dhull.record = record
+	add_child(dhull)
+	dhull.global_position = record.position
+	dhull.global_rotation.y = record.facing

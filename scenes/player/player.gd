@@ -43,6 +43,7 @@ var _carried_from: Node
 @onready var _spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
 @onready var _carry_point: Marker3D = $Model/CarryPoint
 @onready var _care_menu: CareMenu = %CareMenu
+@onready var _dialogue_box: DialogueBox = %DialogueBox
 
 
 func _ready() -> void:
@@ -94,6 +95,12 @@ func _physics_process(delta: float) -> void:
 		var target_yaw := atan2(-direction.x, -direction.z)
 		var turn_weight := 1.0 - exp(-turn_speed * delta)
 		_model.rotation.y = lerp_angle(_model.rotation.y, target_yaw, turn_weight)
+
+
+## Shows what [param speaker] says, [param lines] of translation keys, then calls
+## [param when_done]. The dreamer only listens.
+func listen(speaker: String, lines: PackedStringArray, when_done := Callable()) -> void:
+	_dialogue_box.say(self, speaker, lines, when_done)
 
 
 ## Opens the care menu for [param dhull].
