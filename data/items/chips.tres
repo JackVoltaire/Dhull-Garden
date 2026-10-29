@@ -2,6 +2,13 @@
 
 [ext_resource type="Script" path="res://systems/inventory/item_definition.gd" id="1_item"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_prop"]
+albedo_color = Color(1, 0.55, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_prop"]
+material = SubResource("StandardMaterial3D_prop")
+size = Vector3(0.12, 0.16, 0.04)
+
 [resource]
 script = ExtResource("1_item")
 id = &"chips"
@@ -11,3 +18,4 @@ buy_price = 12
 sell_price = 4
 fills = 0.3
 cheers = 0.05
+prop = SubResource("BoxMesh_prop")

@@ -4,9 +4,13 @@ extends Node
 ## they eat, late at night and in the morning, and never more often than every so many minutes.
 ## The player reads the posts and reacts, once each, and the Dhull takes it its own way (see
 ## DhullPosting).
+##
+## Each post has a selfie the Dhull took on its own phone, where it was. The pictures are kept as
+## PNG files in a folder beside the save slot, by post id.
 
 signal posted(post: FeedPost)
 signal reacted(post: FeedPost)
+signal selfie_taken(post: FeedPost)
 
 const SAVE_ID := &"feed"
 
@@ -17,6 +21,8 @@ var posts: Array[FeedPost] = []
 var _next_number := 1
 ## When each Dhull last posted, as Unix time, by id.
 var _last_posted: Dictionary[StringName, int] = {}
+## Selfies loaded so far, by post id.
+var _selfies: Dictionary[StringName, Texture2D] = {}
 
 
 func _ready() -> void:
@@ -46,9 +52,40 @@ func post_about(record: DhullRecord, topic: FeedPost.Topic, subject := &"") -> F
 	_last_posted[record.id] = now
 	posts.append(post)
 	if posts.size() > tuning.most_posts_kept:
-		posts.pop_front()
+		_forget_selfie(posts.pop_front())
 	posted.emit(post)
 	return post
+
+
+## The posts by [param dhull_id] still waiting for their selfie, oldest first.
+func waiting_for_selfies(dhull_id: StringName) -> Array[FeedPost]:
+	var waiting: Array[FeedPost] = []
+	for post in posts:
+		if post.dhull_id == dhull_id and not has_selfie(post):
+			waiting.append(post)
+	return waiting
+
+
+func has_selfie(post: FeedPost) -> bool:
+	return FileAccess.file_exists(_selfie_path(post))
+
+
+## Keeps [param picture] as the selfie of [param post].
+func keep_selfie(post: FeedPost, picture: Image) -> void:
+	DirAccess.make_dir_recursive_absolute(_selfie_folder())
+	var error := picture.save_png(_selfie_path(post))
+	if error != OK:
+		push_warning("Couldn't keep the selfie of %s: %s" % [post.id, error_string(error)])
+		return
+	_selfies[post.id] = ImageTexture.create_from_image(picture)
+	selfie_taken.emit(post)
+
+
+## The selfie of [param post], or null if it hasn't been taken yet.
+func selfie(post: FeedPost) -> Texture2D:
+	if not _selfies.has(post.id) and has_selfie(post):
+		_selfies[post.id] = ImageTexture.create_from_image(Image.load_from_file(_selfie_path(post)))
+	return _selfies.get(post.id)
 
 
 ## The player reacts to [param post], once. The Dhull takes it its own way.
@@ -79,6 +116,9 @@ func get_save_data() -> Dictionary:
 
 
 func apply_save_data(data: Dictionary) -> void:
+	_selfies.clear()
+	if data.is_empty():
+		_forget_all_selfies()
 	posts.clear()
 	for post_data: Variant in data.get("posts", []):
 		if post_data is Dictionary:
@@ -110,3 +150,26 @@ func _on_hour_changed(hour: int) -> void:
 	for record in Garden.dhulls:
 		if not record.napping:
 			post_about(record, topic)
+
+
+## The folder of the selfies of the game in progress.
+func _selfie_folder() -> String:
+	return Saves.save_dir.path_join("slot_%d_selfies" % maxi(Saves.current_slot, 0))
+
+
+func _selfie_path(post: FeedPost) -> String:
+	return _selfie_folder().path_join("%s.png" % post.id)
+
+
+func _forget_selfie(post: FeedPost) -> void:
+	_selfies.erase(post.id)
+	if has_selfie(post):
+		DirAccess.remove_absolute(_selfie_path(post))
+
+
+## A new game starts without the old one's selfies.
+func _forget_all_selfies() -> void:
+	if not DirAccess.dir_exists_absolute(_selfie_folder()):
+		return
+	for file in DirAccess.get_files_at(_selfie_folder()):
+		DirAccess.remove_absolute(_selfie_folder().path_join(file))

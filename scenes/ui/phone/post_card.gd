@@ -1,7 +1,7 @@
 class_name PostCard
 extends PanelContainer
 ## One post on the phone: who posted it and when, its selfie and words, and the four reactions
-## the player can leave on it, once.
+## the player can leave on it, once. A selfie still to be taken shows up as soon as it is.
 
 var _post: FeedPost
 
@@ -20,10 +20,10 @@ var _post: FeedPost
 func _ready() -> void:
 	for reaction in _reactions:
 		_reactions[reaction].pressed.connect(_on_reaction.bind(reaction))
+	Feed.selfie_taken.connect(_on_selfie_taken)
 
 
-## Shows [param post], with its selfie taken in [param studio].
-func show_post(post: FeedPost, studio: SelfieStudio) -> void:
+func show_post(post: FeedPost) -> void:
 	_post = post
 	var record := Garden.find_dhull(post.dhull_id)
 	var name_shown := record.name if record and not record.name.is_empty() else tr("UI_UNNAMED")
@@ -35,8 +35,12 @@ func show_post(post: FeedPost, studio: SelfieStudio) -> void:
 		words = words % (tr(subject.display_name).to_lower() if subject else "")
 	_words.text = words
 	_show_reaction()
-	if record:
-		_selfie.texture = await studio.selfie(post, record)
+	_selfie.texture = Feed.selfie(post)
+
+
+func _on_selfie_taken(post: FeedPost) -> void:
+	if post == _post:
+		_selfie.texture = Feed.selfie(post)
 
 
 func _on_reaction(reaction: FeedPost.Reaction) -> void:

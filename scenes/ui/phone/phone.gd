@@ -8,7 +8,6 @@ const POST_CARD := preload("res://scenes/ui/phone/post_card.tscn")
 var _player: Player
 
 @onready var _posts: Container = %Posts
-@onready var _studio: SelfieStudio = %SelfieStudio
 
 
 func _ready() -> void:
@@ -51,4 +50,4 @@ func _show_posts() -> void:
 	for post in newest:
 		var card: PostCard = POST_CARD.instantiate()
 		_posts.add_child(card)
-		card.show_post(post, _studio)
+		card.show_post(post)

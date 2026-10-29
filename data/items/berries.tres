@@ -2,6 +2,14 @@
 
 [ext_resource type="Script" path="res://systems/inventory/item_definition.gd" id="1_item"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_prop"]
+albedo_color = Color(0.45, 0.2, 0.7, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_prop"]
+material = SubResource("StandardMaterial3D_prop")
+radius = 0.045
+height = 0.09
+
 [resource]
 script = ExtResource("1_item")
 id = &"berries"
@@ -11,3 +19,4 @@ buy_price = 14
 sell_price = 5
 fills = 0.3
 cheers = 0.04
+prop = SubResource("SphereMesh_prop")

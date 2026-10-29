@@ -124,3 +124,18 @@ func _adult(boldness: int, friendliness: int) -> DhullRecord:
 	record.genome.alleles[DhullGenome.Gene.BOLDNESS] = Vector2i(boldness, boldness)
 	record.genome.alleles[DhullGenome.Gene.FRIENDLINESS] = Vector2i(friendliness, friendliness)
 	return record
+
+
+func test_every_selfie_gets_a_face_that_fits() -> void:
+	var post := FeedPost.new()
+	for topic: FeedPost.Topic in FeedPost.Topic.values():
+		post.topic = topic
+		post.mood = DhullState.Mood.CONTENT
+		assert_true(DhullPosting.selfie_face(post) in DhullFace.Emotion.values(), "a face")
+	post.topic = FeedPost.Topic.ATE
+	assert_eq(DhullPosting.selfie_face(post), DhullFace.Emotion.HAPPY)
+	post.topic = FeedPost.Topic.UPSET
+	post.mood = DhullState.Mood.GRUMPY
+	assert_eq(DhullPosting.selfie_face(post), DhullFace.Emotion.ANGRY)
+	post.mood = DhullState.Mood.SAD
+	assert_eq(DhullPosting.selfie_face(post), DhullFace.Emotion.SAD)

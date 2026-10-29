@@ -2,6 +2,15 @@
 
 [ext_resource type="Script" path="res://systems/inventory/item_definition.gd" id="1_item"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_prop"]
+albedo_color = Color(0.35, 0.2, 0.12, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_prop"]
+material = SubResource("StandardMaterial3D_prop")
+top_radius = 0.05
+bottom_radius = 0.04
+height = 0.12
+
 [resource]
 script = ExtResource("1_item")
 id = &"coffee"
@@ -12,3 +21,4 @@ sell_price = 5
 fills = 0.02
 cheers = 0.02
 wakes = 0.5
+prop = SubResource("CylinderMesh_prop")

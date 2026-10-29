@@ -4,7 +4,7 @@ extends RefCounted
 ## never picked at random: every activity and mood has its own, so a glance tells how a Dhull is.
 ## The animations are in dhull_animations.tres.
 
-enum Activity { STANDING, WALKING, SITTING, SLEEPING }
+enum Activity { STANDING, WALKING, SITTING, SLEEPING, TAKING_SELFIE }
 enum Mood { CONTENT, HAPPY, PLAYFUL, SLEEPY, HUNGRY, SAD, GRUMPY }
 enum Weather { CLEAR, RAIN, STORM, SUN }
 
@@ -49,6 +49,17 @@ const ANIMATIONS: Dictionary[Activity, Dictionary] = {
 		Mood.HUNGRY: &"sleep_restless",
 		Mood.SAD: &"sleep_restless",
 		Mood.GRUMPY: &"sleep_restless",
+	},
+	# Phone up, the other nub holding up what the selfie is about; the face shows the mood.
+	Activity.TAKING_SELFIE:
+	{
+		Mood.CONTENT: &"selfie",
+		Mood.HAPPY: &"selfie",
+		Mood.PLAYFUL: &"selfie",
+		Mood.SLEEPY: &"selfie",
+		Mood.HUNGRY: &"selfie",
+		Mood.SAD: &"selfie",
+		Mood.GRUMPY: &"selfie",
 	},
 }
 ## The face each mood shows while awake. Asleep, the eyes are always closed.

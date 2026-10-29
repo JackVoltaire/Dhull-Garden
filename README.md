@@ -83,7 +83,7 @@ scenes/
   ui/dialogue_box/  What characters say to the dreamer, a line at a time
   characters/       The island's characters, lulla/ and pebble/, with placeholder looks
   ui/shop_menu/     Pebble's shop: buy and sell, one at a time
-  ui/phone/         The dreamer's phone: the feed, post cards and the selfie studio
+  ui/phone/         The dreamer's phone: the feed and its post cards
   ui/name_prompt/   Naming a newly hatched Dhull
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
@@ -173,7 +173,7 @@ above it.
   shape, model it like the others, add it to `DhullGenome.BodyShape` or `HeadShape` with its
   dominance and commonness, and to `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is
   missing.
-- **Dhull animations.** A Dhull's `activity` (standing, walking, sitting, sleeping) and `mood`
+- **Dhull animations.** A Dhull's `activity` (standing, walking, sitting, sleeping, taking a selfie) and `mood`
   (content, happy, playful, sleepy, hungry, sad, grumpy) pick its animation and face from the
   tables in `DhullState`, never at random; its energy gene sets how fast they play. The
   animations are loops in `scenes/dhulls/dhull_animations.tres`, an AnimationLibrary you can
@@ -223,8 +223,15 @@ above it.
 - **The feed.** The phone button (Tab) opens the dreamer's phone. Its feed is the only way
   Dhulls talk to them: grown Dhulls post when their mood swings, when they doze off or wake up,
   when they eat, at 3am and in the morning, never more often than every 45 minutes
-  (`data/feed/feed.tres`). Each post has a selfie, taken by `SelfieStudio`, a SubViewport that
-  poses the Dhull in its mood beside a drawing of what it's about. The player reacts once per
+  (`data/feed/feed.tres`). Each post has a real selfie, taken right where the Dhull is: it strikes
+  the `selfie` pose (activity `TAKING_SELFIE`), holding its phone out on a selfie stick in its
+  right nub (`SelfieStick`, since nubs are far too short to frame a face) and what the post is
+  about in its left (an item's `prop` mesh), and pulls a face that fits the post
+  (`DhullPosting.selfie_face`: thrilled with its food, drowsy at 3am). The shot comes from the
+  phone, through the Dhull's `Selfie` SubViewport, which shares the level's world. The stick
+  and phone are on render layer 20, `selfie_phone`, which the selfie lens doesn't see. A
+  post made while the Dhull's area wasn't loaded gets its selfie the next time it is. The
+  pictures are PNGs in a `slot_<n>_selfies` folder beside the save, and go with their posts. The player reacts once per
   post with a like, a heart, a sad face or an angry face, and `DhullPosting` decides how the
   Dhull takes it: bold Dhulls want a rise out of you, friendly ones sympathy, and the rest for
   you to match their vibe. The right reaction lifts its mood and bond; the wrong one stings. The
