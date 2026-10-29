@@ -15,7 +15,9 @@ extends Node3D
 ## its needs set its mood (see DhullLife), its Brain walks it about as that mood's habit says
 ## (see DhullBrain) unless it's napping, and the young are smaller. It reacts when its mood
 ## changes, when it notices the player, and now and then as it rests. The player can pet it, feed
-## it and carry it about (see DhullCare and CareMenu). Without a record, as in the
+## it and carry it about (see DhullCare and CareMenu). When it posts on the feed it takes a selfie
+## on its phone, right where it is, holding up what the post is about; posts it made while its
+## area wasn't loaded get their selfies the next time it is. Without a record, as in the
 ## Dhull gallery, it shows whatever activity and mood are set on it and stays where it is.
 
 const BODY_MODELS: Dictionary[DhullGenome.BodyShape, PackedScene] = {
@@ -103,6 +105,9 @@ var _head_shape: MeshInstance3D
 var _life_shown := false
 ## The life stage shown last, to notice it hatching or growing up.
 var _shown_life_stage := DhullRecord.LifeStage.ADULT
+## Posts it still has to take a selfie for, oldest first.
+var _selfies_due: Array[FeedPost] = []
+var _taking_selfies := false
 
 @onready var _model: Node3D = $Model
 @onready var _head: Node3D = $Model/Head
@@ -115,6 +120,10 @@ var _shown_life_stage := DhullRecord.LifeStage.ADULT
 @onready var _sigh_timer: Timer = $SighTimer
 @onready var _care: Interactable = $Care
 @onready var _egg: MeshInstance3D = $Egg
+@onready var _selfie: SubViewport = $Selfie
+@onready var _selfie_lens: Camera3D = $Selfie/Lens
+@onready var _selfie_arm: Marker3D = $Model/SelfieArm
+@onready var _held_thing: MeshInstance3D = $Model/HeldThing
 
 
 func _ready() -> void:
@@ -137,7 +146,10 @@ func _ready() -> void:
 		_sigh_timer.timeout.connect(_sigh)
 		_brain.activity_changed.connect(_on_brain_activity_changed)
 		Garden.lives_changed.connect(_show_life)
+		Feed.posted.connect(_on_posted)
 		_show_life()
+		_selfies_due.assign(Feed.waiting_for_selfies(record.id))
+		_take_selfies.call_deferred()
 	_until_blink_change = _rng.randf_range(blink_interval.x, blink_interval.y)
 	# Start each Dhull at its own point in its loop, so Dhulls doing the same thing aren't in step.
 	_animation_player.seek(_rng.randf() * _animation_player.current_animation_length, true)
@@ -183,6 +195,35 @@ func feed(item: ItemDefinition) -> bool:
 	if response == DhullCare.Response.WELCOMED:
 		Feed.post_about(record, FeedPost.Topic.ATE, item.id)
 	return response == DhullCare.Response.WELCOMED
+
+
+func _on_posted(post: FeedPost) -> void:
+	if post.dhull_id != record.id:
+		return
+	_selfies_due.append(post)
+	_take_selfies()
+
+
+## Takes a selfie for each post waiting for one, one after another: the camera at arm's length,
+## holding up what the post is about.
+func _take_selfies() -> void:
+	if _taking_selfies:
+		return
+	_taking_selfies = true
+	while not _selfies_due.is_empty():
+		var post: FeedPost = _selfies_due.front()
+		var subject: ItemDefinition = Inventory.definitions.get(post.subject)
+		_held_thing.mesh = subject.prop if subject else null
+		_held_thing.visible = _held_thing.mesh != null
+		_selfie_lens.global_transform = _selfie_arm.global_transform.orthonormalized()
+		_selfie.render_target_update_mode = SubViewport.UPDATE_ONCE
+		# One frame to draw the picture, one for it to be ready to read back.
+		await RenderingServer.frame_post_draw
+		await RenderingServer.frame_post_draw
+		Feed.keep_selfie(post, _selfie.get_texture().get_image())
+		_held_thing.visible = false
+		_selfies_due.pop_front()
+	_taking_selfies = false
 
 
 func _respond(response: DhullCare.Response) -> void:

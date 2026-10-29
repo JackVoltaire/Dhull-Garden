@@ -23,6 +23,10 @@ enum Kind { MATERIAL, FOOD, DRINK }
 ## How much tiredness it takes away, as coffee does. Only adults take these.
 @export_range(0.0, 1.0, 0.01) var wakes := 0.0
 
+@export_group("Look")
+## What a Dhull holds up when it posts about the item, like the cup of noodles it's eating.
+@export var prop: Mesh
+
 
 func is_edible() -> bool:
 	return kind == Kind.FOOD or kind == Kind.DRINK

@@ -161,6 +161,14 @@ visible = false
 cast_shadow = 0
 mesh = ExtResource("15_spiral")
 
+[node name="SelfieArm" type="Marker3D" parent="Model"]
+transform = Transform3D(0.9487, -0.1107, 0.2962, 0.0000, 0.9367, 0.3501, -0.3162, -0.3321, 0.8887, 0.2200, 0.8800, 0.6600)
+
+[node name="HeldThing" type="MeshInstance3D" parent="Model"]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.42, 0.28)
+cast_shadow = 0
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": ExtResource("5_animations")
@@ -202,3 +210,11 @@ prompt = "PROMPT_CARE"
 [node name="Shape" type="CollisionShape3D" parent="Care"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("SphereShape3D_care")
+
+[node name="Selfie" type="SubViewport" parent="."]
+size = Vector2i(256, 192)
+render_target_update_mode = 0
+
+[node name="Lens" type="Camera3D" parent="Selfie"]
+current = true
+fov = 72.0
