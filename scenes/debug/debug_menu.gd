@@ -48,6 +48,11 @@ func _ready() -> void:
 	_add_button(needs_row, "Rested", _change_needs.bind(_rest))
 	_add_button(needs_row, "Happy", _change_needs.bind(_cheer_up))
 	_add_button(needs_row, "Unhappy", _change_needs.bind(_sadden))
+	var reaction_row := _add_row("Dhull reactions")
+	_add_button(reaction_row, "Eye", _react.bind(DhullReaction.Symbol.EYE))
+	_add_button(reaction_row, "Star", _react.bind(DhullReaction.Symbol.STAR))
+	_add_button(reaction_row, "Spiral", _react.bind(DhullReaction.Symbol.SPIRAL))
+	_add_button(reaction_row, "Gloomy sigh", _react.bind(DhullReaction.Symbol.SPIRAL, true))
 	var activity_row := _add_row("Dhull activity")
 	for activity: DhullState.Activity in DhullState.Activity.values():
 		var activity_name: String = DhullState.Activity.keys()[activity].capitalize()
@@ -155,6 +160,11 @@ func _reroll_dhulls() -> void:
 func _set_dhulls(property: StringName, value: int) -> void:
 	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
 		dhull.set(property, value)
+
+
+func _react(symbol: DhullReaction.Symbol, gloomy := false) -> void:
+	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
+		dhull.react(symbol, gloomy)
 
 
 ## Changes the needs of every Dhull in the garden with [param change].

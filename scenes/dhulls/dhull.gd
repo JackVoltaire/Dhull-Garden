@@ -6,11 +6,13 @@ extends Node3D
 ## together from those parts when it's ready, in the editor too. What it's doing and how it feels,
 ## its [member activity] and [member mood], pick its animation and face (see DhullState); its
 ## energy sets how fast it moves. The face is drawn on the head from swappable eye and mouth
-## images, like Wind Waker's, and the eyes blink now and then.
+## images, like Wind Waker's, and the eyes blink now and then. Its mood also shows as weather in
+## its nebula, and reaction symbols pop up beside its head (see DhullReaction).
 ##
 ## A Dhull in the garden shows its [member record], the life the Garden autoload keeps for it:
 ## its needs set its mood (see DhullLife), its Brain walks it about as that mood's habit says
-## (see DhullBrain) unless it's napping, and the young are smaller. Without a record, as in the
+## (see DhullBrain) unless it's napping, and the young are smaller. It reacts when its mood
+## changes, when it notices the player, and now and then as it rests. Without a record, as in the
 ## Dhull gallery, it shows whatever activity and mood are set on it and stays where it is.
 
 const BODY_MODELS: Dictionary[DhullGenome.BodyShape, PackedScene] = {
@@ -70,6 +72,9 @@ const GROUP := &"dhulls"
 @export var face_material: Material
 ## How big a young Dhull is next to an adult.
 @export_range(0.3, 1.0, 0.05) var young_scale := 0.7
+## How close the player has to come before it notices them, for the least and the most curious
+## Dhulls.
+@export var notice_distance := Vector2(2.0, 6.0)
 ## Seconds between blinks, picked at random between x and y, and how long a blink lasts.
 @export var blink_interval := Vector2(2.0, 5.0)
 @export_range(0.05, 1.0, 0.01, "suffix:s") var blink_duration := 0.14
@@ -85,11 +90,18 @@ var _blinking := false
 var _until_blink_change := 0.0
 var _rng := RandomNumberGenerator.new()
 var _head_shape: MeshInstance3D
+## Whether its life has been shown yet. The first time isn't a change of mood to react to.
+var _life_shown := false
 
 @onready var _model: Node3D = $Model
 @onready var _head: Node3D = $Model/Head
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
 @onready var _brain: DhullBrain = $Brain
+@onready var _weather: DhullWeather = $Model/Head/Weather
+@onready var _reactions: DhullReactions = $Model/Head/Reactions
+@onready var _notice: Area3D = $Notice
+@onready var _notice_shape: CollisionShape3D = $Notice/Shape
+@onready var _sigh_timer: Timer = $SighTimer
 
 
 func _ready() -> void:
@@ -100,7 +112,14 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	add_to_group(GROUP)
+	_notice.monitoring = record != null
 	if record:
+		var curiosity := genome.level(DhullGenome.Gene.CURIOSITY)
+		(_notice_shape.shape as SphereShape3D).radius = lerpf(
+			notice_distance.x, notice_distance.y, curiosity
+		)
+		_notice.body_entered.connect(_on_noticed)
+		_sigh_timer.timeout.connect(_sigh)
 		_brain.activity_changed.connect(_on_brain_activity_changed)
 		Garden.lives_changed.connect(_show_life)
 		_show_life()
@@ -127,17 +146,31 @@ func size_scale() -> float:
 	return young_scale if record and record.is_young() else 1.0
 
 
+## Pops up [param symbol] beside its head, with gloomy lines down its face if [param gloomy].
+func react(symbol: DhullReaction.Symbol, gloomy := false) -> void:
+	if symbol == DhullReaction.Symbol.NONE:
+		return
+	_reactions.pop(symbol)
+	if gloomy:
+		_set_gloom(true)
+		get_tree().create_timer(_reactions.duration()).timeout.connect(_set_gloom.bind(false))
+
+
 func _show_life() -> void:
 	var new_mood := DhullLife.mood_for(record, Garden.tuning)
 	# Setting a mood or activity blends into its animation again, so only change what changed.
 	if new_mood != mood:
+		if _life_shown:
+			react(DhullReaction.on_mood_change(mood, new_mood))
 		mood = new_mood
+	_life_shown = true
 	if record.napping:
 		_brain.rest()
 		_set_activity(DhullState.Activity.SLEEPING)
 	else:
 		_brain.follow_mood(mood)
 	_model.scale = Vector3.ONE * size_scale()
+	_keep_sighing()
 
 
 func _on_brain_activity_changed(new_activity: DhullState.Activity) -> void:
@@ -148,6 +181,34 @@ func _on_brain_activity_changed(new_activity: DhullState.Activity) -> void:
 func _set_activity(new_activity: DhullState.Activity) -> void:
 	if new_activity != activity:
 		activity = new_activity
+		_keep_sighing()
+
+
+func _on_noticed(_player: Node3D) -> void:
+	if not record.napping:
+		react(DhullReaction.Symbol.EYE)
+
+
+## Keeps the sigh timer going while it rests in a mood that sighs now and then, and stops it
+## otherwise.
+func _keep_sighing() -> void:
+	var habit := _brain.habits.habit_for(mood)
+	var resting := activity in [DhullState.Activity.STANDING, DhullState.Activity.SITTING]
+	if not resting or habit.idle_reaction == DhullReaction.Symbol.NONE:
+		_sigh_timer.stop()
+	elif _sigh_timer.is_stopped():
+		var seconds := habit.idle_reaction_every_seconds * _rng.randf_range(0.6, 1.4)
+		_sigh_timer.start(seconds / DhullState.speed_scale(genome))
+
+
+func _sigh() -> void:
+	var habit := _brain.habits.habit_for(mood)
+	react(habit.idle_reaction, habit.gloomy)
+	_keep_sighing()
+
+
+func _set_gloom(gloomy: bool) -> void:
+	_head_shape.set_instance_shader_parameter(&"gloom", 1.0 if gloomy else 0.0)
 
 
 ## Puts the model together from the body and head its genes call for.
@@ -183,6 +244,7 @@ static func _take_part(model: PackedScene, part_name: StringName) -> Node3D:
 
 func _show_state() -> void:
 	_show_face()
+	_weather.show_weather(DhullState.weather_for(mood))
 	# Animating in the editor would save the animated pose into the scene.
 	if Engine.is_editor_hint():
 		return

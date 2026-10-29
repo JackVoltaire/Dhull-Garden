@@ -54,3 +54,11 @@ func test_dhulls_walk_up_to_the_nearest_other_and_stop_short() -> void:
 	assert_eq(nearest, Vector3(4, 0, 0))
 	assert_eq(DhullHabits.beside(from, nearest, 1.0), Vector3(3, 0, 0))
 	assert_eq(DhullHabits.beside(Vector3(3.5, 0, 0), nearest, 1.0), Vector3(3.5, 0, 0))
+
+
+func test_sad_and_grumpy_dhulls_sigh_gloomily_now_and_then() -> void:
+	for mood: DhullState.Mood in [DhullState.Mood.SAD, DhullState.Mood.GRUMPY]:
+		var habit := _habits.habit_for(mood)
+		var mood_name: String = DhullState.Mood.keys()[mood]
+		assert_eq(habit.idle_reaction, DhullReaction.Symbol.SPIRAL, mood_name + " sighs")
+		assert_true(habit.gloomy, mood_name + " is gloomy about it")

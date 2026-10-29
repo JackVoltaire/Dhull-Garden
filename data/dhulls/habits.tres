@@ -12,11 +12,15 @@ outing_every_seconds = 25.0
 script = ExtResource("2_habit")
 heads_to = 1
 outing_every_seconds = 12.0
+idle_reaction = 2
+idle_reaction_every_seconds = 25.0
 
 [sub_resource type="Resource" id="Resource_playful"]
 script = ExtResource("2_habit")
 heads_to = 3
 outing_every_seconds = 6.0
+idle_reaction = 2
+idle_reaction_every_seconds = 15.0
 
 [sub_resource type="Resource" id="Resource_sleepy"]
 script = ExtResource("2_habit")
@@ -31,10 +35,16 @@ outing_every_seconds = 8.0
 script = ExtResource("2_habit")
 heads_to = 2
 rests_by = 2
+idle_reaction = 3
+idle_reaction_every_seconds = 14.0
+gloomy = true
 
 [sub_resource type="Resource" id="Resource_grumpy"]
 script = ExtResource("2_habit")
 heads_to = 2
+idle_reaction = 3
+idle_reaction_every_seconds = 16.0
+gloomy = true
 
 [resource]
 script = ExtResource("1_habits")

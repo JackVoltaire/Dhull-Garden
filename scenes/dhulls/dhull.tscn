@@ -6,6 +6,14 @@
 [ext_resource type="AnimationLibrary" path="res://scenes/dhulls/dhull_animations.tres" id="5_animations"]
 [ext_resource type="Script" path="res://scenes/dhulls/dhull_brain.gd" id="6_brain"]
 [ext_resource type="Resource" path="res://data/dhulls/habits.tres" id="7_habits"]
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_weather.gd" id="8_weather"]
+[ext_resource type="QuadMesh" path="res://scenes/dhulls/weather/rain.tres" id="9_rain"]
+[ext_resource type="QuadMesh" path="res://scenes/dhulls/weather/storm.tres" id="10_storm"]
+[ext_resource type="QuadMesh" path="res://scenes/dhulls/weather/sun.tres" id="11_sun"]
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_reactions.gd" id="12_reactions"]
+[ext_resource type="QuadMesh" path="res://scenes/dhulls/reactions/eye.tres" id="13_eye"]
+[ext_resource type="QuadMesh" path="res://scenes/dhulls/reactions/star.tres" id="14_star"]
+[ext_resource type="QuadMesh" path="res://scenes/dhulls/reactions/spiral.tres" id="15_spiral"]
 
 [sub_resource type="Gradient" id="Gradient_mist"]
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
@@ -71,6 +79,10 @@ color_ramp = SubResource("GradientTexture1D_stars")
 material = SubResource("StandardMaterial3D_puff")
 size = Vector2(0.035, 0.035)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_notice"]
+resource_local_to_scene = true
+radius = 4.0
+
 [node name="Dhull" type="Node3D"]
 script = ExtResource("1_dhull")
 face_material = ExtResource("3_face")
@@ -100,6 +112,44 @@ visibility_aabb = AABB(-0.6, -0.5, -0.6, 1.2, 1, 1.2)
 process_material = SubResource("ParticleProcessMaterial_stars")
 draw_pass_1 = SubResource("QuadMesh_star")
 
+[node name="Weather" type="Node3D" parent="Model/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+script = ExtResource("8_weather")
+
+[node name="Rain" type="MeshInstance3D" parent="Model/Head/Weather"]
+visible = false
+cast_shadow = 0
+mesh = ExtResource("9_rain")
+
+[node name="Storm" type="MeshInstance3D" parent="Model/Head/Weather"]
+visible = false
+cast_shadow = 0
+mesh = ExtResource("10_storm")
+
+[node name="Sun" type="MeshInstance3D" parent="Model/Head/Weather"]
+visible = false
+cast_shadow = 0
+mesh = ExtResource("11_sun")
+
+[node name="Reactions" type="Node3D" parent="Model/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, 0.26, 0.05)
+script = ExtResource("12_reactions")
+
+[node name="Eye" type="MeshInstance3D" parent="Model/Head/Reactions"]
+visible = false
+cast_shadow = 0
+mesh = ExtResource("13_eye")
+
+[node name="Star" type="MeshInstance3D" parent="Model/Head/Reactions"]
+visible = false
+cast_shadow = 0
+mesh = ExtResource("14_star")
+
+[node name="Spiral" type="MeshInstance3D" parent="Model/Head/Reactions"]
+visible = false
+cast_shadow = 0
+mesh = ExtResource("15_spiral")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": ExtResource("5_animations")
@@ -116,3 +166,14 @@ script = ExtResource("6_brain")
 habits = ExtResource("7_habits")
 dhull = NodePath("..")
 navigation_agent = NodePath("../NavigationAgent")
+
+[node name="Notice" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Notice"]
+shape = SubResource("SphereShape3D_notice")
+
+[node name="SighTimer" type="Timer" parent="."]
+one_shot = true

@@ -178,6 +178,16 @@ above it.
   Dhulls needs a `NavigationRegion3D`: its mesh is built from the static colliders of everything
   in the level root's `navigation_mesh_source_group`, so after changing the level, select the
   region and press **Bake NavigationMesh** in the editor.
+- **Mood weather and reactions.** A Dhull's mood also shows as weather over its head
+  (`DhullState.WEATHER`): a rain cloud when it's sad, a storm when it's grumpy, a small sun
+  peeking out when it's happy or playful. Reaction symbols pop up beside its head, as in Animal
+  Crossing: an eye when the player comes close (from farther away for curious Dhulls), a star
+  when it cheers up and a spiral when it gets upset (`DhullReaction`). A mood's habit can also
+  show a reaction now and then while the Dhull rests, like a sigh: sad and grumpy Dhulls get a
+  spiral and gloomy blue lines down their foreheads, as in anime (`gloom` in
+  `dhull_face.gdshader`). The weather and symbols are cutout drawings in
+  `scenes/dhulls/weather/` and `scenes/dhulls/reactions/`, placeholders like the rest. The F3
+  menu can pop any reaction.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
   Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
   eye color show the more dominant of the two, so recessive variants can skip a generation;
