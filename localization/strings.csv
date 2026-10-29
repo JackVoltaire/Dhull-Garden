@@ -71,3 +71,32 @@ UI_CLOSE,Close
 UI_PRICE,%s: %d
 UI_SELL_PRICE,%s ×%d: %d each
 UI_NOTHING_TO_SELL,Nothing in your pockets
+"POST_CHEERED_UP_1","today is actually good?? suspicious"
+"POST_CHEERED_UP_2","small win. big feelings"
+"POST_UPSET_1","not ok but posting anyway"
+"POST_UPSET_2","everyone is annoying. not you. ok maybe you"
+"POST_HUNGRY_1","starving. dramatically"
+"POST_HUNGRY_2","fridge empty. heart empty"
+"POST_WOKE_UP_1","woke up from a nap that lasted a century"
+"POST_WOKE_UP_2","nap was elite. no notes"
+"POST_NAPPING_1","brb dying (napping)"
+"POST_NAPPING_2","eyes closing. goodbye forever (20 min)"
+"POST_ATE_1","eating %s. do not perceive me"
+"POST_ATE_2","%s is changing my life rn"
+"POST_LATE_NIGHT_1","3am thoughts: what if the sky is just a big window"
+"POST_LATE_NIGHT_2","can't sleep. scrolling. send help"
+"POST_MORNING_1","good morning to everyone except the sun"
+"POST_MORNING_2","up. barely. coffee pls"
+UI_UNNAMED,someone
+UI_PHONE,Phone
+UI_FEED_EMPTY,Nobody's posted yet.
+UI_JUST_NOW,just now
+UI_MINUTES_AGO,%dm ago
+UI_HOURS_AGO,%dh ago
+UI_DAYS_AGO,%dd ago
+UI_NAME_YOUR_DHULL,Name your Dhull
+UI_OK,OK
+UI_REACT_LIKE,Like
+UI_REACT_HEART,Heart
+UI_REACT_SAD,Sad
+UI_REACT_ANGRY,Angry

@@ -8,6 +8,8 @@ enum LifeStage { EGG, YOUNG, ADULT }
 
 ## Stable and unique in a garden; saves refer to the Dhull by it.
 var id: StringName
+## What the player named it when it hatched. Empty until then.
+var name := ""
 var genome: DhullGenome
 var coloring: DhullColoring
 var life_stage := LifeStage.ADULT
@@ -49,6 +51,7 @@ func is_adult() -> bool:
 func to_dict() -> Dictionary:
 	var data := {
 		"id": String(id),
+		"name": name,
 		"genes": genome.to_dict(),
 		"coloring": String(coloring.id),
 		"life_stage": LifeStage.keys()[life_stage],
@@ -77,6 +80,7 @@ static func from_dict(
 ) -> DhullRecord:
 	var record := DhullRecord.new()
 	record.id = StringName(data.get("id", ""))
+	record.name = str(data.get("name", ""))
 	record.genome = DhullGenome.from_dict(data.get("genes", {}), rng)
 	record.coloring = colorings.get(StringName(data.get("coloring", "")), default_coloring)
 	record.life_stage = LifeStage.get(data.get("life_stage", ""), LifeStage.ADULT)

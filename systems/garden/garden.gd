@@ -12,6 +12,9 @@ signal lives_changed
 signal garden_replaced
 ## A Dhull joined the garden, such as an egg Lulla handed over.
 signal dhull_added(record: DhullRecord)
+## As time went by, a Dhull's mood changed from [param old_mood], or it dozed off or woke up.
+signal mood_changed(record: DhullRecord, old_mood: DhullState.Mood)
+signal nap_changed(record: DhullRecord)
 ## Mess turned up in [param area], or was cleaned up there.
 signal mess_changed(area: StringName)
 
@@ -60,6 +63,14 @@ func dhulls_in(area: StringName) -> Array[DhullRecord]:
 		if record.home_area == area:
 			living_there.append(record)
 	return living_there
+
+
+## The Dhull with [param id], or null.
+func find_dhull(id: StringName) -> DhullRecord:
+	for record in dhulls:
+		if record.id == id:
+			return record
+	return null
 
 
 func mess_in(area: StringName) -> Array[MessRecord]:
@@ -138,6 +149,11 @@ func advance_to(unix_time: int) -> void:
 	var steps := (unix_time - _simulated_until) / STEP_SECONDS
 	if steps == 0:
 		return
+	var moods_before: Dictionary[DhullRecord, DhullState.Mood] = {}
+	var napping_before: Dictionary[DhullRecord, bool] = {}
+	for record in dhulls:
+		moods_before[record] = DhullLife.mood_for(record, tuning)
+		napping_before[record] = record.napping
 	var carers := _carers()
 	var step_hours := STEP_SECONDS / 3600.0
 	for _step in steps:
@@ -153,6 +169,11 @@ func advance_to(unix_time: int) -> void:
 			carers = _carers()
 	_simulated_until += steps * STEP_SECONDS
 	lives_changed.emit()
+	for record in moods_before:
+		if record.napping != napping_before[record]:
+			nap_changed.emit(record)
+		if DhullLife.mood_for(record, tuning) != moods_before[record]:
+			mood_changed.emit(record, moods_before[record])
 
 
 ## Lets the Dhulls in levels show their records again after something changed them by hand,

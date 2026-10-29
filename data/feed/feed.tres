@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="FeedTuning" format=3]
+
+[ext_resource type="Script" path="res://systems/feed/feed_tuning.gd" id="1_feed"]
+
+[resource]
+script = ExtResource("1_feed")

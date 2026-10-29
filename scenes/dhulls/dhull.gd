@@ -180,6 +180,8 @@ func pet() -> void:
 func feed(item: ItemDefinition) -> bool:
 	var response := DhullCare.feed(record, item, Garden.tuning)
 	_respond(response)
+	if response == DhullCare.Response.WELCOMED:
+		Feed.post_about(record, FeedPost.Topic.ATE, item.id)
 	return response == DhullCare.Response.WELCOMED
 
 
@@ -189,8 +191,12 @@ func _respond(response: DhullCare.Response) -> void:
 	Garden.notify_changed()
 
 
+## A hatched Dhull is named the first time the dreamer cares for it.
 func _on_care(player: Player) -> void:
-	player.care_for(self)
+	if record.name.is_empty() and not record.is_egg():
+		player.name_dhull(self)
+	else:
+		player.care_for(self)
 
 
 func _show_life() -> void:

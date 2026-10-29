@@ -24,6 +24,7 @@ files move. The `*.translation` files generated from `localization/strings.csv` 
 | Jump       | Space              | A / Cross    |
 | Sprint     | Shift (hold)       | L3 (hold)    |
 | Interact   | E                  | X / Square   |
+| Phone      | Tab                | Back / Select |
 | Pause      | Esc                | Start        |
 | Debug menu | F3 (debug builds)  |              |
 
@@ -39,6 +40,7 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   calendar/         `Calendar`: dated events and seasons; CalendarEvent resource
   saves/            `Saves`: save slots, backups, migrations, time away
   inventory/        `Inventory`: the player's pockets and money; ItemDefinition, one kind of item
+  feed/             `Feed`: what Dhulls post and the player's reactions; DhullPosting, the rules
   garden/           `Garden`: every Dhull's life (needs, life stage, where it is) and the mess
                     in the garden, saved and moved on with the real-world clock; NewGarden, who a
                     new game starts with; MessRecord and MessTuning
@@ -81,6 +83,8 @@ scenes/
   ui/dialogue_box/  What characters say to the dreamer, a line at a time
   characters/       The island's characters, lulla/ and pebble/, with placeholder looks
   ui/shop_menu/     Pebble's shop: buy and sell, one at a time
+  ui/phone/         The dreamer's phone: the feed, post cards and the selfie studio
+  ui/name_prompt/   Naming a newly hatched Dhull
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
@@ -216,6 +220,16 @@ above it.
   `dhull_face.gdshader`). The weather and symbols are cutout drawings in
   `scenes/dhulls/weather/` and `scenes/dhulls/reactions/`, placeholders like the rest. The F3
   menu can pop any reaction.
+- **The feed.** The phone button (Tab) opens the dreamer's phone. Its feed is the only way
+  Dhulls talk to them: grown Dhulls post when their mood swings, when they doze off or wake up,
+  when they eat, at 3am and in the morning, never more often than every 45 minutes
+  (`data/feed/feed.tres`). Each post has a selfie, taken by `SelfieStudio`, a SubViewport that
+  poses the Dhull in its mood beside a drawing of what it's about. The player reacts once per
+  post with a like, a heart, a sad face or an angry face, and `DhullPosting` decides how the
+  Dhull takes it: bold Dhulls want a rise out of you, friendly ones sympathy, and the rest for
+  you to match their vibe. The right reaction lifts its mood and bond; the wrong one stings. The
+  words are translation keys `POST_<TOPIC>_<n>`, placeholders in a Dhull's voice. A hatched Dhull
+  is named the first time the dreamer cares for it, the one thing they ever type.
 - **Characters.** A character is a scene in `scenes/characters/` with an `Interactable` for "[E]
   Talk to". What it says is translation keys in exported lists, shown with `Player.listen()` in
   the dialogue box; the dreamer only listens, and Interact moves on a line. Lulla's lines are
