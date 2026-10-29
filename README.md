@@ -259,7 +259,8 @@ above it.
   curtains frame the face and wide panels hang down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet standing
   straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
   `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
-  thick blocky brows over tired eyes with a heavy lid painted solid plum, dull irises, bags with
+  thick blocky brows over wide, flat, tired eyes with no border, just a heavy lash line under a lid
+  painted solid plum, dull irises, bags with
   makeup run down from them and blush, in the order of `DreamerModel.Eyes`, and a small nose over
   a wide, lopsided mouth (`DreamerModel.Mouth`).
   `eyes_apart` spaces the two eyes wider than the drawings without stretching them, and they
