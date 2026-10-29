@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Links model materials to the shared toon palette.
 
-For every .glb under assets/models/, any material named like a file in assets/materials/
-(e.g. a Blender material called "toon_grass") is set to use that .tres file instead of the
-material inside the .glb. This rewrites the "_subresources" line of each .glb.import file that
+For every .glb under assets/models/, any material named like a palette file in
+assets/materials/, a toon_*.tres (e.g. a Blender material called "toon_grass"), is set to use
+that .tres file instead of the material inside the .glb. Other materials there, like ink_hull,
+are passes other materials use, not ones a model is painted with. This rewrites the "_subresources" line of each .glb.import file that
 isn't linked yet, so run it after Godot has imported a new model or a new palette material has
 been added, then let Godot import again:
 
@@ -14,7 +15,7 @@ been added, then let Godot import again:
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PALETTE = sorted(path.stem for path in (ROOT / "assets" / "materials").glob("*.tres"))
+PALETTE = sorted(path.stem for path in (ROOT / "assets" / "materials").glob("toon_*.tres"))
 IMPORTED = ROOT / ".godot" / "imported"
 
 

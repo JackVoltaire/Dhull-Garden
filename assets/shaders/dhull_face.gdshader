@@ -1,10 +1,11 @@
-// A Dhull's face, drawn over its head as an overlay (GeometryInstance3D.material_overlay): a pair
-// of eyes and a mouth, each picked from a strip of drawings, like Wind Waker's swappable face
-// textures. The drawings are imported small and shown with hard pixels, so they read as crunchy
-// painted textures, like a PS1 character's. They're projected straight onto the front (+Z) of
-// the head, so the head needs no special UVs. Each Dhull picks its own drawings through the
-// instance uniforms eye_frame and mouth_frame (see DhullFace for the order); a mouth_frame below
-// 0 shows no mouth. A gloomy Dhull gets anime-style blue lines down its forehead, behind the eyes,
+// A character's face, a Dhull's or the dreamer's, drawn over its head as an overlay
+// (GeometryInstance3D.material_overlay): a pair of eyes and a mouth, each picked from a strip of
+// drawings, like Wind Waker's swappable face textures. The drawings are imported small and shown
+// with hard pixels, so they read as crunchy painted textures, like a PS1 character's. They're
+// projected straight onto the front (+Z) of the head, around its origin, so the head needs no
+// special UVs; each head's material sets where the features sit. Each picks its own drawings
+// through the instance uniforms eye_frame and mouth_frame (see DhullFace for the order); a
+// mouth_frame below 0 shows no mouth. A gloomy Dhull gets anime-style blue lines down its forehead, behind the eyes,
 // while gloom is above 0.
 //
 // The eyes are drawn in three strips so the irises can move: the whites, the irises whole and at

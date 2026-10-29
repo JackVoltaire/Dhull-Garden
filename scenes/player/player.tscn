@@ -9,20 +9,16 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/phone/phone.tscn" id="7_phone"]
 [ext_resource type="PackedScene" path="res://scenes/ui/name_prompt/name_prompt.tscn" id="8_name"]
 [ext_resource type="Script" path="res://systems/looking/lookable.gd" id="9_lookable"]
+[ext_resource type="PackedScene" path="res://assets/models/dreamer/dreamer.glb" id="10_dreamer"]
+[ext_resource type="Script" path="res://scenes/player/dreamer_model.gd" id="11_dreamer_model"]
+[ext_resource type="Resource" path="res://data/dreamer/colors.tres" id="12_colors"]
+[ext_resource type="Material" path="res://scenes/player/dreamer_face.tres" id="13_face"]
+[ext_resource type="AnimationLibrary" path="res://scenes/player/dreamer_animations.tres" id="14_animations"]
+[ext_resource type="PackedScene" path="res://scenes/ui/look_menu/look_menu.tscn" id="15_look_menu"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
-radius = 0.35
-height = 1.8
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
-radius = 0.35
-height = 1.8
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
-albedo_color = Color(0.86, 0.56, 0.32, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_nose"]
-size = Vector3(0.2, 0.15, 0.3)
+radius = 0.3
+height = 1.6
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_camera"]
 radius = 0.2
@@ -35,22 +31,29 @@ collision_layer = 2
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_body")
 
 [node name="Model" type="Node3D" parent="."]
 
-[node name="Body" type="MeshInstance3D" parent="Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-mesh = SubResource("CapsuleMesh_body")
-surface_material_override/0 = SubResource("StandardMaterial3D_body")
+[node name="Dreamer" parent="Model" instance=ExtResource("10_dreamer")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+script = ExtResource("11_dreamer_model")
+colors = ExtResource("12_colors")
+face_material = ExtResource("13_face")
 
-[node name="Nose" type="MeshInstance3D" parent="Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -0.35)
-mesh = SubResource("BoxMesh_nose")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Model/Dreamer"]
+libraries = {
+&"": ExtResource("14_animations")
+}
+autoplay = &"idle"
+playback_default_blend_time = 0.2
+
+[node name="BlinkTimer" type="Timer" parent="Model/Dreamer"]
+one_shot = true
 
 [node name="CarryPoint" type="Marker3D" parent="Model"]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.6, 0.05)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.56, 0.05)
 
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -121,7 +124,10 @@ unique_name_in_owner = true
 [node name="NamePrompt" parent="Hud" instance=ExtResource("8_name")]
 unique_name_in_owner = true
 
+[node name="LookMenu" parent="Hud" instance=ExtResource("15_look_menu")]
+unique_name_in_owner = true
+
 [node name="Lookable" type="Marker3D" parent="Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -0.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22, -0.26)
 script = ExtResource("9_lookable")
 interest = 1.0

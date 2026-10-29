@@ -7,7 +7,9 @@ extends CharacterBody3D
 ## and [code]CameraPivot[/code] turns with the camera, so the two stay independent.
 ##
 ## The player cares for Dhulls in person through the care menu, and can carry one on their
-## shoulders and put it down again. The phone button opens their phone and its feed.
+## head and put it down again. The phone button opens their phone and its feed. The model is the
+## dreamer (see DreamerModel), in the look they picked: a new game asks for one first, and the
+## pause menu can ask again.
 
 @export_group("Movement")
 @export var walk_speed := 5.0
@@ -39,6 +41,7 @@ var _carried: Dhull
 var _carried_from: Node
 
 @onready var _model: Node3D = $Model
+@onready var _dreamer: DreamerModel = $Model/Dreamer
 @onready var _camera_pivot: Node3D = $CameraPivot
 @onready var _spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
 @onready var _carry_point: Marker3D = $Model/CarryPoint
@@ -47,10 +50,16 @@ var _carried_from: Node
 @onready var _shop_menu: ShopMenu = %ShopMenu
 @onready var _phone: Phone = %Phone
 @onready var _name_prompt: NamePrompt = %NamePrompt
+@onready var _look_menu: LookMenu = %LookMenu
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	_dreamer.show_look(Dreamer.look)
+	Dreamer.look_changed.connect(func() -> void: _dreamer.show_look(Dreamer.look))
+	Dreamer.look_wanted.connect(change_look)
+	if not Dreamer.chosen:
+		change_look.call_deferred()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -96,6 +105,7 @@ func _physics_process(delta: float) -> void:
 	velocity.z = horizontal_velocity.y
 
 	move_and_slide()
+	_dreamer.show_motion(Vector2(velocity.x, velocity.z).length())
 
 	if not direction.is_zero_approx():
 		# Model faces -Z, Godot's forward axis.
@@ -108,6 +118,15 @@ func _physics_process(delta: float) -> void:
 ## [param when_done]. The dreamer only listens.
 func listen(speaker: String, lines: PackedStringArray, when_done := Callable()) -> void:
 	_dialogue_box.say(self, speaker, lines, when_done)
+
+
+## Opens the look menu, turning the camera round to see the dreamer's face. Not while another
+## menu is open.
+func change_look() -> void:
+	if busy:
+		return
+	_camera_pivot.rotation.y = _model.rotation.y + PI
+	_look_menu.open(self)
 
 
 ## Asks the dreamer to name [param dhull].
@@ -129,7 +148,7 @@ func is_carrying() -> bool:
 	return _carried != null
 
 
-## Picks [param dhull] up and carries it on the player's shoulders, looking where they go.
+## Picks [param dhull] up and carries it on the player's head, looking where they go.
 func pick_up(dhull: Dhull) -> void:
 	_carried = dhull
 	_carried_from = dhull.get_parent()

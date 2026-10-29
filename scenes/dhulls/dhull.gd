@@ -296,7 +296,7 @@ func _show_life() -> void:
 
 
 ## What it's doing follows from its life: an egg sits still, a napping Dhull sleeps, a carried
-## one sits on the player's shoulders, and otherwise its brain walks it about.
+## one sits on the player's head, and otherwise its brain walks it about.
 func _show_activity() -> void:
 	if record.is_egg():
 		_brain.rest()
@@ -392,14 +392,11 @@ func _front_camera() -> Vector3:
 	return _stick_phone.global_position + phone_up.normalized() * height
 
 
-## Tells each part's ink outline where the part's middle is, to grow it out from there (see
-## ink_hull.gdshader).
 func _center_outlines(body: Node3D) -> void:
 	# Parts taken out of their models have no owner, so look at every node.
 	var parts: Array[Node] = body.find_children("*", "MeshInstance3D", true, false)
 	parts.append_array([body, _head_shape, _egg])
-	for part: MeshInstance3D in parts:
-		part.set_instance_shader_parameter(&"outline_center", part.mesh.get_aabb().get_center())
+	InkHull.center_outlines(parts)
 
 
 ## Puts [param thing] in [param nub], at [param grip] from its joint, turned as it was.

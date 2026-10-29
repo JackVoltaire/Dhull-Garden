@@ -41,6 +41,7 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   saves/            `Saves`: save slots, backups, migrations, time away
   inventory/        `Inventory`: the player's pockets and money; ItemDefinition, one kind of item
   feed/             `Feed`: what Dhulls post and the player's reactions; DhullPosting, the rules
+  dreamer/          `Dreamer`: how the player's dreamer looks; DreamerLook and DreamerColors
   garden/           `Garden`: every Dhull's life (needs, life stage, where it is) and the mess
                     in the garden, saved and moved on with the real-world clock; NewGarden, who a
                     new game starts with; MessRecord and MessTuning
@@ -68,7 +69,8 @@ scenes/
   levels/dhull_gallery/  Every Dhull animation side by side, for checking them
   environment/      SkyCycle (sky and light by time of day), CutoutRing, InkOutlines,
                     ScreenTexture, and the drawn clouds/, sun_moon/, floating_eyes/ and doodles/
-  player/           Player scene and its controller script
+  player/           Player scene and its controller script; DreamerModel, the dreamer's model,
+                    with its animations and face
   dhulls/           The Dhull scene, its genes (DhullGenome), DhullState (which animation and
                     face show each activity and mood), its animations, DhullFace, DhullColoring
                     and the face drawings in face/; DhullRecord and DhullLife (a Dhull's saved
@@ -86,6 +88,7 @@ scenes/
   ui/shop_menu/     Pebble's shop: buy and sell, one at a time
   ui/phone/         The dreamer's phone: the feed and its post cards
   ui/name_prompt/   Naming a newly hatched Dhull
+  ui/look_menu/     Where the dreamer picks their hair
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
@@ -243,6 +246,19 @@ above it.
   you to match their vibe. The right reaction lifts its mood and bond; the wrong one stings. The
   words are translation keys `POST_<TOPIC>_<n>`, placeholders in a Dhull's voice. A hatched Dhull
   is named the first time the dreamer cares for it, the one thing they ever type.
+- **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
+  Decay's characters: a low-poly chibi with hard facets, in an oversized hoodie and platform
+  boots, with hair in angular locks, one falling over an eye. Their face is painted on by
+  `dhull_face.gdshader` with the Dhulls' drawings (sleepy droopy eyes, silver irises, eye bags),
+  sized for their head in `scenes/player/dreamer_face.tres`, and they blink. `DreamerModel` shows
+  the hair of the chosen length (`HairShort`, `HairMedium`, `HairLong`) in the chosen color,
+  colors the rest from `data/dreamer/colors.tres` (`DreamerColors`), and plays `idle` or `walk`
+  (`scenes/player/dreamer_animations.tres`), the walk sped up to match how fast they go. The
+  `Dreamer` autoload keeps their look (`DreamerLook`, saved by name) and whether they've picked
+  it: a new game opens the look menu before the first dream, with the camera turned to their
+  face, and **Change look** in the pause menu opens it again. Its lengths and swatches come from
+  `DreamerLook`'s enums and the palette, so adding a choice is a data change plus its
+  `UI_HAIR_<NAME>` string.
 - **Characters.** A character is a scene in `scenes/characters/` with an `Interactable` for "[E]
   Talk to". What it says is translation keys in exported lists, shown with `Player.listen()` in
   the dialogue box; the dreamer only listens, and Interact moves on a line. Lulla's lines are
@@ -261,7 +277,7 @@ above it.
   which cheers them and grows their `bond` with you, but not while they nap, when they're
   grumpy, when they're sad and don't trust you yet, or after too much fuss; they turn down food
   when full, and the young turn down coffee and energy drinks. A star or a spiral shows how it
-  went. A picked-up Dhull rides on the player's shoulders until Interact puts it down. Tune it
+  went. A picked-up Dhull rides on the dreamer's head until Interact puts it down. Tune it
   in the "Care from the player" group of `data/dhulls/life.tres`.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
   Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
@@ -361,8 +377,9 @@ uses. Godot is set not to read `.blend` files itself, so the project works on ma
 Blender.
 
 1. Edit or create `<name>.blend`.
-2. Name each material after a palette file in `assets/materials/`, such as `toon_grass` or
-   `toon_bark`. Godot then uses the shared toon material instead of the Blender one.
+2. Name each material after a palette file in `assets/materials/`, one of the `toon_*.tres`, such
+   as `toon_grass` or `toon_bark`. Godot then uses the shared toon material instead of the
+   Blender one.
 3. Name objects with a collision suffix where needed: `-col` (the mesh plus matching collision),
    `-convcol` (the mesh plus simpler convex collision), or `-colonly` / `-convcolonly` (an
    invisible collider only).
