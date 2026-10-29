@@ -18,8 +18,8 @@ extends Node3D
 ## it and carry it about (see DhullCare and CareMenu). When it posts on the feed it takes a selfie
 ## right where it is: it holds its phone out on a selfie stick in one nub, since its nubs are far
 ## too short to frame a face, holds up what the post is about in the other, and pulls a face that
-## fits (see DhullPosting.selfie_face); the shot is taken from the phone. Posts it made while its
-## area wasn't loaded get their selfies the next time it is.
+## fits (see DhullPosting.selfie_face); the shot is taken from the phone's front camera, stick
+## and all. Posts it made while its area wasn't loaded get their selfies the next time it is.
 ## Without a record, as in the Dhull gallery, it shows whatever activity and mood are set on it
 ## and stays where it is.
 
@@ -88,6 +88,8 @@ const GROUP := &"dhulls"
 ## about, from their joints.
 @export var stick_grip := Vector3(-0.15, -0.13, 0.0)
 @export var held_thing_grip := Vector3(0.17, -0.15, 0.02)
+## How far above the stick the phone's front camera sits, for a grown Dhull.
+@export_range(0.0, 0.3, 0.005, "suffix:m") var front_camera_height := 0.06
 ## How long it takes to strike the pose before the shot, and how long it holds it after.
 @export_range(0.0, 3.0, 0.05, "suffix:s") var selfie_pose_seconds := 0.6
 @export_range(0.0, 3.0, 0.05, "suffix:s") var selfie_hold_seconds := 0.8
@@ -244,8 +246,7 @@ func _take_selfie(post: FeedPost) -> void:
 	var focus := _head.global_position
 	if _held_thing.visible:
 		focus = focus.lerp(_held_thing.global_position, 0.5)
-	var phone_at := Transform3D(Basis.IDENTITY, _stick_phone.global_position)
-	_selfie_lens.global_transform = phone_at.looking_at(focus)
+	_selfie_lens.global_transform = Transform3D(Basis.IDENTITY, _front_camera()).looking_at(focus)
 	_selfie.render_target_update_mode = SubViewport.UPDATE_ONCE
 	# One frame to draw the picture, one for it to be ready to read back.
 	await RenderingServer.frame_post_draw
@@ -375,6 +376,18 @@ func _build_model() -> void:
 	_animation_player.clear_caches()
 	_apply_coloring()
 	_show_state()
+
+
+## Where the phone's front camera is: at its top edge, a little above the stick, so the stick
+## shows in the picture running down to the Dhull's nub, as in any selfie-stick shot. From on
+## the stick's own line it would only see the stick end-on.
+func _front_camera() -> Vector3:
+	var along_stick := _selfie_stick.global_basis.y.normalized()
+	var phone_up := Vector3.UP.slide(along_stick)
+	if phone_up.is_zero_approx():
+		phone_up = _selfie_stick.global_basis.z
+	var height := front_camera_height * size_scale()
+	return _stick_phone.global_position + phone_up.normalized() * height
 
 
 ## Puts [param thing] in [param nub], at [param grip] from its joint, turned as it was.
