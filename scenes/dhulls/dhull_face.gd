@@ -2,8 +2,8 @@ class_name DhullFace
 extends RefCounted
 ## Which eye and mouth images make a Dhull's face. Like Wind Waker's faces, the eyes and the mouth
 ## are separate images, swapped on their own. Each Dhull has an eye style for its everyday eyes;
-## most emotions swap in eyes of their own. The mouth only shows when it's open. The frames in
-## face/dhull_eyes.png and face/dhull_mouths.png follow the order of [enum Eyes] and [enum Mouth].
+## most emotions swap in eyes of their own. The mouth only shows when it's open. The frames of
+## the eye strips in face/ and of face/dhull_mouths.png follow [enum Eyes] and [enum Mouth].
 
 enum Emotion { NEUTRAL, HAPPY, SAD, ANGRY, DIZZY, SURPRISED, SLEEPY, TIRED, HUNGRY }
 enum EyeStyle { ROUND, DROOPY, INTENSE, DUMB }

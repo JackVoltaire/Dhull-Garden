@@ -5,6 +5,7 @@
 [ext_resource type="Material" path="res://assets/materials/toon_bark.tres" id="3_bark"]
 [ext_resource type="Material" path="res://assets/materials/toon_rock_dark.tres" id="4_grime"]
 [ext_resource type="Material" path="res://assets/materials/toon_stone.tres" id="5_stone"]
+[ext_resource type="Script" path="res://systems/looking/lookable.gd" id="6_lookable"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_dropping_bottom"]
 radius = 0.1
@@ -148,3 +149,8 @@ prompt = "PROMPT_CLEAN_UP"
 [node name="Shape" type="CollisionShape3D" parent="CleanUp"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 shape = SubResource("SphereShape3D_reach")
+
+[node name="Lookable" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+script = ExtResource("6_lookable")
+interest = 0.25

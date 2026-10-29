@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/shop_menu/shop_menu.tscn" id="6_shop"]
 [ext_resource type="PackedScene" path="res://scenes/ui/phone/phone.tscn" id="7_phone"]
 [ext_resource type="PackedScene" path="res://scenes/ui/name_prompt/name_prompt.tscn" id="8_name"]
+[ext_resource type="Script" path="res://systems/looking/lookable.gd" id="9_lookable"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
@@ -119,3 +120,8 @@ unique_name_in_owner = true
 
 [node name="NamePrompt" parent="Hud" instance=ExtResource("8_name")]
 unique_name_in_owner = true
+
+[node name="Lookable" type="Marker3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -0.25)
+script = ExtResource("9_lookable")
+interest = 1.0

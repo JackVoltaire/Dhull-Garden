@@ -13,15 +13,16 @@ extends Node3D
 ##
 ## A Dhull in the garden shows its [member record], the life the Garden autoload keeps for it:
 ## its needs set its mood (see DhullLife), its Brain walks it about as that mood's habit says
-## (see DhullBrain) unless it's napping, and the young are smaller. It reacts when its mood
+## (see DhullBrain) unless it's napping, and the young are smaller. Grown Dhulls hang out as they
+## rest, scrolling their phones or sipping coffee or energy drinks. It reacts when its mood
 ## changes, when it notices the player, and now and then as it rests. The player can pet it, feed
 ## it and carry it about (see DhullCare and CareMenu). When it posts on the feed it takes a selfie
 ## right where it is: it holds its phone out on a selfie stick in one nub, since its nubs are far
 ## too short to frame a face, holds up what the post is about in the other, and pulls a face that
-## fits (see DhullPosting.selfie_face); the shot is taken from the phone. Posts it made while its
-## area wasn't loaded get their selfies the next time it is.
+## fits (see DhullPosting.selfie_face); the shot is taken from the phone's front camera, stick
+## and all. Posts it made while its area wasn't loaded get their selfies the next time it is.
 ## Without a record, as in the Dhull gallery, it shows whatever activity and mood are set on it
-## and stays where it is.
+## and stays where it is. Its irises follow whatever catches its eye nearby (see DhullGaze).
 
 const BODY_MODELS: Dictionary[DhullGenome.BodyShape, PackedScene] = {
 	DhullGenome.BodyShape.BELL: preload("res://assets/models/dhull_body_bell/dhull_body_bell.glb"),
@@ -88,6 +89,8 @@ const GROUP := &"dhulls"
 ## about, from their joints.
 @export var stick_grip := Vector3(-0.15, -0.13, 0.0)
 @export var held_thing_grip := Vector3(0.17, -0.15, 0.02)
+## How far above the stick the phone's front camera sits, for a grown Dhull.
+@export_range(0.0, 0.3, 0.005, "suffix:m") var front_camera_height := 0.06
 ## How long it takes to strike the pose before the shot, and how long it holds it after.
 @export_range(0.0, 3.0, 0.05, "suffix:s") var selfie_pose_seconds := 0.6
 @export_range(0.0, 3.0, 0.05, "suffix:s") var selfie_hold_seconds := 0.8
@@ -119,8 +122,9 @@ var _shown_life_stage := DhullRecord.LifeStage.ADULT
 ## Posts it still has to take a selfie for, oldest first.
 var _selfies_due: Array[FeedPost] = []
 var _taking_selfies := false
-## The face it pulls in the selfie it's taking.
+## The face it pulls in the selfie it's taking, and what it holds up in it, if anything.
 var _selfie_face := DhullFace.Emotion.NEUTRAL
+var _selfie_subject: ItemDefinition
 
 @onready var _model: Node3D = $Model
 @onready var _head: Node3D = $Model/Head
@@ -138,6 +142,8 @@ var _selfie_face := DhullFace.Emotion.NEUTRAL
 @onready var _selfie_stick: Node3D = $Model/SelfieStick
 @onready var _stick_phone: Node3D = $Model/SelfieStick/Phone
 @onready var _held_thing: MeshInstance3D = $Model/HeldThing
+@onready var _phone: MeshInstance3D = $Model/Phone
+@onready var _gaze: DhullGaze = $Gaze
 
 
 func _ready() -> void:
@@ -233,10 +239,7 @@ func _take_selfies() -> void:
 ## Raises the phone, holds up what [param post] is about, pulls the face that fits and shoots,
 ## from the phone, so the face and the thing are both in the picture.
 func _take_selfie(post: FeedPost) -> void:
-	var subject: ItemDefinition = Inventory.definitions.get(post.subject)
-	_held_thing.mesh = subject.prop if subject else null
-	_held_thing.visible = _held_thing.mesh != null
-	_selfie_stick.visible = true
+	_selfie_subject = Inventory.definitions.get(post.subject)
 	_selfie_face = DhullPosting.selfie_face(post)
 	_brain.rest()
 	_set_activity(DhullState.Activity.TAKING_SELFIE)
@@ -244,16 +247,15 @@ func _take_selfie(post: FeedPost) -> void:
 	var focus := _head.global_position
 	if _held_thing.visible:
 		focus = focus.lerp(_held_thing.global_position, 0.5)
-	var phone_at := Transform3D(Basis.IDENTITY, _stick_phone.global_position)
-	_selfie_lens.global_transform = phone_at.looking_at(focus)
+	_selfie_lens.global_transform = Transform3D(Basis.IDENTITY, _front_camera()).looking_at(focus)
 	_selfie.render_target_update_mode = SubViewport.UPDATE_ONCE
 	# One frame to draw the picture, one for it to be ready to read back.
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	Feed.keep_selfie(post, _selfie.get_texture().get_image())
 	await get_tree().create_timer(selfie_hold_seconds).timeout
-	_held_thing.visible = false
-	_selfie_stick.visible = false
+	# Lowering the stick between shots lets the next one strike its own pose, face and thing.
+	_set_activity(DhullState.Activity.STANDING)
 
 
 func _respond(response: DhullCare.Response) -> void:
@@ -329,8 +331,7 @@ func _on_noticed(_player: Node3D) -> void:
 ## otherwise.
 func _keep_sighing() -> void:
 	var habit := _brain.habits.habit_for(mood)
-	var resting := activity in [DhullState.Activity.STANDING, DhullState.Activity.SITTING]
-	if not resting or habit.idle_reaction == DhullReaction.Symbol.NONE:
+	if activity not in DhullState.RESTING or habit.idle_reaction == DhullReaction.Symbol.NONE:
 		_sigh_timer.stop()
 	elif _sigh_timer.is_stopped():
 		var seconds := habit.idle_reaction_every_seconds * _rng.randf_range(0.6, 1.4)
@@ -364,17 +365,41 @@ func _build_model() -> void:
 	var head_shape := genome.head_shape() if genome else DhullGenome.HeadShape.MOON
 	var body := _take_part(BODY_MODELS[body_shape], &"Body")
 	_model.add_child(body)
-	if not Engine.is_editor_hint():
-		_hold(_selfie_stick, body.get_node(^"ArmRight"), stick_grip)
-		_hold(_held_thing, body.get_node(^"ArmLeft"), held_thing_grip)
 	_head_shape = _take_part(HEAD_MODELS[head_shape], &"Head")
 	_head_shape.name = &"Shape"
 	_head_shape.material_overlay = face_material
 	_head.add_child(_head_shape)
+	_center_outlines(body)
+	if not Engine.is_editor_hint():
+		_gaze.face = _head_shape
+		_hold(_selfie_stick, body.get_node(^"ArmRight"), stick_grip)
+		_hold(_held_thing, body.get_node(^"ArmLeft"), held_thing_grip)
 	# The animation player holds on to the parts it moved last; these are new ones.
 	_animation_player.clear_caches()
 	_apply_coloring()
 	_show_state()
+
+
+## Where the phone's front camera is: at its top edge, a little above the stick, so the stick
+## shows in the picture running down to the Dhull's nub, as in any selfie-stick shot. From on
+## the stick's own line it would only see the stick end-on.
+func _front_camera() -> Vector3:
+	var along_stick := _selfie_stick.global_basis.y.normalized()
+	var phone_up := Vector3.UP.slide(along_stick)
+	if phone_up.is_zero_approx():
+		phone_up = _selfie_stick.global_basis.z
+	var height := front_camera_height * size_scale()
+	return _stick_phone.global_position + phone_up.normalized() * height
+
+
+## Tells each part's ink outline where the part's middle is, to grow it out from there (see
+## ink_hull.gdshader).
+func _center_outlines(body: Node3D) -> void:
+	# Parts taken out of their models have no owner, so look at every node.
+	var parts: Array[Node] = body.find_children("*", "MeshInstance3D", true, false)
+	parts.append_array([body, _head_shape, _egg])
+	for part: MeshInstance3D in parts:
+		part.set_instance_shader_parameter(&"outline_center", part.mesh.get_aabb().get_center())
 
 
 ## Puts [param thing] in [param nub], at [param grip] from its joint, turned as it was.
@@ -398,9 +423,38 @@ func _show_state() -> void:
 	# Animating in the editor would save the animated pose into the scene.
 	if Engine.is_editor_hint():
 		return
+	_show_held_things()
+	_hold_eyes()
 	if genome:
 		_animation_player.speed_scale = DhullState.speed_scale(genome)
 	_animation_player.play(DhullState.animation_for(activity, mood), BLEND_TIME)
+
+
+## Shows what it holds for what it's doing: the selfie stick and what the post is about for a
+## selfie, its phone as it scrolls, its drink as it sips.
+func _show_held_things() -> void:
+	_selfie_stick.visible = activity == DhullState.Activity.TAKING_SELFIE
+	_phone.visible = activity == DhullState.Activity.SCROLLING
+	var held: ItemDefinition = null
+	match activity:
+		DhullState.Activity.TAKING_SELFIE:
+			held = _selfie_subject
+		DhullState.Activity.SIPPING:
+			held = _brain.habits.drink_for(genome)
+	_held_thing.mesh = held.prop if held else null
+	_held_thing.visible = _held_thing.mesh != null
+
+
+## Keeps its eyes on what it's busy with: its phone as it scrolls, and the phone on its stick for
+## a selfie, so it looks into the lens.
+func _hold_eyes() -> void:
+	match activity:
+		DhullState.Activity.SCROLLING:
+			_gaze.held_by = _phone
+		DhullState.Activity.TAKING_SELFIE:
+			_gaze.held_by = _stick_phone
+		_:
+			_gaze.held_by = null
 
 
 func _show_face() -> void:

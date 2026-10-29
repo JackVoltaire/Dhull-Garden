@@ -10,7 +10,7 @@ extends Resource
 enum Gene {HEAD_SHAPE, BODY_SHAPE, EYE_STYLE, ENERGY, BOLDNESS, CURIOSITY, FRIENDLINESS, EYE_COLOR}
 enum HeadShape { MOON, MOONCAT, BEAN }
 enum BodyShape { BELL, BEAN }
-## Numbered as the rows of scenes/dhulls/face/dhull_eyes.png.
+## Numbered as the rows of scenes/dhulls/face/dhull_irises.png.
 enum EyeColor { TEAL, VIOLET, AMBER, ROSE, MINT, SILVER }
 
 ## For each gene with set variants, how dominant each variant is, in variant order: when a Dhull

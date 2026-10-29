@@ -10,14 +10,37 @@ func before_each() -> void:
 	_habits = load(HABITS_PATH)
 
 
-func test_every_mood_has_a_habit_that_stands_or_sits() -> void:
-	var resting := [DhullState.Activity.STANDING, DhullState.Activity.SITTING]
+## The young have no phones and don't drink coffee: only adults hang out.
+func test_every_mood_has_a_habit_to_rest_by_and_only_adults_hang_out() -> void:
 	for mood: DhullState.Mood in DhullState.Mood.values():
 		var habit := _habits.habit_for(mood)
 		var mood_name: String = DhullState.Mood.keys()[mood]
 		assert_true(habit != null, mood_name + " has a habit")
 		if habit:
-			assert_true(habit.rests_by in resting, mood_name + " stands or sits")
+			var young := habit.rest_for(false)
+			var adult := habit.rest_for(true)
+			assert_true(young in DhullState.RESTING, mood_name + " young rest")
+			assert_false(young in DhullState.HANGING_OUT, mood_name + " young don't hang out")
+			assert_true(adult in DhullState.RESTING, mood_name + " adults rest")
+
+
+func test_grown_dhulls_scroll_their_phones_or_sip_to_stay_awake() -> void:
+	for mood: DhullState.Mood in [DhullState.Mood.CONTENT, DhullState.Mood.SAD]:
+		var habit := _habits.habit_for(mood)
+		assert_eq(habit.rest_for(true), DhullState.Activity.SCROLLING)
+	var sleepy := _habits.habit_for(DhullState.Mood.SLEEPY)
+	assert_eq(sleepy.rest_for(true), DhullState.Activity.SIPPING)
+	assert_eq(sleepy.rest_for(false), DhullState.Activity.SITTING)
+
+
+func test_energetic_dhulls_drink_energy_drinks_and_the_rest_coffee() -> void:
+	var genome := DhullGenome.random(RandomNumberGenerator.new())
+	genome.alleles[DhullGenome.Gene.ENERGY] = Vector2i(DhullGenome.MAX_LEVEL, DhullGenome.MAX_LEVEL)
+	assert_eq(_habits.drink_for(genome).id, &"energy_drink")
+	genome.alleles[DhullGenome.Gene.ENERGY] = Vector2i(0, 0)
+	assert_eq(_habits.drink_for(genome).id, &"coffee")
+	assert_true(_habits.coffee.prop != null, "coffee can be held")
+	assert_true(_habits.energy_drink.prop != null, "energy drinks can be held")
 
 
 func test_each_mood_has_its_own_habit() -> void:

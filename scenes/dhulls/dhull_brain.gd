@@ -1,9 +1,9 @@
 class_name DhullBrain
 extends Node
 ## Carries out a Dhull's habits in a level. When it's given a mood, the Dhull heads where that
-## mood takes it, walking along the level's navigation mesh, then stands or sits there and now
-## and then heads out again (see DhullHabit). It reports what the Dhull is doing through
-## [signal activity_changed]; while the Dhull naps, the brain rests.
+## mood takes it, walking along the level's navigation mesh, then rests there as the habit says,
+## hanging out if it's grown, and now and then heads out again (see DhullHabit). It reports what
+## the Dhull is doing through [signal activity_changed]; while the Dhull naps, the brain rests.
 
 signal activity_changed(activity: DhullState.Activity)
 
@@ -94,7 +94,7 @@ func _head_out() -> void:
 func _settle() -> void:
 	_walking = false
 	_until_outing = _habit.outing_every_seconds / DhullState.speed_scale(dhull.genome)
-	activity_changed.emit(_habit.rests_by)
+	activity_changed.emit(_habit.rest_for(dhull.record.is_adult()))
 
 
 func _walk(delta: float) -> void:

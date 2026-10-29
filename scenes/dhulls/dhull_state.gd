@@ -4,7 +4,7 @@ extends RefCounted
 ## never picked at random: every activity and mood has its own, so a glance tells how a Dhull is.
 ## The animations are in dhull_animations.tres.
 
-enum Activity { STANDING, WALKING, SITTING, SLEEPING, TAKING_SELFIE }
+enum Activity { STANDING, WALKING, SITTING, SLEEPING, TAKING_SELFIE, SCROLLING, SIPPING }
 enum Mood { CONTENT, HAPPY, PLAYFUL, SLEEPY, HUNGRY, SAD, GRUMPY }
 enum Weather { CLEAR, RAIN, STORM, SUN }
 
@@ -61,7 +61,35 @@ const ANIMATIONS: Dictionary[Activity, Dictionary] = {
 		Mood.SAD: &"selfie",
 		Mood.GRUMPY: &"selfie",
 	},
+	# Hanging out, which only adults do: sitting bowed over the phone in both nubs, or sitting with
+	# a drink and sipping now and then. The face shows the mood.
+	Activity.SCROLLING:
+	{
+		Mood.CONTENT: &"scroll",
+		Mood.HAPPY: &"scroll",
+		Mood.PLAYFUL: &"scroll",
+		Mood.SLEEPY: &"scroll",
+		Mood.HUNGRY: &"scroll",
+		Mood.SAD: &"scroll",
+		Mood.GRUMPY: &"scroll",
+	},
+	Activity.SIPPING:
+	{
+		Mood.CONTENT: &"sip",
+		Mood.HAPPY: &"sip",
+		Mood.PLAYFUL: &"sip",
+		Mood.SLEEPY: &"sip",
+		Mood.HUNGRY: &"sip",
+		Mood.SAD: &"sip",
+		Mood.GRUMPY: &"sip",
+	},
 }
+## What a Dhull can do while it rests between outings.
+const RESTING: Array[Activity] = [
+	Activity.STANDING, Activity.SITTING, Activity.SCROLLING, Activity.SIPPING
+]
+## Of those, what only adults do: the young have no phones and don't drink coffee.
+const HANGING_OUT: Array[Activity] = [Activity.SCROLLING, Activity.SIPPING]
 ## The face each mood shows while awake. Asleep, the eyes are always closed.
 const FACES: Dictionary[Mood, DhullFace.Emotion] = {
 	Mood.CONTENT: DhullFace.Emotion.NEUTRAL,

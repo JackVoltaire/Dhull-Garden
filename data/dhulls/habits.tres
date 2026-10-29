@@ -2,10 +2,13 @@
 
 [ext_resource type="Script" path="res://scenes/dhulls/dhull_habits.gd" id="1_habits"]
 [ext_resource type="Script" path="res://scenes/dhulls/dhull_habit.gd" id="2_habit"]
+[ext_resource type="Resource" path="res://data/items/coffee.tres" id="3_coffee"]
+[ext_resource type="Resource" path="res://data/items/energy_drink.tres" id="4_energy_drink"]
 
 [sub_resource type="Resource" id="Resource_content"]
 script = ExtResource("2_habit")
 heads_to = 1
+adults_rest_by = 5
 outing_every_seconds = 25.0
 
 [sub_resource type="Resource" id="Resource_happy"]
@@ -25,6 +28,7 @@ idle_reaction_every_seconds = 15.0
 [sub_resource type="Resource" id="Resource_sleepy"]
 script = ExtResource("2_habit")
 rests_by = 2
+adults_rest_by = 6
 
 [sub_resource type="Resource" id="Resource_hungry"]
 script = ExtResource("2_habit")
@@ -35,6 +39,7 @@ outing_every_seconds = 8.0
 script = ExtResource("2_habit")
 heads_to = 2
 rests_by = 2
+adults_rest_by = 5
 idle_reaction = 3
 idle_reaction_every_seconds = 14.0
 gloomy = true
@@ -42,6 +47,7 @@ gloomy = true
 [sub_resource type="Resource" id="Resource_grumpy"]
 script = ExtResource("2_habit")
 heads_to = 2
+adults_rest_by = 5
 idle_reaction = 3
 idle_reaction_every_seconds = 16.0
 gloomy = true
@@ -55,3 +61,5 @@ sleepy = SubResource("Resource_sleepy")
 hungry = SubResource("Resource_hungry")
 sad = SubResource("Resource_sad")
 grumpy = SubResource("Resource_grumpy")
+coffee = ExtResource("3_coffee")
+energy_drink = ExtResource("4_energy_drink")

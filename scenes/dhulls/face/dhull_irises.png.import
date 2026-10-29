@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://02na3vqfm4yo"
-path="res://.godot/imported/dhull_eyes.png-f77341e1483677d22758559589c419db.ctex"
+uid="uid://doq87op8eu5r7"
+path="res://.godot/imported/dhull_irises.png-3bef0a5a3bab7485bfdb2944ae437fe1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/dhulls/face/dhull_eyes.png"
-dest_files=["res://.godot/imported/dhull_eyes.png-f77341e1483677d22758559589c419db.ctex"]
+source_file="res://scenes/dhulls/face/dhull_irises.png"
+dest_files=["res://.godot/imported/dhull_irises.png-3bef0a5a3bab7485bfdb2944ae437fe1.ctex"]
 
 [params]
 

@@ -48,6 +48,7 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   scenes/           `Scenes`: fading scene changes with background loading
   minigames/        `Minigames`: launching minigames and returning results; MinigameSpot
   interaction/      Interactable things in the world and the player's Interactor
+  looking/          Lookable: a spot that catches Dhulls' eyes
   game/             `Game`: pausing and quitting
   data/             ResourceDir: loads every resource in a data folder
 data/               Game content as .tres resources
@@ -205,8 +206,12 @@ above it.
   `data/dhulls/habits.tres`: where it heads (nowhere, somewhere nearby, a spot away from the
   others, or up to another Dhull), whether it stands or sits once there, and how long it rests
   before heading out again (sooner for energetic Dhulls). A sad Dhull goes off alone and sits in
-  a corner; a playful one keeps running up to the others. The Dhull's `Brain` (`DhullBrain`)
-  walks it there along the level's navigation mesh and keeps it on the ground. A level with
+  a corner; a playful one keeps running up to the others. Adults rest by `adults_rest_by`
+  instead, which can also be hanging out: scrolling their phone (`Model/Phone`, its screen
+  glowing) when content, sad or grumpy, or sipping a drink when sleepy, to stay awake. Energetic
+  Dhulls drink energy drinks, the rest coffee (`DhullHabits.drink_for`); the drink is the
+  item's `prop`, held in the left nub. The young only stand or sit. The Dhull's `Brain`
+  (`DhullBrain`) walks it there along the level's navigation mesh and keeps it on the ground. A level with
   Dhulls needs a `NavigationRegion3D`: its mesh is built from the static colliders of everything
   in the level root's `navigation_mesh_source_group`, so after changing the level, select the
   region and press **Bake NavigationMesh** in the editor.
@@ -228,8 +233,9 @@ above it.
   right nub (`SelfieStick`, since nubs are far too short to frame a face) and what the post is
   about in its left (an item's `prop` mesh), and pulls a face that fits the post
   (`DhullPosting.selfie_face`: thrilled with its food, drowsy at 3am). The shot comes from the
-  phone, through the Dhull's `Selfie` SubViewport, which shares the level's world. The stick
-  and phone are on render layer 20, `selfie_phone`, which the selfie lens doesn't see. A
+  phone's front camera at its top edge, through the Dhull's `Selfie` SubViewport, which shares
+  the level's world, so the stick shows in the picture as in any selfie-stick shot. Only the
+  phone itself is hidden from it, on render layer 20, `selfie_phone`. A
   post made while the Dhull's area wasn't loaded gets its selfie the next time it is. The
   pictures are PNGs in a `slot_<n>_selfies` folder beside the save, and go with their posts. The player reacts once per
   post with a like, a heart, a sad face or an angry face, and `DhullPosting` decides how the
@@ -267,16 +273,30 @@ above it.
   load genes by name, so saves survive new genes. A Dhull without a genome gets a random one
   when the game runs; the F3 menu's "New random genes" rerolls every Dhull in the level.
 - **Dhull look.** Characters look like House of Decay's: PS1-era models with crunchy painted
-  faces, while the world stays ink-drawn. The part models are low-poly and flat-shaded, and
+  faces, while the world stays ink-drawn. Each part has its own ink outline, as wide on screen as
+  the world's ink lines: `toon_character`'s next pass, `ink_hull`, draws the part's back faces in
+  ink, pushed out from the part's middle (its `outline_center`, which the Dhull sets), since the
+  screen-wide lines miss something as small as a Dhull standing on the ground. The part models are low-poly and flat-shaded, and
   `ps1_character.gdshader` (the `toon_character` material) lights them in a few dithered bands.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
-  eyes with big banded irises and a starburst round a tiny pupil, black wedge lashes, eye bags
-  dithered under the eyes, and gritted teeth. The drawings are pixel-art PNG strips in
-  `scenes/dhulls/face/`, edited in any pixel editor and shown with hard pixels; keep them
-  lossless and with mipmaps in their import settings. A Dhull's genes give its everyday eyes
+  eyes with a thick black border, big banded irises and a starburst round a tiny pupil, black
+  wedge lashes, eye bags dithered under the eyes, and gritted teeth. The drawings are pixel-art
+  PNG strips in `scenes/dhulls/face/`, edited in any pixel editor and shown with hard pixels;
+  keep them lossless and with mipmaps in their import settings. The eyes are three strips laid
+  over each other, so the irises can move: `dhull_eye_whites.png` (where an iris can show),
+  `dhull_irises.png` (each iris whole and looking straight ahead, clear of its frame's edges and
+  middle) and `dhull_eye_lines.png` (border, lashes, lids, bags and tears, and the shapes with no
+  iris, like closed eyes, on top). The shader slides the irises a whole pixel at a time, up to
+  `iris_reach` pixels, and clips them to the whites. A Dhull's genes give its everyday eyes
   (round, droopy, intense or dumb) and its eye color (teal, violet, amber, rose, mint or
-  silver): the eye strip has a row per color, in the order of `DhullGenome.EyeColor`, and angry
-  eyes are red in every row; set its `emotion` to change its face. `DhullFace` picks the eyes
+  silver): the iris strip has a row per color, in the order of `DhullGenome.EyeColor`, and angry
+  irises are red in every row; set its `emotion` to change its face. A Dhull's `Gaze`
+  (`DhullGaze`) moves its irises: every few seconds it glances about for whatever catches its eye
+  most nearby (`DhullLooking`), and its eyes follow it. What catches the eye is a `Lookable`, a
+  marker placed where the eyes should land, with an `interest` from 0 to 1: the dreamer's face
+  (1), Lulla's and Pebble's (0.8), other Dhulls' (0.6), the shiny spot (0.35) and mess (0.25);
+  nearer things catch it more. Put one in any scene Dhulls should look at. A scrolling Dhull keeps
+  its eyes on its phone, and one taking a selfie looks into the lens. `DhullFace` picks the eyes
   and mouth, and blinks; the mouth only shows when it's open. Frames follow the order of
   `DhullFace.Eyes` and `DhullFace.Mouth`; to add a shape, draw a frame at the end of its strip,
   add it to the enum and raise the frame count on `dhull_face.tres`, and a test checks they
