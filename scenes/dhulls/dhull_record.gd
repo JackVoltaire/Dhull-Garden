@@ -20,6 +20,10 @@ var tiredness := 0.0
 ## From 0 (miserable) to 1 (overjoyed).
 var happiness := 0.5
 var napping := false
+## How close it has grown to the player, from 0 (a stranger) to 1.
+var bond := 0.0
+## How much the player has fussed over it lately, in pets. It wears off over the hours.
+var fussed_over := 0.0
 ## Where it was last seen in its home area, and which way it faced, as a turn about the up axis
 ## in radians. Unplaced Dhulls haven't been put anywhere yet.
 var position := Vector3.ZERO
@@ -43,6 +47,8 @@ func to_dict() -> Dictionary:
 		"tiredness": tiredness,
 		"happiness": happiness,
 		"napping": napping,
+		"bond": bond,
+		"fussed_over": fussed_over,
 	}
 	if placed:
 		data["position"] = position
@@ -68,6 +74,8 @@ static func from_dict(
 	record.tiredness = clampf(float(data.get("tiredness", record.tiredness)), 0.0, 1.0)
 	record.happiness = clampf(float(data.get("happiness", record.happiness)), 0.0, 1.0)
 	record.napping = data.get("napping", false) == true
+	record.bond = clampf(float(data.get("bond", 0.0)), 0.0, 1.0)
+	record.fussed_over = maxf(float(data.get("fussed_over", 0.0)), 0.0)
 	var saved_position: Variant = data.get("position")
 	if saved_position is Vector3:
 		record.position = saved_position

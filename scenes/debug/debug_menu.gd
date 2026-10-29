@@ -1,6 +1,7 @@
 extends CanvasLayer
 ## Developer tools, toggled with F3 (the debug_menu action): time travel, calendar state,
-## saving and loading, switching levels, launching minigames, Dhulls' genes and needs, and mess.
+## saving and loading, switching levels, launching minigames, Dhulls' genes and needs, mess and
+## the player's pockets.
 ## Registered as the [code]DebugMenu[/code] autoload and removed in release builds.
 
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -48,6 +49,9 @@ func _ready() -> void:
 	_add_button(needs_row, "Rested", _change_needs.bind(_rest))
 	_add_button(needs_row, "Happy", _change_needs.bind(_cheer_up))
 	_add_button(needs_row, "Unhappy", _change_needs.bind(_sadden))
+	var pockets_row := _add_row("Pockets")
+	_add_button(pockets_row, "+100 money", Inventory.earn.bind(100))
+	_add_button(pockets_row, "One of every item", _fill_pockets)
 	var mess_row := _add_row("Garden")
 	_add_button(mess_row, "Make a mess", _make_mess)
 	_add_button(mess_row, "Clean it all up", _clean_up_mess)
@@ -163,6 +167,11 @@ func _reroll_dhulls() -> void:
 func _set_dhulls(property: StringName, value: int) -> void:
 	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
 		dhull.set(property, value)
+
+
+func _fill_pockets() -> void:
+	for id in Inventory.definitions:
+		Inventory.add(id)
 
 
 ## Leaves a bit of mess near every young Dhull, as if no adult had looked after them.

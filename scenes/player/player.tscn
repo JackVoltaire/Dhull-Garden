@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://systems/interaction/interactor.gd" id="2_interactor"]
+[ext_resource type="PackedScene" path="res://scenes/ui/care_menu/care_menu.tscn" id="3_care_menu"]
+[ext_resource type="Script" path="res://scenes/ui/hud/money_label.gd" id="4_money"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
@@ -42,6 +44,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_body")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -0.35)
 mesh = SubResource("BoxMesh_nose")
 
+[node name="CarryPoint" type="Marker3D" parent="Model"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.6, 0.05)
+
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
@@ -80,3 +85,21 @@ theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Money" type="Label" parent="Hud"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -260.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 2
+script = ExtResource("4_money")
+
+[node name="CareMenu" parent="Hud" instance=ExtResource("3_care_menu")]
+unique_name_in_owner = true

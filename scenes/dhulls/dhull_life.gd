@@ -15,6 +15,7 @@ static func advance(
 	_advance_hunger(record, hours, carer, rates, tuning)
 	_advance_tiredness(record, hours, rates, tuning)
 	_advance_happiness(record, hours, carer, tuning)
+	record.fussed_over = maxf(record.fussed_over - tuning.fussing_fades_per_hour * hours, 0.0)
 
 
 ## The adult that looks after a young Dhull: the most nurturing one living in the same area.

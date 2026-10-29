@@ -38,6 +38,7 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   clock/            `Clock`: real-world local time, day phases, debug time travel
   calendar/         `Calendar`: dated events and seasons; CalendarEvent resource
   saves/            `Saves`: save slots, backups, migrations, time away
+  inventory/        `Inventory`: the player's pockets and money; ItemDefinition, one kind of item
   garden/           `Garden`: every Dhull's life (needs, life stage, where it is) and the mess
                     in the garden, saved and moved on with the real-world clock; NewGarden, who a
                     new game starts with; MessRecord and MessTuning
@@ -50,6 +51,7 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
 data/               Game content as .tres resources
   events/           One CalendarEvent per file
   minigames/        One MinigameDefinition per file
+  items/            One ItemDefinition per file: materials, food and drinks
   dhulls/           Dhull colorings; life.tres, how fast needs change and when moods show;
                     habits.tres, what Dhulls do in each mood
   garden/           new_garden.tres, the Dhulls a new game starts with; mess.tres, how fast the
@@ -72,6 +74,8 @@ scenes/
                     mess/ (a bit of mess, and the MessSpawner that shows an area's mess)
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
+  ui/care_menu/     The menu for petting, feeding and picking up a Dhull
+  ui/hud/           Bits of the player's HUD, like the money label
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
@@ -194,6 +198,20 @@ above it.
   `dhull_face.gdshader`). The weather and symbols are cutout drawings in
   `scenes/dhulls/weather/` and `scenes/dhulls/reactions/`, placeholders like the rest. The F3
   menu can pop any reaction.
+- **Items and money.** Every kind of item is an `ItemDefinition` in `data/items/`: a stable `id`,
+  a translated name, a kind (material, food or drink), what Pebble asks for it and pays for it,
+  and for food and drink how much it fills, cheers and wakes a Dhull. The `Inventory` autoload
+  counts what the player holds by id and keeps their money; `held()` lists it, `add()`,
+  `take()`, `earn()` and `spend()` change it, and `changed` tells the HUD. A test checks every
+  item has a name and that Pebble never pays more for an item than he asks.
+- **Caring in person.** Walking up to a Dhull shows "[E] Care for", which opens the care menu:
+  pet it, feed it something edible from your pockets, or pick it up. There's nothing to say:
+  words only go through the feed. `DhullCare` holds the rules. Most Dhulls love being petted,
+  which cheers them and grows their `bond` with you, but not while they nap, when they're
+  grumpy, when they're sad and don't trust you yet, or after too much fuss; they turn down food
+  when full, and the young turn down coffee and energy drinks. A star or a spiral shows how it
+  went. A picked-up Dhull rides on the player's shoulders until Interact puts it down. Tune it
+  in the "Care from the player" group of `data/dhulls/life.tres`.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
   Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
   eye color show the more dominant of the two, so recessive variants can skip a generation;

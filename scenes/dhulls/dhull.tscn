@@ -14,6 +14,7 @@
 [ext_resource type="QuadMesh" path="res://scenes/dhulls/reactions/eye.tres" id="13_eye"]
 [ext_resource type="QuadMesh" path="res://scenes/dhulls/reactions/star.tres" id="14_star"]
 [ext_resource type="QuadMesh" path="res://scenes/dhulls/reactions/spiral.tres" id="15_spiral"]
+[ext_resource type="Script" path="res://systems/interaction/interactable.gd" id="16_interactable"]
 
 [sub_resource type="Gradient" id="Gradient_mist"]
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
@@ -78,6 +79,9 @@ color_ramp = SubResource("GradientTexture1D_stars")
 [sub_resource type="QuadMesh" id="QuadMesh_star"]
 material = SubResource("StandardMaterial3D_puff")
 size = Vector2(0.035, 0.035)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_care"]
+radius = 0.6
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_notice"]
 resource_local_to_scene = true
@@ -177,3 +181,11 @@ shape = SubResource("SphereShape3D_notice")
 
 [node name="SighTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Care" type="Area3D" parent="."]
+script = ExtResource("16_interactable")
+prompt = "PROMPT_CARE"
+
+[node name="Shape" type="CollisionShape3D" parent="Care"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("SphereShape3D_care")

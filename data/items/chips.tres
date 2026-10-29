@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://systems/inventory/item_definition.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"chips"
+display_name = "ITEM_CHIPS"
+kind = 1
+buy_price = 12
+sell_price = 4
+fills = 0.3
+cheers = 0.05
