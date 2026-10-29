@@ -224,12 +224,12 @@ above it.
   Dhulls talk to them: grown Dhulls post when their mood swings, when they doze off or wake up,
   when they eat, at 3am and in the morning, never more often than every 45 minutes
   (`data/feed/feed.tres`). Each post has a real selfie, taken right where the Dhull is: it strikes
-  the `selfie` pose (activity `TAKING_SELFIE`), raising its phone (`HeldPhone`) in its right nub
-  and holding up what the post is about in its left (an item's `prop` mesh), and pulls a face
-  that fits the post (`DhullPosting.selfie_face`: thrilled with its food, drowsy at 3am). The
-  shot comes from its `Selfie` SubViewport, which shares the level's world, out along the line
-  from its face through the phone, since nubs are too short to frame a face. The phone is on
-  render layer 20, `selfie_phone`, which the selfie lens doesn't see. A
+  the `selfie` pose (activity `TAKING_SELFIE`), holding its phone out on a selfie stick in its
+  right nub (`SelfieStick`, since nubs are far too short to frame a face) and what the post is
+  about in its left (an item's `prop` mesh), and pulls a face that fits the post
+  (`DhullPosting.selfie_face`: thrilled with its food, drowsy at 3am). The shot comes from the
+  phone, through the Dhull's `Selfie` SubViewport, which shares the level's world. The stick
+  and phone are on render layer 20, `selfie_phone`, which the selfie lens doesn't see. A
   post made while the Dhull's area wasn't loaded gets its selfie the next time it is. The
   pictures are PNGs in a `slot_<n>_selfies` folder beside the save, and go with their posts. The player reacts once per
   post with a like, a heart, a sad face or an angry face, and `DhullPosting` decides how the

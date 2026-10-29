@@ -16,9 +16,10 @@ extends Node3D
 ## (see DhullBrain) unless it's napping, and the young are smaller. It reacts when its mood
 ## changes, when it notices the player, and now and then as it rests. The player can pet it, feed
 ## it and carry it about (see DhullCare and CareMenu). When it posts on the feed it takes a selfie
-## right where it is: it raises its phone in one nub, holds up what the post is about in the
-## other, and pulls a face that fits (see DhullPosting.selfie_face); the shot is taken from the
-## phone. Posts it made while its area wasn't loaded get their selfies the next time it is.
+## right where it is: it holds its phone out on a selfie stick in one nub, since its nubs are far
+## too short to frame a face, holds up what the post is about in the other, and pulls a face that
+## fits (see DhullPosting.selfie_face); the shot is taken from the phone. Posts it made while its
+## area wasn't loaded get their selfies the next time it is.
 ## Without a record, as in the Dhull gallery, it shows whatever activity and mood are set on it
 ## and stays where it is.
 
@@ -83,12 +84,10 @@ const GROUP := &"dhulls"
 ## Dhulls.
 @export var notice_distance := Vector2(2.0, 6.0)
 @export_group("Selfies")
-## Where the right nub holds the phone and the left nub holds the thing it's posting about, from
-## their joints.
-@export var phone_grip := Vector3(-0.17, -0.15, 0.0)
+## Where the right nub holds the selfie stick and the left nub holds the thing it's posting
+## about, from their joints.
+@export var stick_grip := Vector3(-0.15, -0.13, 0.0)
 @export var held_thing_grip := Vector3(0.17, -0.15, 0.02)
-## How far from the Dhull's face the selfie is taken, for a grown Dhull.
-@export_range(0.2, 3.0, 0.05, "suffix:m") var selfie_distance := 0.75
 ## How long it takes to strike the pose before the shot, and how long it holds it after.
 @export_range(0.0, 3.0, 0.05, "suffix:s") var selfie_pose_seconds := 0.6
 @export_range(0.0, 3.0, 0.05, "suffix:s") var selfie_hold_seconds := 0.8
@@ -136,7 +135,8 @@ var _selfie_face := DhullFace.Emotion.NEUTRAL
 @onready var _egg: MeshInstance3D = $Egg
 @onready var _selfie: SubViewport = $Selfie
 @onready var _selfie_lens: Camera3D = $Selfie/Lens
-@onready var _held_phone: MeshInstance3D = $Model/HeldPhone
+@onready var _selfie_stick: Node3D = $Model/SelfieStick
+@onready var _stick_phone: Node3D = $Model/SelfieStick/Phone
 @onready var _held_thing: MeshInstance3D = $Model/HeldThing
 
 
@@ -236,7 +236,7 @@ func _take_selfie(post: FeedPost) -> void:
 	var subject: ItemDefinition = Inventory.definitions.get(post.subject)
 	_held_thing.mesh = subject.prop if subject else null
 	_held_thing.visible = _held_thing.mesh != null
-	_held_phone.visible = true
+	_selfie_stick.visible = true
 	_selfie_face = DhullPosting.selfie_face(post)
 	_brain.rest()
 	_set_activity(DhullState.Activity.TAKING_SELFIE)
@@ -244,12 +244,8 @@ func _take_selfie(post: FeedPost) -> void:
 	var focus := _head.global_position
 	if _held_thing.visible:
 		focus = focus.lerp(_held_thing.global_position, 0.5)
-	# Nubs are far too short to hold a phone out far enough to frame a face, so the shot is taken
-	# further out along the line from the face through the phone, a little from above, as if on
-	# a longer arm.
-	var away := (_held_phone.global_position - focus).normalized() + Vector3.UP * 0.3
-	var lens_at := focus + away.normalized() * selfie_distance * size_scale()
-	_selfie_lens.global_transform = Transform3D(Basis.IDENTITY, lens_at).looking_at(focus)
+	var phone_at := Transform3D(Basis.IDENTITY, _stick_phone.global_position)
+	_selfie_lens.global_transform = phone_at.looking_at(focus)
 	_selfie.render_target_update_mode = SubViewport.UPDATE_ONCE
 	# One frame to draw the picture, one for it to be ready to read back.
 	await RenderingServer.frame_post_draw
@@ -257,7 +253,7 @@ func _take_selfie(post: FeedPost) -> void:
 	Feed.keep_selfie(post, _selfie.get_texture().get_image())
 	await get_tree().create_timer(selfie_hold_seconds).timeout
 	_held_thing.visible = false
-	_held_phone.visible = false
+	_selfie_stick.visible = false
 
 
 func _respond(response: DhullCare.Response) -> void:
@@ -356,7 +352,7 @@ func _build_model() -> void:
 	var old_body := _model.get_node_or_null(^"Body")
 	if not Engine.is_editor_hint():
 		# Out of the old nubs before they go.
-		_held_phone.reparent(_model, false)
+		_selfie_stick.reparent(_model, false)
 		_held_thing.reparent(_model, false)
 	if old_body:
 		_model.remove_child(old_body)
@@ -369,7 +365,7 @@ func _build_model() -> void:
 	var body := _take_part(BODY_MODELS[body_shape], &"Body")
 	_model.add_child(body)
 	if not Engine.is_editor_hint():
-		_hold(_held_phone, body.get_node(^"ArmRight"), phone_grip)
+		_hold(_selfie_stick, body.get_node(^"ArmRight"), stick_grip)
 		_hold(_held_thing, body.get_node(^"ArmLeft"), held_thing_grip)
 	_head_shape = _take_part(HEAD_MODELS[head_shape], &"Head")
 	_head_shape.name = &"Shape"
@@ -381,10 +377,10 @@ func _build_model() -> void:
 	_show_state()
 
 
-## Puts [param thing] in [param nub], at [param grip] from its joint.
+## Puts [param thing] in [param nub], at [param grip] from its joint, turned as it was.
 static func _hold(thing: Node3D, nub: Node3D, grip: Vector3) -> void:
 	thing.reparent(nub, false)
-	thing.transform = Transform3D(Basis.IDENTITY, grip)
+	thing.position = grip
 
 
 ## The named part of a model, with its children, taken out of the rest of the model.
