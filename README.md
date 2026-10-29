@@ -328,8 +328,8 @@ above it.
   match. A Dhull's colors come from its `coloring`, a `DhullColoring` resource in
   `data/dhulls/colorings/`: a color per part, the color the nubs turn towards at their tips
   (painted into the model's vertex color, and stepped like the light), and an optional pattern,
-  harlequin diamonds, spots or stripes. The Dhull sets them on its parts through the shader's instance
-  uniforms, so every Dhull can differ while sharing one material; the character and face shaders
+  harlequin diamonds, spots or stripes. The Dhull sets them on its parts through the shader's
+  instance uniforms, so every Dhull can differ while sharing one material; the character and face shaders
   keep their instance uniforms in separate slots, as a head carries both.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
   are 2D drawings, like cardboard cutouts, animated in steps with 3 or 4 frames. The drawings in
