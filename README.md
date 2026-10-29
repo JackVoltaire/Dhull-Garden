@@ -252,8 +252,10 @@ above it.
   a short neck, with soft cheeks, a flattish face and a flat bottom. The skin is
   shaded the way House of Decay's faces are painted, darker to the sides, down the jaw and under
   the fringe, through its "Tip" vertex color and `DreamerColors.skin_shade`. Each hair length is one
-  continuous mass, a shell over the head breaking into a few big flat blades at its hem, some
-  curling out, with a short fringe and a blade of it over one eye. As in House of Decay, the face is a flat sheet standing
+  mass, made the way House of Decay's hair is: a smooth cap well out from the head with big, wide,
+  flat panels laid over it, overlapping so no gaps show. A fringe of broad pointed panels comes
+  down to the brows, which peek out between the points, with one panel over the right eye; flat
+  curtains frame the face and wide panels hang down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet standing
   straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
   `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
   thick blocky brows over tired eyes under a heavy lid, dull irises, smoky shadow, bags and blush, in

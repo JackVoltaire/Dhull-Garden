@@ -3,7 +3,7 @@ extends Resource
 ## The dreamer's colors: their skin and clothes, which everyone shares for now, and the color of
 ## each hair color they can pick. The game's are data/dreamer/colors.tres.
 
-@export var skin := Color(0.96, 0.87, 0.82)
+@export var skin := Color(1, 0.88, 0.8)
 ## What the skin turns to where it's shaded: to the sides of the face, the jaw, under the fringe
 ## and the chin.
 @export var skin_shade := Color(0.78, 0.62, 0.64)
