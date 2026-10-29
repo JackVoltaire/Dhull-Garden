@@ -22,7 +22,7 @@ extends Node3D
 ## fits (see DhullPosting.selfie_face); the shot is taken from the phone's front camera, stick
 ## and all. Posts it made while its area wasn't loaded get their selfies the next time it is.
 ## Without a record, as in the Dhull gallery, it shows whatever activity and mood are set on it
-## and stays where it is.
+## and stays where it is. Its irises follow whatever catches its eye nearby (see DhullGaze).
 
 const BODY_MODELS: Dictionary[DhullGenome.BodyShape, PackedScene] = {
 	DhullGenome.BodyShape.BELL: preload("res://assets/models/dhull_body_bell/dhull_body_bell.glb"),
@@ -143,6 +143,7 @@ var _selfie_subject: ItemDefinition
 @onready var _stick_phone: Node3D = $Model/SelfieStick/Phone
 @onready var _held_thing: MeshInstance3D = $Model/HeldThing
 @onready var _phone: MeshInstance3D = $Model/Phone
+@onready var _gaze: DhullGaze = $Gaze
 
 
 func _ready() -> void:
@@ -370,6 +371,7 @@ func _build_model() -> void:
 	_head.add_child(_head_shape)
 	_center_outlines(body)
 	if not Engine.is_editor_hint():
+		_gaze.face = _head_shape
 		_hold(_selfie_stick, body.get_node(^"ArmRight"), stick_grip)
 		_hold(_held_thing, body.get_node(^"ArmLeft"), held_thing_grip)
 	# The animation player holds on to the parts it moved last; these are new ones.
@@ -422,6 +424,7 @@ func _show_state() -> void:
 	if Engine.is_editor_hint():
 		return
 	_show_held_things()
+	_hold_eyes()
 	if genome:
 		_animation_player.speed_scale = DhullState.speed_scale(genome)
 	_animation_player.play(DhullState.animation_for(activity, mood), BLEND_TIME)
@@ -440,6 +443,18 @@ func _show_held_things() -> void:
 			held = _brain.habits.drink_for(genome)
 	_held_thing.mesh = held.prop if held else null
 	_held_thing.visible = _held_thing.mesh != null
+
+
+## Keeps its eyes on what it's busy with: its phone as it scrolls, and the phone on its stick for
+## a selfie, so it looks into the lens.
+func _hold_eyes() -> void:
+	match activity:
+		DhullState.Activity.SCROLLING:
+			_gaze.held_by = _phone
+		DhullState.Activity.TAKING_SELFIE:
+			_gaze.held_by = _stick_phone
+		_:
+			_gaze.held_by = null
 
 
 func _show_face() -> void:

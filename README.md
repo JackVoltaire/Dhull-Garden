@@ -48,6 +48,7 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   scenes/           `Scenes`: fading scene changes with background loading
   minigames/        `Minigames`: launching minigames and returning results; MinigameSpot
   interaction/      Interactable things in the world and the player's Interactor
+  looking/          Lookable: a spot that catches Dhulls' eyes
   game/             `Game`: pausing and quitting
   data/             ResourceDir: loads every resource in a data folder
 data/               Game content as .tres resources
@@ -278,13 +279,24 @@ above it.
   screen-wide lines miss something as small as a Dhull standing on the ground. The part models are low-poly and flat-shaded, and
   `ps1_character.gdshader` (the `toon_character` material) lights them in a few dithered bands.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
-  eyes with big banded irises and a starburst round a tiny pupil, black wedge lashes, eye bags
-  dithered under the eyes, and gritted teeth. The drawings are pixel-art PNG strips in
-  `scenes/dhulls/face/`, edited in any pixel editor and shown with hard pixels; keep them
-  lossless and with mipmaps in their import settings. A Dhull's genes give its everyday eyes
+  eyes with a thick black border, big banded irises and a starburst round a tiny pupil, black
+  wedge lashes, eye bags dithered under the eyes, and gritted teeth. The drawings are pixel-art
+  PNG strips in `scenes/dhulls/face/`, edited in any pixel editor and shown with hard pixels;
+  keep them lossless and with mipmaps in their import settings. The eyes are three strips laid
+  over each other, so the irises can move: `dhull_eye_whites.png` (where an iris can show),
+  `dhull_irises.png` (each iris whole and looking straight ahead, clear of its frame's edges and
+  middle) and `dhull_eye_lines.png` (border, lashes, lids, bags and tears, and the shapes with no
+  iris, like closed eyes, on top). The shader slides the irises a whole pixel at a time, up to
+  `iris_reach` pixels, and clips them to the whites. A Dhull's genes give its everyday eyes
   (round, droopy, intense or dumb) and its eye color (teal, violet, amber, rose, mint or
-  silver): the eye strip has a row per color, in the order of `DhullGenome.EyeColor`, and angry
-  eyes are red in every row; set its `emotion` to change its face. `DhullFace` picks the eyes
+  silver): the iris strip has a row per color, in the order of `DhullGenome.EyeColor`, and angry
+  irises are red in every row; set its `emotion` to change its face. A Dhull's `Gaze`
+  (`DhullGaze`) moves its irises: every few seconds it glances about for whatever catches its eye
+  most nearby (`DhullLooking`), and its eyes follow it. What catches the eye is a `Lookable`, a
+  marker placed where the eyes should land, with an `interest` from 0 to 1: the dreamer's face
+  (1), Lulla's and Pebble's (0.8), other Dhulls' (0.6), the shiny spot (0.35) and mess (0.25);
+  nearer things catch it more. Put one in any scene Dhulls should look at. A scrolling Dhull keeps
+  its eyes on its phone, and one taking a selfie looks into the lens. `DhullFace` picks the eyes
   and mouth, and blinks; the mouth only shows when it's open. Frames follow the order of
   `DhullFace.Eyes` and `DhullFace.Mouth`; to add a shape, draw a frame at the end of its strip,
   add it to the enum and raise the frame count on `dhull_face.tres`, and a test checks they

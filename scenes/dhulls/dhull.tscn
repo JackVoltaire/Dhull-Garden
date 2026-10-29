@@ -16,6 +16,8 @@
 [ext_resource type="QuadMesh" path="res://scenes/dhulls/reactions/spiral.tres" id="15_spiral"]
 [ext_resource type="Script" path="res://systems/interaction/interactable.gd" id="16_interactable"]
 [ext_resource type="Material" path="res://assets/materials/toon_character.tres" id="17_character"]
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_gaze.gd" id="18_gaze"]
+[ext_resource type="Script" path="res://systems/looking/lookable.gd" id="19_lookable"]
 
 [sub_resource type="Gradient" id="Gradient_mist"]
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
@@ -187,6 +189,10 @@ visible = false
 cast_shadow = 0
 mesh = ExtResource("15_spiral")
 
+[node name="Lookable" type="Marker3D" parent="Model/Head"]
+script = ExtResource("19_lookable")
+interest = 0.6
+
 [node name="SelfieStick" type="Node3D" parent="Model"]
 visible = false
 transform = Transform3D(-0.6585, -0.7526, 0.0000, 0.7526, -0.6585, 0.0000, 0.0000, 0.0000, 1.0000, 0, 0, 0)
@@ -234,6 +240,13 @@ script = ExtResource("6_brain")
 habits = ExtResource("7_habits")
 dhull = NodePath("..")
 navigation_agent = NodePath("../NavigationAgent")
+
+[node name="Gaze" type="Node" parent="." node_paths=PackedStringArray("own_lookable")]
+script = ExtResource("18_gaze")
+own_lookable = NodePath("../Model/Head/Lookable")
+
+[node name="GlanceTimer" type="Timer" parent="Gaze"]
+one_shot = true
 
 [node name="Notice" type="Area3D" parent="."]
 collision_layer = 0

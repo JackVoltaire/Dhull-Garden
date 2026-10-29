@@ -3,6 +3,7 @@ extends TestCase
 ## Width over height of one frame of each strip, whatever size the drawings are imported at.
 const EYE_FRAME_ASPECT := 1.6
 const MOUTH_FRAME_ASPECT := 2.0
+const FACE_MATERIAL_PATH := "res://scenes/dhulls/face/dhull_face.tres"
 
 
 func test_every_eye_style_has_everyday_eyes() -> void:
@@ -44,20 +45,42 @@ func test_shut_mouths_hide() -> void:
 	assert_eq(DhullFace.mouth_for(DhullFace.Emotion.SAD), DhullFace.NO_MOUTH)
 
 
-## The face images and the face material must have one frame per eye and mouth shape, and a row
-## of eyes per eye color, or faces show the wrong drawing.
+## The face images and the face material must have one frame per eye and mouth shape, the eye
+## layers alike, and a row of irises per eye color, or faces show the wrong drawing.
 func test_face_images_match_the_shapes() -> void:
-	var material: ShaderMaterial = load("res://scenes/dhulls/face/dhull_face.tres")
+	var material: ShaderMaterial = load(FACE_MATERIAL_PATH)
 	var eye_colors := DhullGenome.EyeColor.size()
 	assert_eq(material.get_shader_parameter("eye_frames"), DhullFace.Eyes.size())
 	assert_eq(material.get_shader_parameter("eye_colors"), eye_colors)
 	assert_eq(material.get_shader_parameter("mouth_frames"), DhullFace.Mouth.size())
-	var eyes: Texture2D = material.get_shader_parameter("eyes")
+	var whites: Texture2D = material.get_shader_parameter("eye_whites")
+	var lines: Texture2D = material.get_shader_parameter("eye_lines")
+	var irises: Texture2D = material.get_shader_parameter("irises")
 	var mouths: Texture2D = material.get_shader_parameter("mouths")
-	assert_eq(eyes.get_height() % eye_colors, 0, "a row per eye color")
-	var eye_frame_height := eyes.get_height() / eye_colors
-	assert_eq(eyes.get_width(), roundi(eye_frame_height * EYE_FRAME_ASPECT) * DhullFace.Eyes.size())
+	assert_eq(
+		whites.get_width(), roundi(whites.get_height() * EYE_FRAME_ASPECT) * DhullFace.Eyes.size()
+	)
+	assert_eq(lines.get_size(), whites.get_size(), "lines match the whites")
+	assert_eq(irises.get_size(), whites.get_size() * Vector2(1, eye_colors), "a row per eye color")
 	assert_eq(
 		mouths.get_width(),
 		roundi(mouths.get_height() * MOUTH_FRAME_ASPECT) * DhullFace.Mouth.size()
 	)
+
+
+## The shader keeps each iris to its own half of its frame and smears the half's edge pixels
+## when it slides an iris far, so no iris may touch the edges or the middle of its frame.
+func test_irises_keep_clear_of_their_frames_edges() -> void:
+	var material: ShaderMaterial = load(FACE_MATERIAL_PATH)
+	var irises: Image = (material.get_shader_parameter("irises") as Texture2D).get_image()
+	irises.decompress()
+	var frame_width := irises.get_width() / DhullFace.Eyes.size()
+	var half := frame_width / 2
+	for frame in DhullFace.Eyes.size():
+		for column in [0, half - 1, half, frame_width - 1]:
+			var x: int = frame * frame_width + column
+			for y in irises.get_height():
+				var clear := irises.get_pixel(x, y).a == 0.0
+				assert_true(clear, "frame %d keeps clear of column %d" % [frame, column])
+				if not clear:
+					return
