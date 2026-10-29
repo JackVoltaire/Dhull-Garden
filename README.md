@@ -248,8 +248,9 @@ above it.
   is named the first time the dreamer cares for it, the one thing they ever type.
 - **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
   Decay's characters, though with Animal Crossing's short proportions: a low-poly chibi with hard
-  facets, in an oversized hoodie with striped sleeves and platform boots, and a big round head on
-  a short neck, with soft cheeks, a flattish face and a flat bottom. The skin is
+  facets, in an oversized hoodie with striped sleeves and platform boots, and a big head on a
+  short neck, wider than it's tall: widest at round cheeks, its jaw coming in to a chin with a flat
+  underside, and a flattish face. The skin is
   shaded the way House of Decay's faces are painted, darker to the sides, down the jaw and under
   the fringe, through its "Tip" vertex color and `DreamerColors.skin_shade`. Each hair length is one
   mass, made the way House of Decay's hair is: a smooth cap well out from the head with big, wide,
@@ -258,8 +259,9 @@ above it.
   curtains frame the face and wide panels hang down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet standing
   straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
   `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
-  thick blocky brows over tired eyes under a heavy lid, dull irises, smoky shadow, bags and blush, in
-  the order of `DreamerModel.Eyes`, and a tiny nose over a thin flat mouth (`DreamerModel.Mouth`).
+  thick blocky brows over tired eyes with a heavy lid painted solid plum, dull irises, bags with
+  makeup run down from them and blush, in the order of `DreamerModel.Eyes`, and a small nose over
+  a wide, lopsided mouth (`DreamerModel.Mouth`).
   `eyes_apart` spaces the two eyes wider than the drawings without stretching them, and they
   blink. `DreamerModel` shows
   the hair of the chosen length (`HairShort`, `HairMedium`, `HairLong`) in the chosen color,
