@@ -365,13 +365,14 @@ func _build_model() -> void:
 	var head_shape := genome.head_shape() if genome else DhullGenome.HeadShape.MOON
 	var body := _take_part(BODY_MODELS[body_shape], &"Body")
 	_model.add_child(body)
-	if not Engine.is_editor_hint():
-		_hold(_selfie_stick, body.get_node(^"ArmRight"), stick_grip)
-		_hold(_held_thing, body.get_node(^"ArmLeft"), held_thing_grip)
 	_head_shape = _take_part(HEAD_MODELS[head_shape], &"Head")
 	_head_shape.name = &"Shape"
 	_head_shape.material_overlay = face_material
 	_head.add_child(_head_shape)
+	_center_outlines(body)
+	if not Engine.is_editor_hint():
+		_hold(_selfie_stick, body.get_node(^"ArmRight"), stick_grip)
+		_hold(_held_thing, body.get_node(^"ArmLeft"), held_thing_grip)
 	# The animation player holds on to the parts it moved last; these are new ones.
 	_animation_player.clear_caches()
 	_apply_coloring()
@@ -388,6 +389,16 @@ func _front_camera() -> Vector3:
 		phone_up = _selfie_stick.global_basis.z
 	var height := front_camera_height * size_scale()
 	return _stick_phone.global_position + phone_up.normalized() * height
+
+
+## Tells each part's ink outline where the part's middle is, to grow it out from there (see
+## ink_hull.gdshader).
+func _center_outlines(body: Node3D) -> void:
+	# Parts taken out of their models have no owner, so look at every node.
+	var parts: Array[Node] = body.find_children("*", "MeshInstance3D", true, false)
+	parts.append_array([body, _head_shape, _egg])
+	for part: MeshInstance3D in parts:
+		part.set_instance_shader_parameter(&"outline_center", part.mesh.get_aabb().get_center())
 
 
 ## Puts [param thing] in [param nub], at [param grip] from its joint, turned as it was.

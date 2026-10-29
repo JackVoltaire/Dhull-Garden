@@ -268,7 +268,10 @@ above it.
   load genes by name, so saves survive new genes. A Dhull without a genome gets a random one
   when the game runs; the F3 menu's "New random genes" rerolls every Dhull in the level.
 - **Dhull look.** Characters look like House of Decay's: PS1-era models with crunchy painted
-  faces, while the world stays ink-drawn. The part models are low-poly and flat-shaded, and
+  faces, while the world stays ink-drawn. Each part has its own ink outline, as wide on screen as
+  the world's ink lines: `toon_character`'s next pass, `ink_hull`, draws the part's back faces in
+  ink, pushed out from the part's middle (its `outline_center`, which the Dhull sets), since the
+  screen-wide lines miss something as small as a Dhull standing on the ground. The part models are low-poly and flat-shaded, and
   `ps1_character.gdshader` (the `toon_character` material) lights them in a few dithered bands.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
   eyes with big banded irises and a starburst round a tiny pupil, black wedge lashes, eye bags
