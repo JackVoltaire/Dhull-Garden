@@ -13,7 +13,8 @@ extends Node3D
 ##
 ## A Dhull in the garden shows its [member record], the life the Garden autoload keeps for it:
 ## its needs set its mood (see DhullLife), its Brain walks it about as that mood's habit says
-## (see DhullBrain) unless it's napping, and the young are smaller. It reacts when its mood
+## (see DhullBrain) unless it's napping, and the young are smaller. Grown Dhulls hang out as they
+## rest, scrolling their phones or sipping coffee or energy drinks. It reacts when its mood
 ## changes, when it notices the player, and now and then as it rests. The player can pet it, feed
 ## it and carry it about (see DhullCare and CareMenu). When it posts on the feed it takes a selfie
 ## right where it is: it holds its phone out on a selfie stick in one nub, since its nubs are far
@@ -121,8 +122,9 @@ var _shown_life_stage := DhullRecord.LifeStage.ADULT
 ## Posts it still has to take a selfie for, oldest first.
 var _selfies_due: Array[FeedPost] = []
 var _taking_selfies := false
-## The face it pulls in the selfie it's taking.
+## The face it pulls in the selfie it's taking, and what it holds up in it, if anything.
 var _selfie_face := DhullFace.Emotion.NEUTRAL
+var _selfie_subject: ItemDefinition
 
 @onready var _model: Node3D = $Model
 @onready var _head: Node3D = $Model/Head
@@ -140,6 +142,7 @@ var _selfie_face := DhullFace.Emotion.NEUTRAL
 @onready var _selfie_stick: Node3D = $Model/SelfieStick
 @onready var _stick_phone: Node3D = $Model/SelfieStick/Phone
 @onready var _held_thing: MeshInstance3D = $Model/HeldThing
+@onready var _phone: MeshInstance3D = $Model/Phone
 
 
 func _ready() -> void:
@@ -235,10 +238,7 @@ func _take_selfies() -> void:
 ## Raises the phone, holds up what [param post] is about, pulls the face that fits and shoots,
 ## from the phone, so the face and the thing are both in the picture.
 func _take_selfie(post: FeedPost) -> void:
-	var subject: ItemDefinition = Inventory.definitions.get(post.subject)
-	_held_thing.mesh = subject.prop if subject else null
-	_held_thing.visible = _held_thing.mesh != null
-	_selfie_stick.visible = true
+	_selfie_subject = Inventory.definitions.get(post.subject)
 	_selfie_face = DhullPosting.selfie_face(post)
 	_brain.rest()
 	_set_activity(DhullState.Activity.TAKING_SELFIE)
@@ -253,8 +253,8 @@ func _take_selfie(post: FeedPost) -> void:
 	await RenderingServer.frame_post_draw
 	Feed.keep_selfie(post, _selfie.get_texture().get_image())
 	await get_tree().create_timer(selfie_hold_seconds).timeout
-	_held_thing.visible = false
-	_selfie_stick.visible = false
+	# Lowering the stick between shots lets the next one strike its own pose, face and thing.
+	_set_activity(DhullState.Activity.STANDING)
 
 
 func _respond(response: DhullCare.Response) -> void:
@@ -330,8 +330,7 @@ func _on_noticed(_player: Node3D) -> void:
 ## otherwise.
 func _keep_sighing() -> void:
 	var habit := _brain.habits.habit_for(mood)
-	var resting := activity in [DhullState.Activity.STANDING, DhullState.Activity.SITTING]
-	if not resting or habit.idle_reaction == DhullReaction.Symbol.NONE:
+	if activity not in DhullState.RESTING or habit.idle_reaction == DhullReaction.Symbol.NONE:
 		_sigh_timer.stop()
 	elif _sigh_timer.is_stopped():
 		var seconds := habit.idle_reaction_every_seconds * _rng.randf_range(0.6, 1.4)
@@ -422,9 +421,25 @@ func _show_state() -> void:
 	# Animating in the editor would save the animated pose into the scene.
 	if Engine.is_editor_hint():
 		return
+	_show_held_things()
 	if genome:
 		_animation_player.speed_scale = DhullState.speed_scale(genome)
 	_animation_player.play(DhullState.animation_for(activity, mood), BLEND_TIME)
+
+
+## Shows what it holds for what it's doing: the selfie stick and what the post is about for a
+## selfie, its phone as it scrolls, its drink as it sips.
+func _show_held_things() -> void:
+	_selfie_stick.visible = activity == DhullState.Activity.TAKING_SELFIE
+	_phone.visible = activity == DhullState.Activity.SCROLLING
+	var held: ItemDefinition = null
+	match activity:
+		DhullState.Activity.TAKING_SELFIE:
+			held = _selfie_subject
+		DhullState.Activity.SIPPING:
+			held = _brain.habits.drink_for(genome)
+	_held_thing.mesh = held.prop if held else null
+	_held_thing.visible = _held_thing.mesh != null
 
 
 func _show_face() -> void:

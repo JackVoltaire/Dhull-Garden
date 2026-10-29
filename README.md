@@ -205,8 +205,12 @@ above it.
   `data/dhulls/habits.tres`: where it heads (nowhere, somewhere nearby, a spot away from the
   others, or up to another Dhull), whether it stands or sits once there, and how long it rests
   before heading out again (sooner for energetic Dhulls). A sad Dhull goes off alone and sits in
-  a corner; a playful one keeps running up to the others. The Dhull's `Brain` (`DhullBrain`)
-  walks it there along the level's navigation mesh and keeps it on the ground. A level with
+  a corner; a playful one keeps running up to the others. Adults rest by `adults_rest_by`
+  instead, which can also be hanging out: scrolling their phone (`Model/Phone`, its screen
+  glowing) when content, sad or grumpy, or sipping a drink when sleepy, to stay awake. Energetic
+  Dhulls drink energy drinks, the rest coffee (`DhullHabits.drink_for`); the drink is the
+  item's `prop`, held in the left nub. The young only stand or sit. The Dhull's `Brain`
+  (`DhullBrain`) walks it there along the level's navigation mesh and keeps it on the ground. A level with
   Dhulls needs a `NavigationRegion3D`: its mesh is built from the static colliders of everything
   in the level root's `navigation_mesh_source_group`, so after changing the level, select the
   region and press **Bake NavigationMesh** in the editor.

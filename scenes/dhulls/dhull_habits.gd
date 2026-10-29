@@ -1,8 +1,8 @@
 class_name DhullHabits
 extends Resource
-## A Dhull's habit for each mood (see DhullHabit), and the plain rules for picking where it goes.
-## The game's habits are in data/dhulls/habits.tres. Exactly where a stroll ends is left to
-## chance, but what a Dhull does never is: its mood decides.
+## A Dhull's habit for each mood (see DhullHabit), the drink it hangs out with, and the plain rules
+## for picking where it goes. The game's habits are in data/dhulls/habits.tres. Exactly where a
+## stroll ends is left to chance, but what a Dhull does never is: its mood decides.
 
 @export var content: DhullHabit
 @export var happy: DhullHabit
@@ -11,6 +11,12 @@ extends Resource
 @export var hungry: DhullHabit
 @export var sad: DhullHabit
 @export var grumpy: DhullHabit
+@export_group("Drinks")
+## What adults drink as they hang out: coffee, or energy drinks for the more energetic.
+@export var coffee: ItemDefinition
+@export var energy_drink: ItemDefinition
+## Energy, from 0 to 1, from which a Dhull drinks energy drinks instead of coffee.
+@export_range(0.0, 1.0, 0.01) var energy_drinks_from_energy := 0.6
 
 
 func habit_for(mood: DhullState.Mood) -> DhullHabit:
@@ -24,6 +30,13 @@ func habit_for(mood: DhullState.Mood) -> DhullHabit:
 		DhullState.Mood.GRUMPY: grumpy,
 	}
 	return by_mood[mood]
+
+
+## What a Dhull with [param genome] drinks as it hangs out.
+func drink_for(genome: DhullGenome) -> ItemDefinition:
+	if genome.level(DhullGenome.Gene.ENERGY) >= energy_drinks_from_energy:
+		return energy_drink
+	return coffee
 
 
 ## Of [param spots], the one farthest from its nearest neighbour in [param others]: the best
