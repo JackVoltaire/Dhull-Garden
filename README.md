@@ -248,13 +248,15 @@ above it.
   is named the first time the dreamer cares for it, the one thing they ever type.
 - **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
   Decay's characters: a low-poly chibi with hard facets, in an oversized hoodie and platform
-  boots. Each hair length is one continuous mass, a shell over the head breaking into spikes and
-  curls at its hem, with a lock of the fringe over one eye. As in House of Decay, the face is a
-  flat sheet standing straight in front of the head, like glasses (`Face`), painted by
-  `dhull_face.gdshader` through `assets/materials/face_dreamer.tres` with the dreamer's own
-  drawings in `scenes/player/face/`: tired eyes under a heavy lid, dull irises, smoky shadow and
-  bags, in the order of `DreamerModel.Eyes`. `eyes_apart` spaces the two eyes wider than the
-  drawings without stretching them, and they blink. `DreamerModel` shows
+  boots, with a wide head whose flat face narrows to a small chin. Each hair length is one
+  continuous mass, a shell over the head breaking into spikes and curls at its hem, with a short
+  fringe and a lock of it over one eye. As in House of Decay, the face is a flat sheet standing
+  straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
+  `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
+  thick blocky brows over tired eyes under a heavy lid, dull irises, smoky shadow and bags, in
+  the order of `DreamerModel.Eyes`, and a tiny nose over a thin flat mouth (`DreamerModel.Mouth`).
+  `eyes_apart` spaces the two eyes wider than the drawings without stretching them, and they
+  blink. `DreamerModel` shows
   the hair of the chosen length (`HairShort`, `HairMedium`, `HairLong`) in the chosen color,
   colors the rest from `data/dreamer/colors.tres` (`DreamerColors`), and plays `idle` or `walk`
   (`scenes/player/dreamer_animations.tres`), the walk sped up to match how fast they go. The

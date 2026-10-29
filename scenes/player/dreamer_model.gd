@@ -4,8 +4,9 @@ extends Node3D
 ## picked in the color they picked, colors the rest of them, paints their sleepy face on the flat
 ## sheet in front of their head and blinks, and stands idle or walks as they move.
 
-## The dreamer's own eye drawings, in the order of the frames in scenes/player/face/.
+## The dreamer's own face drawings, in the order of the frames in scenes/player/face/.
 enum Eyes { SLEEPY, CLOSED }
+enum Mouth { TIRED }
 
 ## The hair of each length; only the chosen one shows.
 const HAIRS: Dictionary[DreamerLook.HairLength, NodePath] = {
@@ -52,8 +53,7 @@ var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	_rng.randomize()
-	# A shut mouth doesn't show.
-	_face.set_instance_shader_parameter(&"mouth_frame", DhullFace.NO_MOUTH)
+	_face.set_instance_shader_parameter(&"mouth_frame", Mouth.TIRED)
 	_paint(SKIN, colors.skin)
 	_paint(HOODIE, colors.hoodie)
 	_paint(TROUSERS, colors.trousers)
