@@ -55,3 +55,11 @@ func test_energy_sets_the_speed() -> void:
 	assert_eq(DhullState.speed_scale(genome), DhullState.SPEED_RANGE.x)
 	genome.alleles[DhullGenome.Gene.ENERGY] = Vector2i(DhullGenome.MAX_LEVEL, DhullGenome.MAX_LEVEL)
 	assert_eq(DhullState.speed_scale(genome), DhullState.SPEED_RANGE.y)
+
+
+func test_moods_show_as_weather_in_the_nebula() -> void:
+	for mood: DhullState.Mood in DhullState.Mood.values():
+		assert_true(DhullState.WEATHER.has(mood), DhullState.Mood.keys()[mood] + " has weather")
+	assert_eq(DhullState.weather_for(DhullState.Mood.SAD), DhullState.Weather.RAIN)
+	assert_eq(DhullState.weather_for(DhullState.Mood.GRUMPY), DhullState.Weather.STORM)
+	assert_eq(DhullState.weather_for(DhullState.Mood.HAPPY), DhullState.Weather.SUN)

@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_script")
+id = &"ink"
 body_color = Color(0.23, 0.2, 0.27, 1)
 head_color = Color(0.23, 0.2, 0.27, 1)
 limb_color = Color(0.23, 0.2, 0.27, 1)

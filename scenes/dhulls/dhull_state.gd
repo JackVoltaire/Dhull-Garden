@@ -6,6 +6,7 @@ extends RefCounted
 
 enum Activity { STANDING, WALKING, SITTING, SLEEPING }
 enum Mood { CONTENT, HAPPY, PLAYFUL, SLEEPY, HUNGRY, SAD, GRUMPY }
+enum Weather { CLEAR, RAIN, STORM, SUN }
 
 ## The animation for each activity, by mood. A sleeping Dhull only shows whether it sleeps soundly.
 const ANIMATIONS: Dictionary[Activity, Dictionary] = {
@@ -60,12 +61,27 @@ const FACES: Dictionary[Mood, DhullFace.Emotion] = {
 	Mood.SAD: DhullFace.Emotion.SAD,
 	Mood.GRUMPY: DhullFace.Emotion.ANGRY,
 }
+## The weather in a Dhull's nebula for each mood: rain when it's sad, a storm when it's grumpy and
+## a small sun peeking out when it's happy.
+const WEATHER: Dictionary[Mood, Weather] = {
+	Mood.CONTENT: Weather.CLEAR,
+	Mood.HAPPY: Weather.SUN,
+	Mood.PLAYFUL: Weather.SUN,
+	Mood.SLEEPY: Weather.CLEAR,
+	Mood.HUNGRY: Weather.CLEAR,
+	Mood.SAD: Weather.RAIN,
+	Mood.GRUMPY: Weather.STORM,
+}
 ## How fast a Dhull moves at the lowest and the highest energy, as a playback speed.
 const SPEED_RANGE := Vector2(0.8, 1.2)
 
 
 static func animation_for(activity: Activity, mood: Mood) -> StringName:
 	return ANIMATIONS[activity][mood]
+
+
+static func weather_for(mood: Mood) -> Weather:
+	return WEATHER[mood]
 
 
 static func emotion_for(activity: Activity, mood: Mood) -> DhullFace.Emotion:

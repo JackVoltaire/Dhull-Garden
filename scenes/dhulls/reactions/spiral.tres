@@ -1,0 +1,18 @@
+[gd_resource type="QuadMesh" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/cardboard_cutout.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://scenes/dhulls/reactions/spiral.svg" id="2_frames"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cutout"]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/frames = ExtResource("2_frames")
+shader_parameter/frame_count = 3
+shader_parameter/fps = 4.0
+shader_parameter/random_flip = false
+shader_parameter/self_light = 1.0
+shader_parameter/world_light = 0.0
+
+[resource]
+material = SubResource("ShaderMaterial_cutout")
+size = Vector2(0.3, 0.3)

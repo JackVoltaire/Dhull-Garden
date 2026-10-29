@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="NewGarden" format=3]
+
+[ext_resource type="Script" path="res://systems/garden/new_garden.gd" id="1_new_garden"]
+[ext_resource type="Resource" path="res://data/dhulls/colorings/sunny.tres" id="2_sunny"]
+
+[resource]
+script = ExtResource("1_new_garden")
+coloring = ExtResource("2_sunny")

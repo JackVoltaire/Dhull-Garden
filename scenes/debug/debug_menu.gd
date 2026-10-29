@@ -1,6 +1,6 @@
 extends CanvasLayer
 ## Developer tools, toggled with F3 (the debug_menu action): time travel, calendar state,
-## saving and loading, switching levels, launching minigames and giving Dhulls new genes.
+## saving and loading, switching levels, launching minigames, and Dhulls' genes and needs.
 ## Registered as the [code]DebugMenu[/code] autoload and removed in release builds.
 
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -41,6 +41,18 @@ func _ready() -> void:
 
 	var dhull_row := _add_row("Dhulls")
 	_add_button(dhull_row, "New random genes", _reroll_dhulls)
+	var needs_row := _add_row("Dhull needs")
+	_add_button(needs_row, "Starving", _change_needs.bind(_starve))
+	_add_button(needs_row, "Fed", _change_needs.bind(_feed))
+	_add_button(needs_row, "Exhausted", _change_needs.bind(_exhaust))
+	_add_button(needs_row, "Rested", _change_needs.bind(_rest))
+	_add_button(needs_row, "Happy", _change_needs.bind(_cheer_up))
+	_add_button(needs_row, "Unhappy", _change_needs.bind(_sadden))
+	var reaction_row := _add_row("Dhull reactions")
+	_add_button(reaction_row, "Eye", _react.bind(DhullReaction.Symbol.EYE))
+	_add_button(reaction_row, "Star", _react.bind(DhullReaction.Symbol.STAR))
+	_add_button(reaction_row, "Spiral", _react.bind(DhullReaction.Symbol.SPIRAL))
+	_add_button(reaction_row, "Gloomy sigh", _react.bind(DhullReaction.Symbol.SPIRAL, true))
 	var activity_row := _add_row("Dhull activity")
 	for activity: DhullState.Activity in DhullState.Activity.values():
 		var activity_name: String = DhullState.Activity.keys()[activity].capitalize()
@@ -102,7 +114,26 @@ func _status_text() -> String:
 		"Events: %s" % (", ".join(events) if events else "none"),
 		"Save slot: %d   FPS: %d" % [Saves.current_slot, Engine.get_frames_per_second()],
 	]
+	for record in Garden.dhulls:
+		lines.append(_dhull_status(record))
 	return "\n".join(lines)
+
+
+func _dhull_status(record: DhullRecord) -> String:
+	var mood := DhullLife.mood_for(record, Garden.tuning)
+	return (
+		"%s (%s, %s): %s%s   hunger %.2f   tiredness %.2f   happiness %.2f"
+		% [
+			record.id,
+			DhullRecord.LifeStage.keys()[record.life_stage].to_lower(),
+			record.home_area,
+			DhullState.Mood.keys()[mood].to_lower(),
+			", napping" if record.napping else "",
+			record.hunger,
+			record.tiredness,
+			record.happiness,
+		]
+	)
 
 
 func _restart_save() -> void:
@@ -121,12 +152,53 @@ func _reroll_dhulls() -> void:
 	rng.randomize()
 	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
 		dhull.genome = DhullGenome.random(rng)
+		if dhull.record:
+			dhull.record.genome = dhull.genome
 
 
 ## Sets a property, such as activity or mood, on every Dhull in the level.
 func _set_dhulls(property: StringName, value: int) -> void:
 	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
 		dhull.set(property, value)
+
+
+func _react(symbol: DhullReaction.Symbol, gloomy := false) -> void:
+	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
+		dhull.react(symbol, gloomy)
+
+
+## Changes the needs of every Dhull in the garden with [param change].
+func _change_needs(change: Callable) -> void:
+	for record in Garden.dhulls:
+		change.call(record)
+	Garden.notify_changed()
+
+
+func _starve(record: DhullRecord) -> void:
+	record.hunger = 1.0
+
+
+func _feed(record: DhullRecord) -> void:
+	record.hunger = 0.0
+
+
+## Tired enough to nap at once.
+func _exhaust(record: DhullRecord) -> void:
+	record.tiredness = 1.0
+	record.napping = true
+
+
+func _rest(record: DhullRecord) -> void:
+	record.tiredness = 0.0
+	record.napping = false
+
+
+func _cheer_up(record: DhullRecord) -> void:
+	record.happiness = 1.0
+
+
+func _sadden(record: DhullRecord) -> void:
+	record.happiness = 0.0
 
 
 func _launch_minigame(minigame: MinigameDefinition) -> void:

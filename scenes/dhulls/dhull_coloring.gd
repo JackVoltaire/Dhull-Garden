@@ -7,6 +7,8 @@ extends Resource
 ## Numbered as in clay.gdshader.
 enum Pattern { NONE, DIAMONDS, SPOTS }
 
+## Stable name that saves refer to it by. Never rename it.
+@export var id: StringName
 @export var body_color := Color(1.0, 0.83, 0.25)
 @export var head_color := Color(1.0, 0.83, 0.25)
 ## The left arm and the right leg.
