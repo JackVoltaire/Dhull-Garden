@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://scenes/environment/sky_cycle.gd" id="7_sky_cycle"]
 [ext_resource type="Script" path="res://scenes/environment/cutout_ring.gd" id="8_cutout_ring"]
 [ext_resource type="Shader" path="res://assets/shaders/stylized_water.gdshader" id="9_water"]
-[ext_resource type="Resource" path="res://data/minigames/sample_2d.tres" id="10_sample_2d"]
+[ext_resource type="Resource" path="res://data/minigames/mining.tres" id="10_mining"]
 [ext_resource type="PackedScene" path="res://scenes/props/goth_tree/goth_tree_teal.tscn" id="11_tree_teal"]
 [ext_resource type="PackedScene" path="res://assets/models/rock_shards/rock_shards.glb" id="12_rocks"]
 [ext_resource type="PackedScene" path="res://assets/models/ruin_arch/ruin_arch.glb" id="13_ruin"]
@@ -223,7 +223,9 @@ transform = Transform3D(6.12323e-17, 0, 1, 0, 1, 0, -1, 0, 6.12323e-17, 20.6, 0.
 
 [node name="ShinySpot" parent="." instance=ExtResource("6_spot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.918, -0.75)
-minigame = ExtResource("10_sample_2d")
+minigame = ExtResource("10_mining")
+once_a_day = true
+spot_id = &"dream_island_rock"
 
 [node name="CloudSea" type="MultiMeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -26, 0)

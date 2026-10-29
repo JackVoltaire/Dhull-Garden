@@ -47,3 +47,14 @@ CHARACTER_LULLA,Lulla
 "LULLA_MUMBLE_2","The clouds hum when you're not looking. Don't tell them I said that."
 "LULLA_MUMBLE_3","You again. Or still. ...zzz."
 "LULLA_MUMBLE_4","Is it day? Feels like day. Feels like everything, honestly."
+MINIGAME_MINING,Mining
+MINIGAME_MINING_DESCRIPTION,Dig materials out of a wall before it caves in.
+UI_PICK,Pick
+UI_HAMMER,Hammer
+UI_WALL,Wall
+UI_FOUND,Found: %s
+UI_NOTHING_YET,nothing yet
+UI_WALL_CAVED_IN,The wall caved in.
+UI_DUG_OUT_EVERYTHING,You dug out everything.
+UI_LEFT_THE_WALL,You left the rest in the wall.
+UI_DONE,Done

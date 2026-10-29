@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="DigFind" format=3]
+
+[ext_resource type="Script" path="res://scenes/minigames/mining/dig_find.gd" id="1_find"]
+[ext_resource type="Resource" path="res://data/items/scrap.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_find")
+item = ExtResource("2_item")
+shape = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)])
+commonness = 0.6
+color = Color(0.55, 0.66, 0.72, 1)

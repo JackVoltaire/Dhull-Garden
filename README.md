@@ -52,6 +52,7 @@ data/               Game content as .tres resources
   events/           One CalendarEvent per file
   minigames/        One MinigameDefinition per file
   items/            One ItemDefinition per file: materials, food and drinks
+  mining/           mining.tres, the mining minigame's tuning, and finds/, what can be dug up
   dhulls/           Dhull colorings; life.tres, how fast needs change and when moods show;
                     habits.tres, what Dhulls do in each mood
   garden/           new_garden.tres, the Dhulls a new game starts with; mess.tres, how fast the
@@ -70,6 +71,7 @@ scenes/
                     and the face drawings in face/; DhullRecord and DhullLife (a Dhull's saved
                     life and the rules its needs follow), DhullHabits and DhullBrain (what it
                     does in each mood, and walking it there) and DhullSpawner
+  minigames/mining/ The mining minigame: DigSite (the wall's rules), DigBoard (drawing it)
   props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/, and
                     mess/ (a bit of mess, and the MessSpawner that shows an area's mess)
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
@@ -123,6 +125,16 @@ above it.
   player to the exact spot they left from and emits `minigame_finished` with the result. Code
   can also call `Minigames.launch(definition, context)` directly. Running a minigame scene on
   its own with F6 restarts it when it finishes.
+- **Mining.** Shiny spots open the mining minigame, a dig like Pokémon Diamond and Pearl's: a
+  wall of cells under a few layers of rock, with crafting materials buried in it. The pick knocks
+  two layers off a cell and one off its four neighbours; the hammer knocks two off a 3x3 patch
+  but shakes the wall twice as hard. When the wall caves in or the player leaves, whatever is
+  dug out completely goes into their pockets. `DigSite` holds the rules, with no engine calls;
+  each find is a `DigFind` in `data/mining/finds/` (the item, the cells it covers, how common it
+  is), and `data/mining/mining.tres` tunes the wall. The colors are placeholders.
+- **Spots that refresh every day.** A `MinigameSpot` with `once_a_day` and a stable `spot_id`
+  can be used once each real-world day: `Minigames` remembers which spots were used and on what
+  local date, saves it, and the spot hides until the next day.
 - **Scenes.** Change scenes with `Scenes.change_scene(path, params)`. If the new scene's root
   has `setup(params: Dictionary)`, it gets `params` before `_ready()`.
 - **Settings.** `Settings.get_value("audio/music_volume")` and `set_value()`; every setting

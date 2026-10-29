@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MinigameDefinition" format=3]
+
+[ext_resource type="Script" path="res://systems/minigames/minigame_definition.gd" id="1_minigame"]
+
+[resource]
+script = ExtResource("1_minigame")
+id = &"mining"
+title = "MINIGAME_MINING"
+description = "MINIGAME_MINING_DESCRIPTION"
+scene_path = "res://scenes/minigames/mining/mining.tscn"
