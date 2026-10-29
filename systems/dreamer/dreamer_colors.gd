@@ -6,8 +6,10 @@ extends Resource
 @export var skin := Color(0.96, 0.87, 0.82)
 ## What the skin turns to where it's shaded: to the sides of the face, the jaw, under the fringe
 ## and the chin.
-@export var skin_shade := Color(0.6, 0.42, 0.48)
+@export var skin_shade := Color(0.78, 0.62, 0.64)
 @export var hoodie := Color(0.17, 0.15, 0.21)
+## The stripes painted round the hoodie's sleeves.
+@export var sleeve_stripes := Color(0.36, 0.33, 0.42)
 @export var trousers := Color(0.11, 0.1, 0.14)
 @export var shoes := Color(0.07, 0.06, 0.08)
 @export var hair: Dictionary[DreamerLook.HairColor, Color] = {}

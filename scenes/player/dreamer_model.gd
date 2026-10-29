@@ -18,6 +18,7 @@ const SKIN: Array[NodePath] = [
 	^"Body/Head", ^"Body/Neck", ^"Body/SleeveLeft/HandLeft", ^"Body/SleeveRight/HandRight"
 ]
 const HOODIE: Array[NodePath] = [^"Body", ^"Body/SleeveLeft", ^"Body/SleeveRight"]
+const SLEEVES: Array[NodePath] = [^"Body/SleeveLeft", ^"Body/SleeveRight"]
 const TROUSERS: Array[NodePath] = [^"Body/LegLeft", ^"Body/LegRight"]
 const SHOES: Array[NodePath] = [^"Body/LegLeft/ShoeLeft", ^"Body/LegRight/ShoeRight"]
 ## The flat sheet in front of the head the face is painted on, like glasses.
@@ -56,6 +57,10 @@ func _ready() -> void:
 	_face.set_instance_shader_parameter(&"mouth_frame", Mouth.TIRED)
 	_paint(SKIN, colors.skin, colors.skin_shade)
 	_paint(HOODIE, colors.hoodie)
+	for sleeve in SLEEVES:
+		var part: GeometryInstance3D = get_node(sleeve)
+		part.set_instance_shader_parameter(&"pattern", DhullColoring.Pattern.STRIPES)
+		part.set_instance_shader_parameter(&"pattern_color", colors.sleeve_stripes)
 	_paint(TROUSERS, colors.trousers)
 	_paint(SHOES, colors.shoes)
 	var parts := find_children("*", "MeshInstance3D", true, false)

@@ -5,7 +5,7 @@ extends Resource
 ## shader's instance uniforms, so Dhulls can differ while sharing one material.
 
 ## Numbered as in clay.gdshader.
-enum Pattern { NONE, DIAMONDS, SPOTS }
+enum Pattern { NONE, DIAMONDS, SPOTS, STRIPES }
 
 ## Stable name that saves refer to it by. Never rename it.
 @export var id: StringName

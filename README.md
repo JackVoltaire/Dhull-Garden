@@ -247,15 +247,16 @@ above it.
   words are translation keys `POST_<TOPIC>_<n>`, placeholders in a Dhull's voice. A hatched Dhull
   is named the first time the dreamer cares for it, the one thing they ever type.
 - **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
-  Decay's characters: a low-poly chibi with hard facets, in an oversized hoodie and platform
-  boots, with a wide, boxy head on a short neck: a flat face and a flat bottom. The skin is
+  Decay's characters, though with Animal Crossing's short proportions: a low-poly chibi with hard
+  facets, in an oversized hoodie with striped sleeves and platform boots, and a big round head on
+  a short neck, with soft cheeks, a flattish face and a flat bottom. The skin is
   shaded the way House of Decay's faces are painted, darker to the sides, down the jaw and under
   the fringe, through its "Tip" vertex color and `DreamerColors.skin_shade`. Each hair length is one
-  continuous mass, a shell over the head breaking into spikes and curls at its hem, with a short
-  fringe and a lock of it over one eye. As in House of Decay, the face is a flat sheet standing
+  continuous mass, a shell over the head breaking into a few big flat blades at its hem, some
+  curling out, with a short fringe and a blade of it over one eye. As in House of Decay, the face is a flat sheet standing
   straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
   `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
-  thick blocky brows over tired eyes under a heavy lid, dull irises, smoky shadow and bags, in
+  thick blocky brows over tired eyes under a heavy lid, dull irises, smoky shadow, bags and blush, in
   the order of `DreamerModel.Eyes`, and a tiny nose over a thin flat mouth (`DreamerModel.Mouth`).
   `eyes_apart` spaces the two eyes wider than the drawings without stretching them, and they
   blink. `DreamerModel` shows
@@ -327,7 +328,7 @@ above it.
   match. A Dhull's colors come from its `coloring`, a `DhullColoring` resource in
   `data/dhulls/colorings/`: a color per part, the color the nubs turn towards at their tips
   (painted into the model's vertex color, and stepped like the light), and an optional pattern,
-  harlequin diamonds or spots. The Dhull sets them on its parts through the shader's instance
+  harlequin diamonds, spots or stripes. The Dhull sets them on its parts through the shader's instance
   uniforms, so every Dhull can differ while sharing one material; the character and face shaders
   keep their instance uniforms in separate slots, as a head carries both.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
