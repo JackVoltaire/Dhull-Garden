@@ -4,10 +4,10 @@ extends Node3D
 ## picked in the color they picked, colors the rest of them, paints their sleepy face on the flat
 ## sheet in front of their head and blinks, and stands idle or walks as they move.
 
-## The dreamer's own face drawings, in the order of the frames in scenes/player/face/: emo,
-## tired and pissed off.
-enum Eyes { GLARING, SHUT }
-enum Mouth { FROWN }
+## The dreamer's own face drawings, in the order of the frames in scenes/player/face/: tired and
+## fed up, with no makeup.
+enum Eyes { HALF_LIDDED, SHUT }
+enum Mouth { FLAT }
 
 ## The hair of each length; only the chosen one shows.
 const HAIRS: Dictionary[DreamerLook.HairLength, NodePath] = {
@@ -36,8 +36,7 @@ const ANIMATED_TRACKS: Array[NodePath] = [
 ]
 
 @export var colors: DreamerColors
-## Where their irises rest, from -1 to 1 right and up: a little down, glaring from under their
-## brows.
+## Where their irises rest, from -1 to 1 right and up: a little down, from under heavy lids.
 @export var glance := Vector2(0.0, -0.3)
 ## Seconds between blinks, picked at random between x and y, and how long a blink lasts.
 @export var blink_interval := Vector2(2.0, 5.0)
@@ -58,7 +57,7 @@ var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	_rng.randomize()
-	_face.set_instance_shader_parameter(&"mouth_frame", Mouth.FROWN)
+	_face.set_instance_shader_parameter(&"mouth_frame", Mouth.FLAT)
 	_face.set_instance_shader_parameter(&"look", glance)
 	_paint(SKIN, colors.skin, colors.skin_shade)
 	_paint(HOODIE, colors.hoodie)
@@ -102,7 +101,7 @@ func _toggle_blink() -> void:
 
 
 func _show_eyes() -> void:
-	_face.set_instance_shader_parameter(&"eye_frame", Eyes.SHUT if _blinking else Eyes.GLARING)
+	_face.set_instance_shader_parameter(&"eye_frame", Eyes.SHUT if _blinking else Eyes.HALF_LIDDED)
 
 
 ## The model shades parts towards their tip color by its "Tip" vertex color; only the skin has
