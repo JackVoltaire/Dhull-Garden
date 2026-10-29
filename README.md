@@ -159,7 +159,8 @@ above it.
   and crayon streaks, laid out in world space; tune the marks per material. Instance
   `scenes/environment/ink_outlines.tscn` in a level for ink lines along silhouettes and sharp
   folds, the same width on screen at any distance; tune `line_width`, `silhouette_gap` and
-  `crease_angle` on its material. `SkyCycle` colors the sky, sunlight, fog and shadow tint from
+  `crease_angle` on its material. Characters get none: `ps1_character.gdshader` marks them in the
+  normal-roughness buffer, and the lines leave out whatever has its roughness. `SkyCycle` colors the sky, sunlight, fog and shadow tint from
   gradients that run from midnight to midnight, and shows the drawn sun by day and the moon by
   night; in the editor, drag its **Preview Hour** to see any time of day. The sky itself is
   `stained_glass_sky.gdshader`, a speckled mosaic of broken stained glass: irregular shards of
@@ -173,7 +174,7 @@ above it.
   it's ready, in the editor too: a body (`assets/models/dhull_body_*/`: the body, with arms,
   legs and a tail as its children, each with its origin at its joint) and a head
   (`assets/models/dhull_head_*/`) that floats and bobs above it in a nebula mist. The parts are
-  separate, so each gets its own ink outline and can move on its own. To add a body or head
+  separate, so each can move on its own. To add a body or head
   shape, model it like the others, add it to `DhullGenome.BodyShape` or `HeadShape` with its
   dominance and commonness, and to `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is
   missing.
@@ -259,8 +260,8 @@ above it.
   curtains frame the face and wide panels hang down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet standing
   straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
   `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
-  thick blocky brows over wide, flat, tired eyes with no border, just a heavy lash line under a lid
-  painted solid plum, dull irises, bags with
+  thick blocky brows over wide, flat, tired eyes with a thick black border, a heavy lash line and
+  a lid painted solid plum, dull irises, bags with
   makeup run down from them and blush, in the order of `DreamerModel.Eyes`, and a small nose over
   a wide, lopsided mouth (`DreamerModel.Mouth`).
   `eyes_apart` spaces the two eyes wider than the drawings without stretching them, and they
@@ -303,10 +304,8 @@ above it.
   load genes by name, so saves survive new genes. A Dhull without a genome gets a random one
   when the game runs; the F3 menu's "New random genes" rerolls every Dhull in the level.
 - **Dhull look.** Characters look like House of Decay's: PS1-era models with crunchy painted
-  faces, while the world stays ink-drawn. Each part has its own ink outline, as wide on screen as
-  the world's ink lines: `toon_character`'s next pass, `ink_hull`, draws the part's back faces in
-  ink, pushed out from the part's middle (its `outline_center`, which the Dhull sets), since the
-  screen-wide lines miss something as small as a Dhull standing on the ground. The part models are low-poly and flat-shaded, and
+  faces and no ink outlines, while the world stays ink-drawn. The part models are low-poly and
+  flat-shaded, and
   `ps1_character.gdshader` (the `toon_character` material) lights them in a few dithered bands.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
   eyes with a thick black border, big banded irises and a starburst round a tiny pupil, black

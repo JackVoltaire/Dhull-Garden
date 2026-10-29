@@ -42,8 +42,7 @@ uniform vec2 gloom_size = vec2(0.4, 0.26);
 // How big one of the face drawings' pixels is on the head, in meters, so the gloom is drawn in
 // pixels as crunchy as theirs: the eye drawings' width over their width in pixels.
 uniform float face_pixel = 0.006875;
-// Fixed instance slots 4-7 and 9, apart from the character shader's and the ink outline's on the
-// same head.
+// Fixed instance slots 4-7 and 9, apart from the character shader's on the same head.
 instance uniform int eye_frame : instance_index(4) = 0;
 instance uniform int mouth_frame : instance_index(5) = 0;
 instance uniform int eye_color : instance_index(6) = 0;

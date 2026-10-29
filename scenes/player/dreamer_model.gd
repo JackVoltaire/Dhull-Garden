@@ -63,10 +63,6 @@ func _ready() -> void:
 		part.set_instance_shader_parameter(&"pattern_color", colors.sleeve_stripes)
 	_paint(TROUSERS, colors.trousers)
 	_paint(SHOES, colors.shoes)
-	var parts := find_children("*", "MeshInstance3D", true, false)
-	# The face sheet has no outline: it's only the eyes.
-	parts.erase(_face)
-	InkHull.center_outlines(parts)
 	_blink_timer.timeout.connect(_toggle_blink)
 	_show_eyes()
 	_blink_timer.start(_rng.randf_range(blink_interval.x, blink_interval.y))

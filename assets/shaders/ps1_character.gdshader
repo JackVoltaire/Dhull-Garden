@@ -3,8 +3,13 @@
 // rather than smooth. Each character colors its own parts through the instance uniforms (see
 // DhullColoring): the part's color, the color it turns towards at the tips, and an optional
 // pattern. How far towards a tip each point is comes from the model's vertex color, red channel.
+// Characters have no ink lines round them, as House of Decay's have none: they mark themselves in
+// the normal-roughness buffer with CHARACTER_ROUGHNESS, and the world's ink lines
+// (ink_outlines.gdshader) leave out whatever has it. With no specular, the roughness changes
+// nothing else about how they look.
 shader_type spatial;
 
+const float CHARACTER_ROUGHNESS = 0.3;
 // Patterns, numbered as in DhullColoring.Pattern.
 const int PATTERN_DIAMONDS = 1;
 const int PATTERN_SPOTS = 2;
@@ -89,6 +94,8 @@ void fragment() {
 	float threshold = dither(FRAGCOORD.xy, VIEWPORT_SIZE);
 	vec3 color = mix(part_color.rgb, pattern_color.rgb, pattern_mask(model_position));
 	ALBEDO = mix(color, tip_color.rgb, banded(tip_amount, tip_bands, threshold));
+	SPECULAR = 0.0;
+	ROUGHNESS = CHARACTER_ROUGHNESS;
 }
 
 void light() {

@@ -4,7 +4,7 @@
 For every .glb under assets/models/, each material it uses that's named like a palette file in
 assets/materials/ (e.g. a Blender material called "toon_grass") is set to use that .tres file
 instead of the material inside the .glb. The palette is the toon_*.tres colors and the
-face_*.tres faces; the other files there, like ink_hull, are passes other materials use. This
+face_*.tres faces; any other file there would be a pass other materials use. This
 rewrites the "_subresources" line of each .glb.import file that isn't linked yet, so run it
 after Godot has imported a new model or a model uses a new palette material, then let Godot
 import again:

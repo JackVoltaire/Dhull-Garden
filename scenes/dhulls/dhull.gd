@@ -369,7 +369,6 @@ func _build_model() -> void:
 	_head_shape.name = &"Shape"
 	_head_shape.material_overlay = face_material
 	_head.add_child(_head_shape)
-	_center_outlines(body)
 	if not Engine.is_editor_hint():
 		_gaze.face = _head_shape
 		_hold(_selfie_stick, body.get_node(^"ArmRight"), stick_grip)
@@ -390,13 +389,6 @@ func _front_camera() -> Vector3:
 		phone_up = _selfie_stick.global_basis.z
 	var height := front_camera_height * size_scale()
 	return _stick_phone.global_position + phone_up.normalized() * height
-
-
-func _center_outlines(body: Node3D) -> void:
-	# Parts taken out of their models have no owner, so look at every node.
-	var parts: Array[Node] = body.find_children("*", "MeshInstance3D", true, false)
-	parts.append_array([body, _head_shape, _egg])
-	InkHull.center_outlines(parts)
 
 
 ## Puts [param thing] in [param nub], at [param grip] from its joint, turned as it was.
