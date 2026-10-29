@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DhullLifeTuning" format=3]
+
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_life_tuning.gd" id="1_tuning"]
+[ext_resource type="Script" path="res://scenes/dhulls/dhull_need_rates.gd" id="2_rates"]
+
+[sub_resource type="Resource" id="Resource_adult"]
+script = ExtResource("2_rates")
+hunger_per_hour = 0.08
+tiring_per_hour = 0.2
+resting_per_hour = 0.8
+
+[sub_resource type="Resource" id="Resource_young"]
+script = ExtResource("2_rates")
+hunger_per_hour = 0.15
+tiring_per_hour = 0.45
+resting_per_hour = 0.6
+
+[resource]
+script = ExtResource("1_tuning")
+adult_rates = SubResource("Resource_adult")
+young_rates = SubResource("Resource_young")

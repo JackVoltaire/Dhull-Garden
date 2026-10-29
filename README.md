@@ -38,6 +38,8 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   clock/            `Clock`: real-world local time, day phases, debug time travel
   calendar/         `Calendar`: dated events and seasons; CalendarEvent resource
   saves/            `Saves`: save slots, backups, migrations, time away
+  garden/           `Garden`: every Dhull's life (needs, life stage, where it is), saved and
+                    moved on with the real-world clock; NewGarden, who a new game starts with
   audio/            `Audio`: music crossfades and one-shot sounds
   scenes/           `Scenes`: fading scene changes with background loading
   minigames/        `Minigames`: launching minigames and returning results; MinigameSpot
@@ -47,6 +49,8 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
 data/               Game content as .tres resources
   events/           One CalendarEvent per file
   minigames/        One MinigameDefinition per file
+  dhulls/           Dhull colorings, and life.tres: how fast needs change and when moods show
+  garden/           new_garden.tres: the Dhulls a new game starts with
 scenes/
   main/             Entry scene: loads the save and enters the garden
   levels/           Level, the root script of walkable areas
@@ -58,7 +62,8 @@ scenes/
   player/           Player scene and its controller script
   dhulls/           The Dhull scene, its genes (DhullGenome), DhullState (which animation and
                     face show each activity and mood), its animations, DhullFace, DhullColoring
-                    and the face drawings in face/
+                    and the face drawings in face/; DhullRecord and DhullLife (a Dhull's saved
+                    life and the rules its needs follow) and DhullSpawner
   props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
@@ -150,6 +155,18 @@ above it.
   activity and mood has an animation. Walk cycles play in place: moving the Dhull is up to
   whatever makes it walk. The Dhull gallery level (F3 menu) shows every activity and mood side
   by side, and the F3 menu can set every Dhull's activity and mood.
+- **Dhull lives.** Dhulls live in the `Garden` autoload, not in level scenes: each is a
+  `DhullRecord` with its genes, coloring, life stage (young or adult), home area, needs and where
+  it was last. A level shows the Dhulls living in it with a `DhullSpawner` (named after the area,
+  like `dream_island`); Dhulls not placed yet appear at its Marker3D children. Needs (hunger,
+  tiredness, happiness, each from 0 to 1) keep going on the real-world clock: the Garden moves
+  them on a minute at a time with `DhullLife`'s rules, live, after a clock jump and for the time
+  the game was closed (up to two weeks; needs have settled by then). Dhulls nap like cats when
+  tired, the young much more; adults forage, so they get peckish but never starve; the young are
+  fed and kept happy by the most nurturing adult at home, as well as its friendliness allows, and
+  without one they starve and grow unhappy. A Dhull's mood comes from its needs
+  (`DhullLife.mood_for`), and its activity and mood pick its animation and face as before. Tune
+  it all in `data/dhulls/life.tres`. The F3 menu lists every Dhull's needs and can set them.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
   Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
   eye color show the more dominant of the two, so recessive variants can skip a generation;

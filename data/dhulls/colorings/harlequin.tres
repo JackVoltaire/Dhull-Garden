@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_script")
+id = &"harlequin"
 body_color = Color(0.78, 0.16, 0.3, 1)
 head_color = Color(0.96, 0.94, 0.9, 1)
 limb_color = Color(0.78, 0.16, 0.3, 1)

@@ -7,6 +7,10 @@ extends Node3D
 ## its [member activity] and [member mood], pick its animation and face (see DhullState); its
 ## energy sets how fast it moves. The face is drawn on the head from swappable eye and mouth
 ## images, like Wind Waker's, and the eyes blink now and then.
+##
+## A Dhull in the garden shows its [member record], the life the Garden autoload keeps for it:
+## its needs set its activity and mood (see DhullLife), and the young are smaller. Without a
+## record, as in the Dhull gallery, it shows whatever activity and mood are set on it.
 
 const BODY_MODELS: Dictionary[DhullGenome.BodyShape, PackedScene] = {
 	DhullGenome.BodyShape.BELL: preload("res://assets/models/dhull_body_bell/dhull_body_bell.glb"),
@@ -63,9 +67,18 @@ const GROUP := &"dhulls"
 			_apply_coloring()
 ## Draws the face on the head; see dhull_face.gdshader.
 @export var face_material: Material
+## How big a young Dhull is next to an adult.
+@export_range(0.3, 1.0, 0.05) var young_scale := 0.7
 ## Seconds between blinks, picked at random between x and y, and how long a blink lasts.
 @export var blink_interval := Vector2(2.0, 5.0)
 @export_range(0.05, 1.0, 0.01, "suffix:s") var blink_duration := 0.14
+
+## Its life in the garden. Set it before the Dhull enters the tree.
+var record: DhullRecord:
+	set(value):
+		record = value
+		genome = value.genome
+		coloring = value.coloring
 
 var _blinking := false
 var _until_blink_change := 0.0
@@ -85,6 +98,9 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	add_to_group(GROUP)
+	if record:
+		Garden.lives_changed.connect(_show_life)
+		_show_life()
 	_until_blink_change = _rng.randf_range(blink_interval.x, blink_interval.y)
 	# Start each Dhull at its own point in its loop, so Dhulls doing the same thing aren't in step.
 	_animation_player.seek(_rng.randf() * _animation_player.current_animation_length, true)
@@ -101,6 +117,17 @@ func _process(delta: float) -> void:
 		else:
 			_until_blink_change = _rng.randf_range(blink_interval.x, blink_interval.y)
 		_show_face()
+
+
+func _show_life() -> void:
+	var new_activity := DhullLife.activity_for(record)
+	var new_mood := DhullLife.mood_for(record, Garden.tuning)
+	# Setting either one blends into its animation again, so only change what changed.
+	if new_activity != activity:
+		activity = new_activity
+	if new_mood != mood:
+		mood = new_mood
+	_model.scale = Vector3.ONE * (young_scale if record.is_young() else 1.0)
 
 
 ## Puts the model together from the body and head its genes call for.
