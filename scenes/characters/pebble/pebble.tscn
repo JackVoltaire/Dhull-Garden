@@ -1,0 +1,95 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/characters/pebble/pebble.gd" id="1_pebble"]
+[ext_resource type="Script" path="res://systems/interaction/interactable.gd" id="2_interactable"]
+[ext_resource type="Material" path="res://assets/materials/toon_rock_dark.tres" id="3_feathers"]
+[ext_resource type="Material" path="res://assets/materials/toon_stone.tres" id="4_beak"]
+[ext_resource type="Material" path="res://assets/materials/toon_snow.tres" id="5_eyes"]
+[ext_resource type="Material" path="res://assets/materials/toon_bark.tres" id="6_crate"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_body"]
+radius = 0.32
+height = 0.7
+radial_segments = 10
+rings = 6
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+radius = 0.2
+height = 0.38
+radial_segments = 10
+rings = 6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beak"]
+top_radius = 0.0
+bottom_radius = 0.07
+height = 0.26
+radial_segments = 6
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_eye"]
+radius = 0.045
+height = 0.09
+radial_segments = 6
+rings = 3
+
+[sub_resource type="BoxMesh" id="BoxMesh_wing"]
+size = Vector3(0.06, 0.4, 0.34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_crate"]
+size = Vector3(0.7, 0.5, 0.5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 0.95
+
+[node name="Pebble" type="Node3D"]
+script = ExtResource("1_pebble")
+not_open_yet = PackedStringArray("PEBBLE_NOT_OPEN_1", "PEBBLE_NOT_OPEN_2")
+greetings = PackedStringArray("PEBBLE_HELLO_1", "PEBBLE_HELLO_2", "PEBBLE_HELLO_3")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+mesh = SubResource("SphereMesh_body")
+surface_material_override/0 = ExtResource("3_feathers")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.86, 0.04)
+mesh = SubResource("SphereMesh_head")
+surface_material_override/0 = ExtResource("3_feathers")
+
+[node name="Beak" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.84, 0.3)
+mesh = SubResource("CylinderMesh_beak")
+surface_material_override/0 = ExtResource("4_beak")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.92, 0.19)
+mesh = SubResource("SphereMesh_eye")
+surface_material_override/0 = ExtResource("5_eyes")
+
+[node name="EyeRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.92, 0.19)
+mesh = SubResource("SphereMesh_eye")
+surface_material_override/0 = ExtResource("5_eyes")
+
+[node name="WingLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.97, 0.26, 0, -0.26, 0.97, 0, 0, 0, 1, -0.33, 0.42, 0)
+mesh = SubResource("BoxMesh_wing")
+surface_material_override/0 = ExtResource("3_feathers")
+
+[node name="WingRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.97, -0.26, 0, 0.26, 0.97, 0, 0, 0, 1, 0.33, 0.42, 0)
+mesh = SubResource("BoxMesh_wing")
+surface_material_override/0 = ExtResource("3_feathers")
+
+[node name="Crate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.25, 0.1)
+mesh = SubResource("BoxMesh_crate")
+surface_material_override/0 = ExtResource("6_crate")
+
+[node name="Talk" type="Area3D" parent="."]
+script = ExtResource("2_interactable")
+prompt = "PROMPT_TALK"
+
+[node name="Shape" type="CollisionShape3D" parent="Talk"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+shape = SubResource("SphereShape3D_reach")

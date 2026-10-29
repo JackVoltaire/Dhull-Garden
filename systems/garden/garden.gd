@@ -30,6 +30,8 @@ var dhulls: Array[DhullRecord] = []
 var mess: Array[MessRecord] = []
 ## Whether Lulla has handed the dreamer their first egg yet.
 var first_egg_given := false
+## The local day the garden was started on, as a DateUtil day number.
+var started_on_day := 0
 
 var _colorings: Dictionary[StringName, DhullColoring] = {}
 ## Unix time up to which the Dhulls' lives have been worked out.
@@ -116,6 +118,11 @@ func clean_up(bit: MessRecord) -> void:
 	mess_changed.emit(bit.area)
 
 
+## Which day of the garden it is in local time, counting the day it was started as 1.
+func day_of_garden() -> int:
+	return _today() - started_on_day + 1
+
+
 ## Moves every Dhull's life on to the clock's current time.
 func catch_up() -> void:
 	advance_to(Clock.now_unix())
@@ -172,6 +179,7 @@ func get_save_data() -> Dictionary:
 		"next_mess_number": _next_mess_number,
 		"untended_hours": untended_hours,
 		"first_egg_given": first_egg_given,
+		"started_on_day": started_on_day,
 	}
 
 
@@ -188,6 +196,8 @@ func apply_save_data(data: Dictionary) -> void:
 		_next_number = int(data.get("next_number", dhulls.size() + 1))
 		# Gardens saved before Lulla handed out eggs already have their Dhulls.
 		first_egg_given = data.get("first_egg_given", not dhulls.is_empty()) == true
+		# Gardens saved before the day was counted are at least a day old.
+		started_on_day = int(data.get("started_on_day", _today() - 1))
 		_load_mess(data)
 		_simulated_until = int(data.get("simulated_until", Clock.now_unix()))
 		catch_up()
@@ -199,6 +209,7 @@ func _start_new_garden() -> void:
 	dhulls.clear()
 	_next_number = 1
 	first_egg_given = false
+	started_on_day = _today()
 	mess.clear()
 	_next_mess_number = 1
 	_untended_hours.clear()
@@ -243,3 +254,8 @@ func _leave_untended(young: DhullRecord, hours: float) -> void:
 		untended -= mess_tuning.hours_per_mess
 		make_mess_near(young)
 	_untended_hours[young.home_area] = untended
+
+
+func _today() -> int:
+	var now := Clock.now_local()
+	return DateUtil.day_number(now.year, now.month, now.day)

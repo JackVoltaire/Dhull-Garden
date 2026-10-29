@@ -175,3 +175,14 @@ func _only_young() -> Array[DhullRecord]:
 			young.append(record)
 	_garden.dhulls.assign(young)
 	return young
+
+
+func test_the_garden_counts_its_days_from_one() -> void:
+	var offset_before := Clock.offset_seconds
+	var fresh: Node = GARDEN_SCRIPT.new()
+	fresh.apply_save_data({})
+	assert_eq(fresh.day_of_garden(), 1)
+	Clock.offset_seconds += DateUtil.SECONDS_PER_DAY
+	assert_eq(fresh.day_of_garden(), 2)
+	Clock.offset_seconds = offset_before
+	fresh.free()

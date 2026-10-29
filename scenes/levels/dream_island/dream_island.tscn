@@ -30,6 +30,7 @@
 [ext_resource type="NavigationMesh" path="res://scenes/levels/dream_island/dream_island_navigation.tres" id="28_navigation"]
 [ext_resource type="Script" path="res://scenes/props/mess/mess_spawner.gd" id="29_mess_spawner"]
 [ext_resource type="PackedScene" path="res://scenes/characters/lulla/lulla.tscn" id="30_lulla"]
+[ext_resource type="PackedScene" path="res://scenes/characters/pebble/pebble.tscn" id="31_pebble"]
 
 [sub_resource type="Gradient" id="Gradient_sky_top"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.33, 0.72, 0.78, 0.86, 1)
@@ -281,6 +282,9 @@ script = ExtResource("29_mess_spawner")
 
 [node name="Lulla" parent="." instance=ExtResource("30_lulla")]
 transform = Transform3D(0.94, 0, 0.342, 0, 1, 0, -0.342, 0, 0.94, 1.6, 0.44, 5.2)
+
+[node name="Pebble" parent="." instance=ExtResource("31_pebble")]
+transform = Transform3D(0.94, 0, -0.342, 0, 1, 0, 0.342, 0, 0.94, -2.2, 0.44, 4.9)
 
 [node name="InkOutlines" parent="." instance=ExtResource("20_ink")]
 

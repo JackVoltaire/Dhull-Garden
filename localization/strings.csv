@@ -58,3 +58,16 @@ UI_WALL_CAVED_IN,The wall caved in.
 UI_DUG_OUT_EVERYTHING,You dug out everything.
 UI_LEFT_THE_WALL,You left the rest in the wall.
 UI_DONE,Done
+CHARACTER_PEBBLE,Pebble
+"PEBBLE_NOT_OPEN_1","Oh! Oh no, a customer. I'm not open yet. Tomorrow! Probably tomorrow."
+"PEBBLE_NOT_OPEN_2","Everything's still in boxes. Don't look at the boxes."
+"PEBBLE_HELLO_1","H-hi. Welcome. Buying? Selling? Either is fine. Both is scary."
+"PEBBLE_HELLO_2","Shiny things? You have shiny things? I mean. Normal prices. Very normal."
+"PEBBLE_HELLO_3","Quick, before anyone sees. I mean, hello."
+UI_PEBBLES_SHOP,Pebble's
+UI_BUY,Buy
+UI_SELL,Sell
+UI_CLOSE,Close
+UI_PRICE,%s: %d
+UI_SELL_PRICE,%s ×%d: %d each
+UI_NOTHING_TO_SELL,Nothing in your pockets

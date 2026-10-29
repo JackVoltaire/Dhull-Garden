@@ -44,6 +44,7 @@ var _carried_from: Node
 @onready var _carry_point: Marker3D = $Model/CarryPoint
 @onready var _care_menu: CareMenu = %CareMenu
 @onready var _dialogue_box: DialogueBox = %DialogueBox
+@onready var _shop_menu: ShopMenu = %ShopMenu
 
 
 func _ready() -> void:
@@ -101,6 +102,11 @@ func _physics_process(delta: float) -> void:
 ## [param when_done]. The dreamer only listens.
 func listen(speaker: String, lines: PackedStringArray, when_done := Callable()) -> void:
 	_dialogue_box.say(self, speaker, lines, when_done)
+
+
+## Opens Pebble's shop.
+func shop() -> void:
+	_shop_menu.open(self)
 
 
 ## Opens the care menu for [param dhull].

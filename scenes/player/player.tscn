@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/care_menu/care_menu.tscn" id="3_care_menu"]
 [ext_resource type="Script" path="res://scenes/ui/hud/money_label.gd" id="4_money"]
 [ext_resource type="PackedScene" path="res://scenes/ui/dialogue_box/dialogue_box.tscn" id="5_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/ui/shop_menu/shop_menu.tscn" id="6_shop"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
@@ -106,4 +107,7 @@ script = ExtResource("4_money")
 unique_name_in_owner = true
 
 [node name="DialogueBox" parent="Hud" instance=ExtResource("5_dialogue")]
+unique_name_in_owner = true
+
+[node name="ShopMenu" parent="Hud" instance=ExtResource("6_shop")]
 unique_name_in_owner = true

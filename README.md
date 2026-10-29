@@ -79,7 +79,8 @@ scenes/
   ui/care_menu/     The menu for petting, feeding and picking up a Dhull
   ui/hud/           Bits of the player's HUD, like the money label
   ui/dialogue_box/  What characters say to the dreamer, a line at a time
-  characters/       The island's characters: lulla/ so far, with placeholder looks
+  characters/       The island's characters, lulla/ and pebble/, with placeholder looks
+  ui/shop_menu/     Pebble's shop: buy and sell, one at a time
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
@@ -224,7 +225,9 @@ above it.
   and for food and drink how much it fills, cheers and wakes a Dhull. The `Inventory` autoload
   counts what the player holds by id and keeps their money; `held()` lists it, `add()`,
   `take()`, `earn()` and `spend()` change it, and `changed` tells the HUD. A test checks every
-  item has a name and that Pebble never pays more for an item than he asks.
+  item has a name and that Pebble never pays more for an item than he asks. Pebble opens his
+  shop on the garden's second day (`Garden.day_of_garden()`, counting from 1) and sells every
+  item with a buy price; `ShopTrade` holds the buying and selling.
 - **Caring in person.** Walking up to a Dhull shows "[E] Care for", which opens the care menu:
   pet it, feed it something edible from your pockets, or pick it up. There's nothing to say:
   words only go through the feed. `DhullCare` holds the rules. Most Dhulls love being petted,
