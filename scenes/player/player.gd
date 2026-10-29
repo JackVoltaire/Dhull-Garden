@@ -6,8 +6,8 @@ extends CharacterBody3D
 ## The body itself never rotates. [code]Model[/code] turns to face the movement direction
 ## and [code]CameraPivot[/code] turns with the camera, so the two stay independent.
 ##
-## The player cares for Dhulls in person through the care menu, and can carry one in front of
-## them and put it down again.
+## The player cares for Dhulls in person through the care menu, and can carry one on their
+## shoulders and put it down again. The phone button opens their phone and its feed.
 
 @export_group("Movement")
 @export var walk_speed := 5.0
@@ -44,6 +44,9 @@ var _carried_from: Node
 @onready var _carry_point: Marker3D = $Model/CarryPoint
 @onready var _care_menu: CareMenu = %CareMenu
 @onready var _dialogue_box: DialogueBox = %DialogueBox
+@onready var _shop_menu: ShopMenu = %ShopMenu
+@onready var _phone: Phone = %Phone
+@onready var _name_prompt: NamePrompt = %NamePrompt
 
 
 func _ready() -> void:
@@ -52,6 +55,10 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if busy:
+		return
+	if event.is_action_pressed("phone"):
+		get_viewport().set_input_as_handled()
+		_phone.open(self)
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		# screen_relative ignores window stretching, so sensitivity doesn't change with window size.
@@ -101,6 +108,16 @@ func _physics_process(delta: float) -> void:
 ## [param when_done]. The dreamer only listens.
 func listen(speaker: String, lines: PackedStringArray, when_done := Callable()) -> void:
 	_dialogue_box.say(self, speaker, lines, when_done)
+
+
+## Asks the dreamer to name [param dhull].
+func name_dhull(dhull: Dhull) -> void:
+	_name_prompt.open(dhull, self)
+
+
+## Opens Pebble's shop.
+func shop() -> void:
+	_shop_menu.open(self)
 
 
 ## Opens the care menu for [param dhull].

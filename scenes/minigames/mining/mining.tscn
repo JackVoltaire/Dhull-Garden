@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/minigames/mining/mining.gd" id="1_mining"]
+[ext_resource type="Script" path="res://scenes/minigames/mining/dig_board.gd" id="2_board"]
+[ext_resource type="Resource" path="res://data/mining/mining.tres" id="3_tuning"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_tools"]
+
+[node name="Mining" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mining")
+tuning = ExtResource("3_tuning")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.07, 0.14, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Column" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Board" type="Control" parent="Center/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("2_board")
+
+[node name="Tools" type="HBoxContainer" parent="Center/Column"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Pick" type="Button" parent="Center/Column/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_tools")
+text = "UI_PICK"
+
+[node name="Hammer" type="Button" parent="Center/Column/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+button_group = SubResource("ButtonGroup_tools")
+text = "UI_HAMMER"
+
+[node name="WallLabel" type="Label" parent="Center/Column/Tools"]
+layout_mode = 2
+text = "UI_WALL"
+
+[node name="Wall" type="ProgressBar" parent="Center/Column/Tools"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+show_percentage = false
+
+[node name="Leave" type="Button" parent="Center/Column/Tools"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "UI_LEAVE"
+
+[node name="Found" type="Label" parent="Center/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="End" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -60.0
+offset_right = 180.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Column" type="VBoxContainer" parent="End"]
+layout_mode = 2
+alignment = 1
+
+[node name="EndMessage" type="Label" parent="End/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Done" type="Button" parent="End/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "UI_DONE"

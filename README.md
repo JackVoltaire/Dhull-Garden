@@ -24,6 +24,7 @@ files move. The `*.translation` files generated from `localization/strings.csv` 
 | Jump       | Space              | A / Cross    |
 | Sprint     | Shift (hold)       | L3 (hold)    |
 | Interact   | E                  | X / Square   |
+| Phone      | Tab                | Back / Select |
 | Pause      | Esc                | Start        |
 | Debug menu | F3 (debug builds)  |              |
 
@@ -39,6 +40,7 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   calendar/         `Calendar`: dated events and seasons; CalendarEvent resource
   saves/            `Saves`: save slots, backups, migrations, time away
   inventory/        `Inventory`: the player's pockets and money; ItemDefinition, one kind of item
+  feed/             `Feed`: what Dhulls post and the player's reactions; DhullPosting, the rules
   garden/           `Garden`: every Dhull's life (needs, life stage, where it is) and the mess
                     in the garden, saved and moved on with the real-world clock; NewGarden, who a
                     new game starts with; MessRecord and MessTuning
@@ -52,6 +54,7 @@ data/               Game content as .tres resources
   events/           One CalendarEvent per file
   minigames/        One MinigameDefinition per file
   items/            One ItemDefinition per file: materials, food and drinks
+  mining/           mining.tres, the mining minigame's tuning, and finds/, what can be dug up
   dhulls/           Dhull colorings; life.tres, how fast needs change and when moods show;
                     habits.tres, what Dhulls do in each mood
   garden/           new_garden.tres, the Dhulls a new game starts with; mess.tres, how fast the
@@ -70,6 +73,7 @@ scenes/
                     and the face drawings in face/; DhullRecord and DhullLife (a Dhull's saved
                     life and the rules its needs follow), DhullHabits and DhullBrain (what it
                     does in each mood, and walking it there) and DhullSpawner
+  minigames/mining/ The mining minigame: DigSite (the wall's rules), DigBoard (drawing it)
   props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/, and
                     mess/ (a bit of mess, and the MessSpawner that shows an area's mess)
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
@@ -77,7 +81,10 @@ scenes/
   ui/care_menu/     The menu for petting, feeding and picking up a Dhull
   ui/hud/           Bits of the player's HUD, like the money label
   ui/dialogue_box/  What characters say to the dreamer, a line at a time
-  characters/       The island's characters: lulla/ so far, with placeholder looks
+  characters/       The island's characters, lulla/ and pebble/, with placeholder looks
+  ui/shop_menu/     Pebble's shop: buy and sell, one at a time
+  ui/phone/         The dreamer's phone: the feed, post cards and the selfie studio
+  ui/name_prompt/   Naming a newly hatched Dhull
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
@@ -123,6 +130,16 @@ above it.
   player to the exact spot they left from and emits `minigame_finished` with the result. Code
   can also call `Minigames.launch(definition, context)` directly. Running a minigame scene on
   its own with F6 restarts it when it finishes.
+- **Mining.** Shiny spots open the mining minigame, a dig like Pokémon Diamond and Pearl's: a
+  wall of cells under a few layers of rock, with crafting materials buried in it. The pick knocks
+  two layers off a cell and one off its four neighbours; the hammer knocks two off a 3x3 patch
+  but shakes the wall twice as hard. When the wall caves in or the player leaves, whatever is
+  dug out completely goes into their pockets. `DigSite` holds the rules, with no engine calls;
+  each find is a `DigFind` in `data/mining/finds/` (the item, the cells it covers, how common it
+  is), and `data/mining/mining.tres` tunes the wall. The colors are placeholders.
+- **Spots that refresh every day.** A `MinigameSpot` with `once_a_day` and a stable `spot_id`
+  can be used once each real-world day: `Minigames` remembers which spots were used and on what
+  local date, saves it, and the spot hides until the next day.
 - **Scenes.** Change scenes with `Scenes.change_scene(path, params)`. If the new scene's root
   has `setup(params: Dictionary)`, it gets `params` before `_ready()`.
 - **Settings.** `Settings.get_value("audio/music_volume")` and `set_value()`; every setting
@@ -203,6 +220,16 @@ above it.
   `dhull_face.gdshader`). The weather and symbols are cutout drawings in
   `scenes/dhulls/weather/` and `scenes/dhulls/reactions/`, placeholders like the rest. The F3
   menu can pop any reaction.
+- **The feed.** The phone button (Tab) opens the dreamer's phone. Its feed is the only way
+  Dhulls talk to them: grown Dhulls post when their mood swings, when they doze off or wake up,
+  when they eat, at 3am and in the morning, never more often than every 45 minutes
+  (`data/feed/feed.tres`). Each post has a selfie, taken by `SelfieStudio`, a SubViewport that
+  poses the Dhull in its mood beside a drawing of what it's about. The player reacts once per
+  post with a like, a heart, a sad face or an angry face, and `DhullPosting` decides how the
+  Dhull takes it: bold Dhulls want a rise out of you, friendly ones sympathy, and the rest for
+  you to match their vibe. The right reaction lifts its mood and bond; the wrong one stings. The
+  words are translation keys `POST_<TOPIC>_<n>`, placeholders in a Dhull's voice. A hatched Dhull
+  is named the first time the dreamer cares for it, the one thing they ever type.
 - **Characters.** A character is a scene in `scenes/characters/` with an `Interactable` for "[E]
   Talk to". What it says is translation keys in exported lists, shown with `Player.listen()` in
   the dialogue box; the dreamer only listens, and Interact moves on a line. Lulla's lines are
@@ -212,7 +239,9 @@ above it.
   and for food and drink how much it fills, cheers and wakes a Dhull. The `Inventory` autoload
   counts what the player holds by id and keeps their money; `held()` lists it, `add()`,
   `take()`, `earn()` and `spend()` change it, and `changed` tells the HUD. A test checks every
-  item has a name and that Pebble never pays more for an item than he asks.
+  item has a name and that Pebble never pays more for an item than he asks. Pebble opens his
+  shop on the garden's second day (`Garden.day_of_garden()`, counting from 1) and sells every
+  item with a buy price; `ShopTrade` holds the buying and selling.
 - **Caring in person.** Walking up to a Dhull shows "[E] Care for", which opens the care menu:
   pet it, feed it something edible from your pockets, or pick it up. There's nothing to say:
   words only go through the feed. `DhullCare` holds the rules. Most Dhulls love being petted,
