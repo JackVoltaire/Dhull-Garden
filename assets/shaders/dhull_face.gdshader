@@ -15,10 +15,11 @@
 shader_type spatial;
 render_mode unshaded, depth_draw_never, cull_back, shadows_disabled;
 
-uniform sampler2D eye_whites : source_color, filter_nearest_mipmap, repeat_disable;
-uniform sampler2D irises : source_color, filter_nearest_mipmap, repeat_disable;
-uniform sampler2D eye_lines : source_color, filter_nearest_mipmap, repeat_disable;
-uniform sampler2D mouths : source_color, filter_nearest_mipmap, repeat_disable;
+// A face without some drawings, like the dreamer's without mouths, shows nothing there.
+uniform sampler2D eye_whites : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
+uniform sampler2D irises : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
+uniform sampler2D eye_lines : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
+uniform sampler2D mouths : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
 uniform int eye_frames = 10;
 uniform int eye_colors = 6;
 uniform int mouth_frames = 2;

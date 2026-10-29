@@ -1,8 +1,11 @@
 class_name DreamerModel
 extends Node3D
 ## The dreamer's model (assets/models/dreamer/): shows their look, the hair of the length they
-## picked in the color they picked, colors the rest of them, paints their sleepy face on and
-## blinks, and stands idle or walks as they move.
+## picked in the color they picked, colors the rest of them, paints their sleepy face on the flat
+## sheet in front of their head and blinks, and stands idle or walks as they move.
+
+## The dreamer's own eye drawings, in the order of the frames in scenes/player/face/.
+enum Eyes { SLEEPY, CLOSED }
 
 ## The hair of each length; only the chosen one shows.
 const HAIRS: Dictionary[DreamerLook.HairLength, NodePath] = {
@@ -16,6 +19,8 @@ const SKIN: Array[NodePath] = [
 const HOODIE: Array[NodePath] = [^"Body", ^"Body/SleeveLeft", ^"Body/SleeveRight"]
 const TROUSERS: Array[NodePath] = [^"Body/LegLeft", ^"Body/LegRight"]
 const SHOES: Array[NodePath] = [^"Body/LegLeft/ShoeLeft", ^"Body/LegRight/ShoeRight"]
+## The flat sheet in front of the head the face is painted on, like glasses.
+const FACE := ^"Body/Head/Face"
 ## The parts every animation moves.
 const ANIMATED_TRACKS: Array[NodePath] = [
 	^"Body:position",
@@ -28,11 +33,6 @@ const ANIMATED_TRACKS: Array[NodePath] = [
 ]
 
 @export var colors: DreamerColors
-## Draws the face on the head; see dhull_face.gdshader.
-@export var face_material: Material
-## Their eyes: sleepy, under heavy lids.
-@export var eye_style := DhullFace.EyeStyle.DROOPY
-@export var eye_color := DhullGenome.EyeColor.SILVER
 ## Seconds between blinks, picked at random between x and y, and how long a blink lasts.
 @export var blink_interval := Vector2(2.0, 5.0)
 @export_range(0.05, 1.0, 0.01, "suffix:s") var blink_duration := 0.14
@@ -45,22 +45,23 @@ const ANIMATED_TRACKS: Array[NodePath] = [
 var _blinking := false
 var _rng := RandomNumberGenerator.new()
 
-@onready var _head: MeshInstance3D = $Body/Head
+@onready var _face: MeshInstance3D = get_node(FACE)
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
 @onready var _blink_timer: Timer = $BlinkTimer
 
 
 func _ready() -> void:
 	_rng.randomize()
-	_head.material_overlay = face_material
 	# A shut mouth doesn't show.
-	_head.set_instance_shader_parameter(&"mouth_frame", DhullFace.NO_MOUTH)
-	_head.set_instance_shader_parameter(&"eye_color", eye_color)
+	_face.set_instance_shader_parameter(&"mouth_frame", DhullFace.NO_MOUTH)
 	_paint(SKIN, colors.skin)
 	_paint(HOODIE, colors.hoodie)
 	_paint(TROUSERS, colors.trousers)
 	_paint(SHOES, colors.shoes)
-	InkHull.center_outlines(find_children("*", "MeshInstance3D", true, false))
+	var parts := find_children("*", "MeshInstance3D", true, false)
+	# The face sheet has no outline: it's only the eyes.
+	parts.erase(_face)
+	InkHull.center_outlines(parts)
 	_blink_timer.timeout.connect(_toggle_blink)
 	_show_eyes()
 	_blink_timer.start(_rng.randf_range(blink_interval.x, blink_interval.y))
@@ -95,8 +96,7 @@ func _toggle_blink() -> void:
 
 
 func _show_eyes() -> void:
-	var eyes := DhullFace.eyes_for(DhullFace.Emotion.NEUTRAL, eye_style, _blinking)
-	_head.set_instance_shader_parameter(&"eye_frame", eyes)
+	_face.set_instance_shader_parameter(&"eye_frame", Eyes.CLOSED if _blinking else Eyes.SLEEPY)
 
 
 func _paint(parts: Array[NodePath], color: Color) -> void:

@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" path="res://assets/models/dreamer/dreamer.glb" id="10_dreamer"]
 [ext_resource type="Script" path="res://scenes/player/dreamer_model.gd" id="11_dreamer_model"]
 [ext_resource type="Resource" path="res://data/dreamer/colors.tres" id="12_colors"]
-[ext_resource type="Material" path="res://scenes/player/dreamer_face.tres" id="13_face"]
 [ext_resource type="AnimationLibrary" path="res://scenes/player/dreamer_animations.tres" id="14_animations"]
 [ext_resource type="PackedScene" path="res://scenes/ui/look_menu/look_menu.tscn" id="15_look_menu"]
 
@@ -40,7 +39,6 @@ shape = SubResource("CapsuleShape3D_body")
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 script = ExtResource("11_dreamer_model")
 colors = ExtResource("12_colors")
-face_material = ExtResource("13_face")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Model/Dreamer"]
 libraries = {

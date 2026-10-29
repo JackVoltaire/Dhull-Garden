@@ -74,7 +74,7 @@ func test_every_hair_color_has_a_color() -> void:
 ## DreamerModel finds the parts it colors and the hair it shows by name in the model.
 func test_the_model_has_every_part_the_dreamer_shows() -> void:
 	var model: Node3D = load(MODEL_PATH).instantiate()
-	var parts: Array[NodePath] = []
+	var parts: Array[NodePath] = [DreamerModel.FACE]
 	parts.append_array(DreamerModel.HAIRS.values())
 	for group in [
 		DreamerModel.SKIN, DreamerModel.HOODIE, DreamerModel.TROUSERS, DreamerModel.SHOES

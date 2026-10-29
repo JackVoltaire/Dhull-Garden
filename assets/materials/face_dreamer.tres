@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/dhull_face.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://scenes/player/face/dreamer_eye_whites.png" id="2_whites"]
+[ext_resource type="Texture2D" path="res://scenes/player/face/dreamer_irises.png" id="3_irises"]
+[ext_resource type="Texture2D" path="res://scenes/player/face/dreamer_eye_lines.png" id="4_lines"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/eye_whites = ExtResource("2_whites")
+shader_parameter/irises = ExtResource("3_irises")
+shader_parameter/eye_lines = ExtResource("4_lines")
+shader_parameter/eye_frames = 2
+shader_parameter/eye_colors = 1
+shader_parameter/eyes_center = Vector2(0, -0.1)
+shader_parameter/eyes_size = Vector2(0.44, 0.275)
+shader_parameter/eyes_apart = 0.07

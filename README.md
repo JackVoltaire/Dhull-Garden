@@ -248,10 +248,13 @@ above it.
   is named the first time the dreamer cares for it, the one thing they ever type.
 - **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
   Decay's characters: a low-poly chibi with hard facets, in an oversized hoodie and platform
-  boots, with hair in angular locks, one falling over an eye. Their face is painted on by
-  `dhull_face.gdshader` with the Dhulls' drawings (sleepy droopy eyes, silver irises, eye bags),
-  sized and placed for their head in `scenes/player/dreamer_face.tres` (`eyes_apart` spaces the
-  two eyes wider than the drawings without stretching them), and they blink. `DreamerModel` shows
+  boots. Each hair length is one continuous mass, a shell over the head breaking into spikes and
+  curls at its hem, with a lock of the fringe over one eye. As in House of Decay, the face is a
+  flat sheet standing straight in front of the head, like glasses (`Face`), painted by
+  `dhull_face.gdshader` through `assets/materials/face_dreamer.tres` with the dreamer's own
+  drawings in `scenes/player/face/`: tired eyes under a heavy lid, dull irises, smoky shadow and
+  bags, in the order of `DreamerModel.Eyes`. `eyes_apart` spaces the two eyes wider than the
+  drawings without stretching them, and they blink. `DreamerModel` shows
   the hair of the chosen length (`HairShort`, `HairMedium`, `HairLong`) in the chosen color,
   colors the rest from `data/dreamer/colors.tres` (`DreamerColors`), and plays `idle` or `walk`
   (`scenes/player/dreamer_animations.tres`), the walk sped up to match how fast they go. The
@@ -378,9 +381,9 @@ uses. Godot is set not to read `.blend` files itself, so the project works on ma
 Blender.
 
 1. Edit or create `<name>.blend`.
-2. Name each material after a palette file in `assets/materials/`, one of the `toon_*.tres`, such
-   as `toon_grass` or `toon_bark`. Godot then uses the shared toon material instead of the
-   Blender one.
+2. Name each material after a palette file in `assets/materials/`: one of the `toon_*.tres`,
+   such as `toon_grass` or `toon_bark`, or a `face_*.tres` for a face the face shader paints.
+   Godot then uses that material instead of the Blender one.
 3. Name objects with a collision suffix where needed: `-col` (the mesh plus matching collision),
    `-convcol` (the mesh plus simpler convex collision), or `-colonly` / `-convcolonly` (an
    invisible collider only).
