@@ -248,7 +248,7 @@ above it.
   is named the first time the dreamer cares for it, the one thing they ever type.
 - **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
   Decay's characters: a low-poly chibi with hard facets, in an oversized hoodie and platform
-  boots, with a wide head on a short neck, its flat face narrowing to a small chin. The skin is
+  boots, with a wide, boxy head on a short neck: a flat face and a flat bottom. The skin is
   shaded the way House of Decay's faces are painted, darker to the sides, down the jaw and under
   the fringe, through its "Tip" vertex color and `DreamerColors.skin_shade`. Each hair length is one
   continuous mass, a shell over the head breaking into spikes and curls at its hem, with a short
