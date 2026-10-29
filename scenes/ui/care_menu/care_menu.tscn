@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/care_menu/care_menu.gd" id="1_care_menu"]
+
+[node name="CareMenu" type="PanelContainer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -320.0
+offset_right = 120.0
+offset_bottom = -110.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_care_menu")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Actions" type="VBoxContainer" parent="Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Pet" type="Button" parent="Margin/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "UI_PET"
+
+[node name="Feed" type="Button" parent="Margin/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "UI_FEED"
+
+[node name="PickUp" type="Button" parent="Margin/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "UI_PICK_UP"
+
+[node name="Leave" type="Button" parent="Margin/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "UI_LEAVE"
+
+[node name="Foods" type="VBoxContainer" parent="Margin"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2

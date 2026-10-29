@@ -1,6 +1,7 @@
 extends CanvasLayer
 ## Developer tools, toggled with F3 (the debug_menu action): time travel, calendar state,
-## saving and loading, switching levels, launching minigames, and Dhulls' genes and needs.
+## saving and loading, switching levels, launching minigames, Dhulls' genes and needs, mess and
+## the player's pockets.
 ## Registered as the [code]DebugMenu[/code] autoload and removed in release builds.
 
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -41,6 +42,9 @@ func _ready() -> void:
 
 	var dhull_row := _add_row("Dhulls")
 	_add_button(dhull_row, "New random genes", _reroll_dhulls)
+	_add_button(dhull_row, "Add an egg", _add_dhull.bind(DhullRecord.LifeStage.EGG))
+	_add_button(dhull_row, "Add a kid", _add_dhull.bind(DhullRecord.LifeStage.YOUNG))
+	_add_button(dhull_row, "Add an adult", _add_dhull.bind(DhullRecord.LifeStage.ADULT))
 	var needs_row := _add_row("Dhull needs")
 	_add_button(needs_row, "Starving", _change_needs.bind(_starve))
 	_add_button(needs_row, "Fed", _change_needs.bind(_feed))
@@ -48,6 +52,12 @@ func _ready() -> void:
 	_add_button(needs_row, "Rested", _change_needs.bind(_rest))
 	_add_button(needs_row, "Happy", _change_needs.bind(_cheer_up))
 	_add_button(needs_row, "Unhappy", _change_needs.bind(_sadden))
+	var pockets_row := _add_row("Pockets")
+	_add_button(pockets_row, "+100 money", Inventory.earn.bind(100))
+	_add_button(pockets_row, "One of every item", _fill_pockets)
+	var mess_row := _add_row("Garden")
+	_add_button(mess_row, "Make a mess", _make_mess)
+	_add_button(mess_row, "Clean it all up", _clean_up_mess)
 	var reaction_row := _add_row("Dhull reactions")
 	_add_button(reaction_row, "Eye", _react.bind(DhullReaction.Symbol.EYE))
 	_add_button(reaction_row, "Star", _react.bind(DhullReaction.Symbol.STAR))
@@ -156,10 +166,31 @@ func _reroll_dhulls() -> void:
 			dhull.record.genome = dhull.genome
 
 
+func _add_dhull(life_stage: DhullRecord.LifeStage) -> void:
+	Garden.add_dhull(life_stage, Garden.new_garden.home_area)
+
+
 ## Sets a property, such as activity or mood, on every Dhull in the level.
 func _set_dhulls(property: StringName, value: int) -> void:
 	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
 		dhull.set(property, value)
+
+
+func _fill_pockets() -> void:
+	for id in Inventory.definitions:
+		Inventory.add(id)
+
+
+## Leaves a bit of mess near every young Dhull, as if no adult had looked after them.
+func _make_mess() -> void:
+	for record in Garden.dhulls:
+		if record.is_young():
+			Garden.make_mess_near(record)
+
+
+func _clean_up_mess() -> void:
+	for bit in Garden.mess.duplicate():
+		Garden.clean_up(bit)
 
 
 func _react(symbol: DhullReaction.Symbol, gloomy := false) -> void:

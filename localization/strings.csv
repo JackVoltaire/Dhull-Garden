@@ -14,3 +14,36 @@ UI_INTERACT_PROMPT,[%s] %s
 PROMPT_INTERACT,Interact
 PROMPT_DIG,Dig
 PROMPT_PLAY,Play
+PROMPT_CLEAN_UP,Clean up
+ITEM_STONE,Stone
+ITEM_CLAY,Clay
+ITEM_SCRAP,Scrap
+ITEM_CRYSTAL,Crystal
+ITEM_CHIPS,Chips
+ITEM_INSTANT_NOODLES,Instant noodles
+ITEM_CANDY,Candy
+ITEM_BERRIES,Berries
+ITEM_WARM_MILK,Warm milk
+ITEM_HERBAL_TEA,Herbal tea
+ITEM_COFFEE,Coffee
+ITEM_ENERGY_DRINK,Energy drink
+UI_MONEY,Money: %d
+PROMPT_CARE,Care for
+PROMPT_PUT_DOWN,Put down
+UI_PET,Pet
+UI_FEED,Feed
+UI_PICK_UP,Pick up
+UI_LEAVE,Leave
+UI_BACK,Back
+UI_NOTHING_TO_EAT,Nothing to eat in your pockets
+UI_ITEM_COUNT,%s ×%d
+PROMPT_TALK,Talk to
+CHARACTER_LULLA,Lulla
+"LULLA_FIRST_1","...mm? Oh. A dreamer. You're early. Or late. It's hard to tell in here."
+"LULLA_FIRST_2","Someone left this for you. Or for whoever came next. Same thing, really."
+"LULLA_FIRST_3","Hold it gently. It hatches tomorrow, I think. Things here keep their own hours."
+"LULLA_FIRST_4","Come back often. Little ones get lonely when nobody's... zzz..."
+"LULLA_MUMBLE_1","...five more minutes..."
+"LULLA_MUMBLE_2","The clouds hum when you're not looking. Don't tell them I said that."
+"LULLA_MUMBLE_3","You again. Or still. ...zzz."
+"LULLA_MUMBLE_4","Is it day? Feels like day. Feels like everything, honestly."

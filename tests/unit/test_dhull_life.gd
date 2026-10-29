@@ -176,3 +176,31 @@ func _adult_with_friendliness(friendliness: int) -> DhullRecord:
 func _live(record: DhullRecord, hours: float, carer: DhullRecord = null) -> void:
 	for _minute in roundi(hours * 60.0):
 		DhullLife.advance(record, 1.0 / 60.0, carer, _tuning)
+
+
+func test_eggs_hatch_after_a_day_and_have_no_needs_till_then() -> void:
+	var egg := _dhull(DhullRecord.LifeStage.EGG)
+	_live(egg, _tuning.hatch_after_hours - 1.0)
+	assert_true(egg.is_egg(), "not yet")
+	assert_eq(egg.hunger, 0.0)
+	assert_eq(egg.tiredness, 0.0)
+	# A minute more, since many small steps can add up to a hair under the hour.
+	_live(egg, 1.0 + 1.0 / 60.0)
+	assert_true(egg.is_young(), "hatched")
+
+
+func test_kids_grow_up_after_their_kid_phase() -> void:
+	var kid := _dhull(DhullRecord.LifeStage.YOUNG)
+	kid.age_hours = _tuning.hatch_after_hours
+	_live(kid, _tuning.kid_phase_hours - 1.0, _adult_with_friendliness(50))
+	assert_true(kid.is_young(), "not yet")
+	_live(kid, 1.0 + 1.0 / 60.0, _adult_with_friendliness(50))
+	assert_true(kid.is_adult(), "grown up")
+
+
+func test_only_adults_look_after_the_young() -> void:
+	var young := _dhull(DhullRecord.LifeStage.YOUNG)
+	var egg := _dhull(DhullRecord.LifeStage.EGG)
+	var other_kid := _dhull(DhullRecord.LifeStage.YOUNG)
+	var garden: Array[DhullRecord] = [young, egg, other_kid]
+	assert_true(DhullLife.carer_for(young, garden) == null, "eggs and kids are no carers")

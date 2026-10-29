@@ -4,6 +4,12 @@ extends Resource
 ## young, and at what levels each mood shows. Needs run from 0 to 1; see DhullRecord. The tuning
 ## the game uses is data/dhulls/life.tres.
 
+@export_group("Growing up")
+## Real hours from being laid to hatching.
+@export_range(0.0, 240.0, 0.5, "suffix:h") var hatch_after_hours := 24.0
+## Real hours a hatched Dhull spends as a kid before it's grown.
+@export_range(0.0, 2000.0, 1.0, "suffix:h") var kid_phase_hours := 168.0
+
 @export_group("Needs")
 @export var adult_rates: DhullNeedRates
 @export var young_rates: DhullNeedRates
@@ -46,3 +52,18 @@ extends Resource
 @export_range(0.0, 1.0, 0.01) var playful_below_tiredness := 0.3
 ## Boldness, from 0 to 1, from which an unhappy Dhull turns grumpy instead of sad.
 @export_range(0.0, 1.0, 0.01) var grumpy_from_boldness := 0.5
+
+@export_group("Care from the player")
+## How much happier petting makes a Dhull that welcomes it, and how much closer it grows to you.
+@export_range(0.0, 1.0, 0.01) var pet_cheers := 0.08
+@export_range(0.0, 1.0, 0.01) var pet_bond := 0.03
+## How much happiness a Dhull loses when it's petted and didn't want to be.
+@export_range(0.0, 1.0, 0.01) var annoyed_sadness := 0.05
+## Pets in a short while that a Dhull puts up with before it's had enough.
+@export_range(1.0, 20.0, 0.5) var fussing_limit := 3.0
+## How fast being fussed over wears off, in pets per hour.
+@export_range(0.0, 20.0, 0.1) var fussing_fades_per_hour := 1.0
+## Bond from which a sad Dhull takes comfort in being petted by you.
+@export_range(0.0, 1.0, 0.01) var trusted_from_bond := 0.5
+## Hunger below which a Dhull is too full to eat.
+@export_range(0.0, 1.0, 0.01) var full_below := 0.1

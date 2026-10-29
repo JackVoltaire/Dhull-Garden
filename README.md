@@ -38,8 +38,10 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   clock/            `Clock`: real-world local time, day phases, debug time travel
   calendar/         `Calendar`: dated events and seasons; CalendarEvent resource
   saves/            `Saves`: save slots, backups, migrations, time away
-  garden/           `Garden`: every Dhull's life (needs, life stage, where it is), saved and
-                    moved on with the real-world clock; NewGarden, who a new game starts with
+  inventory/        `Inventory`: the player's pockets and money; ItemDefinition, one kind of item
+  garden/           `Garden`: every Dhull's life (needs, life stage, where it is) and the mess
+                    in the garden, saved and moved on with the real-world clock; NewGarden, who a
+                    new game starts with; MessRecord and MessTuning
   audio/            `Audio`: music crossfades and one-shot sounds
   scenes/           `Scenes`: fading scene changes with background loading
   minigames/        `Minigames`: launching minigames and returning results; MinigameSpot
@@ -49,12 +51,14 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
 data/               Game content as .tres resources
   events/           One CalendarEvent per file
   minigames/        One MinigameDefinition per file
+  items/            One ItemDefinition per file: materials, food and drinks
   dhulls/           Dhull colorings; life.tres, how fast needs change and when moods show;
                     habits.tres, what Dhulls do in each mood
-  garden/           new_garden.tres: the Dhulls a new game starts with
+  garden/           new_garden.tres, the Dhulls a new game starts with; mess.tres, how fast the
+                    young make a mess
 scenes/
   main/             Entry scene: loads the save and enters the garden
-  levels/           Level, the root script of walkable areas
+  levels/           Level, the root script of walkable areas, and Ground (where the ground is)
   levels/dream_island/  Look-test floating island: art direction, sky and effects
   levels/sandbox/   Greybox garden for trying out movement and mechanics
   levels/dhull_gallery/  Every Dhull animation side by side, for checking them
@@ -66,9 +70,14 @@ scenes/
                     and the face drawings in face/; DhullRecord and DhullLife (a Dhull's saved
                     life and the rules its needs follow), DhullHabits and DhullBrain (what it
                     does in each mood, and walking it there) and DhullSpawner
-  props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
+  props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/, and
+                    mess/ (a bit of mess, and the MessSpawner that shows an area's mess)
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
+  ui/care_menu/     The menu for petting, feeding and picking up a Dhull
+  ui/hud/           Bits of the player's HUD, like the money label
+  ui/dialogue_box/  What characters say to the dreamer, a line at a time
+  characters/       The island's characters: lulla/ so far, with placeholder looks
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
@@ -158,15 +167,21 @@ above it.
   whatever makes it walk. The Dhull gallery level (F3 menu) shows every activity and mood side
   by side, and the F3 menu can set every Dhull's activity and mood.
 - **Dhull lives.** Dhulls live in the `Garden` autoload, not in level scenes: each is a
-  `DhullRecord` with its genes, coloring, life stage (young or adult), home area, needs and where
-  it was last. A level shows the Dhulls living in it with a `DhullSpawner` (named after the area,
+  `DhullRecord` with its genes, coloring, life stage (egg, young or adult), age, home area, needs
+  and where it was last. A new garden starts empty: the first time the dreamer talks to Lulla she
+  hands over an egg (`Garden.give_first_egg()`), which hatches about a day later and grows up
+  after about a week as a kid (`hatch_after_hours` and `kid_phase_hours` in `life.tres`). An egg
+  only shows its shell and can only be carried; eggs and kids never look after the young. A level shows the Dhulls living in it with a `DhullSpawner` (named after the area,
   like `dream_island`); Dhulls not placed yet appear at its Marker3D children. Needs (hunger,
   tiredness, happiness, each from 0 to 1) keep going on the real-world clock: the Garden moves
   them on a minute at a time with `DhullLife`'s rules, live, after a clock jump and for the time
   the game was closed (up to two weeks; needs have settled by then). Dhulls nap like cats when
   tired, the young much more; adults forage, so they get peckish but never starve; the young are
   fed and kept happy by the most nurturing adult at home, as well as its friendliness allows, and
-  without one they starve and grow unhappy. A Dhull's mood comes from its needs
+  without one they starve, grow unhappy and make a mess of the garden: every few hours a bit of
+  droppings, dirt, grime or clutter lands near them (`MessRecord`, tuned in
+  `data/garden/mess.tres`). The Garden keeps the mess too; a level shows it with a `MessSpawner`,
+  and the player cleans each bit up with Interact. A Dhull's mood comes from its needs
   (`DhullLife.mood_for`), and its activity and mood pick its animation and face as before. Tune
   it all in `data/dhulls/life.tres`. The F3 menu lists every Dhull's needs and can set them.
 - **Dhull habits.** What an awake Dhull does comes from its mood's `DhullHabit` in
@@ -188,6 +203,24 @@ above it.
   `dhull_face.gdshader`). The weather and symbols are cutout drawings in
   `scenes/dhulls/weather/` and `scenes/dhulls/reactions/`, placeholders like the rest. The F3
   menu can pop any reaction.
+- **Characters.** A character is a scene in `scenes/characters/` with an `Interactable` for "[E]
+  Talk to". What it says is translation keys in exported lists, shown with `Player.listen()` in
+  the dialogue box; the dreamer only listens, and Interact moves on a line. Lulla's lines are
+  placeholders in her voice.
+- **Items and money.** Every kind of item is an `ItemDefinition` in `data/items/`: a stable `id`,
+  a translated name, a kind (material, food or drink), what Pebble asks for it and pays for it,
+  and for food and drink how much it fills, cheers and wakes a Dhull. The `Inventory` autoload
+  counts what the player holds by id and keeps their money; `held()` lists it, `add()`,
+  `take()`, `earn()` and `spend()` change it, and `changed` tells the HUD. A test checks every
+  item has a name and that Pebble never pays more for an item than he asks.
+- **Caring in person.** Walking up to a Dhull shows "[E] Care for", which opens the care menu:
+  pet it, feed it something edible from your pockets, or pick it up. There's nothing to say:
+  words only go through the feed. `DhullCare` holds the rules. Most Dhulls love being petted,
+  which cheers them and grows their `bond` with you, but not while they nap, when they're
+  grumpy, when they're sad and don't trust you yet, or after too much fuss; they turn down food
+  when full, and the young turn down coffee and energy drinks. A star or a spiral shows how it
+  went. A picked-up Dhull rides on the player's shoulders until Interact puts it down. Tune it
+  in the "Care from the player" group of `data/dhulls/life.tres`.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
   Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
   eye color show the more dominant of the two, so recessive variants can skip a generation;

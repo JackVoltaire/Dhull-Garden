@@ -5,6 +5,9 @@ extends CharacterBody3D
 ##
 ## The body itself never rotates. [code]Model[/code] turns to face the movement direction
 ## and [code]CameraPivot[/code] turns with the camera, so the two stay independent.
+##
+## The player cares for Dhulls in person through the care menu, and can carry one in front of
+## them and put it down again.
 
 @export_group("Movement")
 @export var walk_speed := 5.0
@@ -25,9 +28,22 @@ extends CharacterBody3D
 @export_range(-89.0, 0.0) var min_pitch_degrees := -70.0
 @export_range(0.0, 89.0) var max_pitch_degrees := 30.0
 
+@export_group("Carrying")
+## How far in front of the player a carried Dhull is put down.
+@export_range(0.2, 3.0, 0.05, "suffix:m") var put_down_distance := 0.9
+
+## While a menu is open the player stands still and the camera stays put.
+var busy := false
+
+var _carried: Dhull
+var _carried_from: Node
+
 @onready var _model: Node3D = $Model
 @onready var _camera_pivot: Node3D = $CameraPivot
 @onready var _spring_arm: SpringArm3D = $CameraPivot/SpringArm3D
+@onready var _carry_point: Marker3D = $Model/CarryPoint
+@onready var _care_menu: CareMenu = %CareMenu
+@onready var _dialogue_box: DialogueBox = %DialogueBox
 
 
 func _ready() -> void:
@@ -35,6 +51,8 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if busy:
+		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		# screen_relative ignores window stretching, so sensitivity doesn't change with window size.
 		var setting: float = Settings.get_value("controls/mouse_sensitivity")
@@ -46,16 +64,19 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	var look_input := Input.get_vector("look_left", "look_right", "look_up", "look_down")
+	var look_input := Vector2.ZERO
+	var move_input := Vector2.ZERO
+	if not busy:
+		look_input = Input.get_vector("look_left", "look_right", "look_up", "look_down")
+		move_input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	_rotate_camera(-look_input * stick_sensitivity * delta)
 
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-	elif Input.is_action_just_pressed("jump"):
+	elif not busy and Input.is_action_just_pressed("jump"):
 		velocity.y = jump_velocity
 
 	# Rotate the input by the camera's yaw so "forward" always points away from the camera.
-	var move_input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := Vector3(move_input.x, 0.0, move_input.y).rotated(
 		Vector3.UP, _camera_pivot.rotation.y
 	)
@@ -74,6 +95,44 @@ func _physics_process(delta: float) -> void:
 		var target_yaw := atan2(-direction.x, -direction.z)
 		var turn_weight := 1.0 - exp(-turn_speed * delta)
 		_model.rotation.y = lerp_angle(_model.rotation.y, target_yaw, turn_weight)
+
+
+## Shows what [param speaker] says, [param lines] of translation keys, then calls
+## [param when_done]. The dreamer only listens.
+func listen(speaker: String, lines: PackedStringArray, when_done := Callable()) -> void:
+	_dialogue_box.say(self, speaker, lines, when_done)
+
+
+## Opens the care menu for [param dhull].
+func care_for(dhull: Dhull) -> void:
+	_care_menu.open(dhull, self)
+
+
+func is_carrying() -> bool:
+	return _carried != null
+
+
+## Picks [param dhull] up and carries it on the player's shoulders, looking where they go.
+func pick_up(dhull: Dhull) -> void:
+	_carried = dhull
+	_carried_from = dhull.get_parent()
+	dhull.carried = true
+	dhull.reparent(_carry_point, false)
+	dhull.position = Vector3.ZERO
+	dhull.rotation = Vector3.ZERO
+
+
+## Puts the carried Dhull down on the ground in front, facing the player.
+func put_down() -> void:
+	var dhull := _carried
+	_carried = null
+	var spot := Ground.below(self, _model.to_global(Vector3(0.0, 0.0, -put_down_distance)))
+	dhull.reparent(_carried_from, false)
+	dhull.global_position = spot
+	dhull.global_rotation = Vector3(0.0, _model.global_rotation.y, 0.0)
+	dhull.record.position = spot
+	dhull.record.facing = dhull.global_rotation.y
+	dhull.carried = false
 
 
 ## Where the player stands and which way they and the camera face, so a scene can put them back

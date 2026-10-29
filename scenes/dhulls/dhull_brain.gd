@@ -7,11 +7,6 @@ extends Node
 
 signal activity_changed(activity: DhullState.Activity)
 
-## The "world" physics layer: level geometry, which is what Dhulls stand on.
-const GROUND_LAYERS := 1
-## How far above and below the walking height to look for the ground.
-const GROUND_PROBE := 1.0
-
 @export var habits: DhullHabits
 ## The Dhull it moves.
 @export var dhull: Dhull
@@ -114,7 +109,8 @@ func _walk(delta: float) -> void:
 		dhull.global_rotation.y = rotate_toward(dhull.global_rotation.y, facing, turn_speed * delta)
 	var speed := walk_speed * DhullState.speed_scale(dhull.genome) * dhull.size_scale()
 	var step := dhull.global_position.move_toward(next, speed * delta)
-	dhull.global_position = _on_ground(step)
+	# The navigation mesh floats up to a cell above the ground; walking on it would hover.
+	dhull.global_position = Ground.below(dhull, step)
 	dhull.record.position = dhull.global_position
 	dhull.record.facing = dhull.global_rotation.y
 
@@ -141,16 +137,6 @@ func _map_knows_where_it_is() -> bool:
 		_map(), dhull.global_position
 	)
 	return owner_region.is_valid()
-
-
-## The ground right under [param point]. The navigation mesh floats up to a cell above the
-## ground, so a Dhull walking on it would hover.
-func _on_ground(point: Vector3) -> Vector3:
-	var query := PhysicsRayQueryParameters3D.create(
-		point + Vector3.UP * GROUND_PROBE, point + Vector3.DOWN * GROUND_PROBE, GROUND_LAYERS
-	)
-	var hit := dhull.get_world_3d().direct_space_state.intersect_ray(query)
-	return hit.position if hit else point
 
 
 func _on_map(point: Vector3) -> Vector3:
