@@ -15,7 +15,7 @@ const HAIRS: Dictionary[DreamerLook.HairLength, NodePath] = {
 	DreamerLook.HairLength.LONG: ^"Body/Head/HairLong",
 }
 const SKIN: Array[NodePath] = [
-	^"Body/Head", ^"Body/SleeveLeft/HandLeft", ^"Body/SleeveRight/HandRight"
+	^"Body/Head", ^"Body/Neck", ^"Body/SleeveLeft/HandLeft", ^"Body/SleeveRight/HandRight"
 ]
 const HOODIE: Array[NodePath] = [^"Body", ^"Body/SleeveLeft", ^"Body/SleeveRight"]
 const TROUSERS: Array[NodePath] = [^"Body/LegLeft", ^"Body/LegRight"]
@@ -54,7 +54,7 @@ var _rng := RandomNumberGenerator.new()
 func _ready() -> void:
 	_rng.randomize()
 	_face.set_instance_shader_parameter(&"mouth_frame", Mouth.TIRED)
-	_paint(SKIN, colors.skin)
+	_paint(SKIN, colors.skin, colors.skin_shade)
 	_paint(HOODIE, colors.hoodie)
 	_paint(TROUSERS, colors.trousers)
 	_paint(SHOES, colors.shoes)
@@ -99,12 +99,13 @@ func _show_eyes() -> void:
 	_face.set_instance_shader_parameter(&"eye_frame", Eyes.CLOSED if _blinking else Eyes.SLEEPY)
 
 
-func _paint(parts: Array[NodePath], color: Color) -> void:
+## The model shades parts towards their tip color by its "Tip" vertex color; only the skin has
+## shading, so other parts' tip color is their own.
+func _paint(parts: Array[NodePath], color: Color, shade := color) -> void:
 	for part in parts:
-		_paint_part(get_node(part), color)
+		_paint_part(get_node(part), color, shade)
 
 
-## The dreamer has no tips in another color, so the tip color is the part's own.
-static func _paint_part(part: GeometryInstance3D, color: Color) -> void:
+static func _paint_part(part: GeometryInstance3D, color: Color, shade := color) -> void:
 	part.set_instance_shader_parameter(&"part_color", color)
-	part.set_instance_shader_parameter(&"tip_color", color)
+	part.set_instance_shader_parameter(&"tip_color", shade)

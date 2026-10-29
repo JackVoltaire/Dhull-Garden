@@ -51,7 +51,7 @@ playback_default_blend_time = 0.2
 one_shot = true
 
 [node name="CarryPoint" type="Marker3D" parent="Model"]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.56, 0.05)
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.61, 0.05)
 
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
@@ -126,6 +126,6 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="Lookable" type="Marker3D" parent="Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22, -0.26)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27, -0.27)
 script = ExtResource("9_lookable")
 interest = 1.0
