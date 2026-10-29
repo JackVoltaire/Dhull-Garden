@@ -29,6 +29,9 @@ uniform vec2 iris_reach = vec2(4.0, 3.0);
 // and how wide and tall each drawing is.
 uniform vec2 eyes_center = vec2(0.0, -0.025);
 uniform vec2 eyes_size = vec2(0.44, 0.275);
+// How much further apart the two eyes sit than in the drawings, in meters; each eye moves out by
+// half, keeping its size.
+uniform float eyes_apart = 0.0;
 uniform vec2 mouth_center = vec2(0.0, -0.155);
 uniform vec2 mouth_size = vec2(0.17, 0.085);
 // The gloomy lines: their color, where on the forehead they hang and how big the patch is.
@@ -85,8 +88,11 @@ vec4 frame_texel(sampler2D strip, vec2 uv, int frame, int frames, int row, int r
 
 // The eyes: the irises slid to look, over the whites and clipped to them, and the lines on top.
 vec4 eyes() {
-	vec2 uv = drawing_uv(eyes_center, eyes_size);
-	if (on_drawing(uv) == 0.0) {
+	// Each side of the face shows its own eye, moved out by half of eyes_apart.
+	float side = head_position.x < 0.0 ? -1.0 : 1.0;
+	vec2 uv = drawing_uv(eyes_center + vec2(side * eyes_apart * 0.5, 0.0), eyes_size);
+	bool own_half = side < 0.0 ? uv.x < 0.5 : uv.x >= 0.5;
+	if (on_drawing(uv) == 0.0 || !own_half) {
 		return vec4(0.0);
 	}
 	vec4 white = frame_texel(eye_whites, uv, eye_frame, eye_frames, 0, 1);

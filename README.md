@@ -250,7 +250,8 @@ above it.
   Decay's characters: a low-poly chibi with hard facets, in an oversized hoodie and platform
   boots, with hair in angular locks, one falling over an eye. Their face is painted on by
   `dhull_face.gdshader` with the Dhulls' drawings (sleepy droopy eyes, silver irises, eye bags),
-  sized for their head in `scenes/player/dreamer_face.tres`, and they blink. `DreamerModel` shows
+  sized and placed for their head in `scenes/player/dreamer_face.tres` (`eyes_apart` spaces the
+  two eyes wider than the drawings without stretching them), and they blink. `DreamerModel` shows
   the hair of the chosen length (`HairShort`, `HairMedium`, `HairLong`) in the chosen color,
   colors the rest from `data/dreamer/colors.tres` (`DreamerColors`), and plays `idle` or `walk`
   (`scenes/player/dreamer_animations.tres`), the walk sped up to match how fast they go. The
