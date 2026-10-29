@@ -67,10 +67,75 @@ func test_the_garden_survives_saving() -> void:
 
 func test_loading_replaces_the_dhulls() -> void:
 	var replaced := [false]
-	_garden.dhulls_replaced.connect(func() -> void: replaced[0] = true)
+	_garden.garden_replaced.connect(func() -> void: replaced[0] = true)
 	_garden.apply_save_data({})
 	assert_true(replaced[0], "told the levels")
 
 
 func _simulated_until() -> int:
 	return _garden.get_save_data().simulated_until
+
+
+func test_young_left_without_an_adult_make_a_mess() -> void:
+	var young := _only_young()
+	var mess_changes := [0]
+	_garden.mess_changed.connect(func(_area: StringName) -> void: mess_changes[0] += 1)
+	var tuning: MessTuning = _garden.mess_tuning
+	var hours := tuning.hours_per_mess * 2.5
+	# A minute more, so many small steps adding up to just under a threshold don't miss one.
+	_garden.advance_to(_simulated_until() + roundi(hours * 3600.0) + GARDEN_SCRIPT.STEP_SECONDS)
+	var expected := floori(hours * young.size() / tuning.hours_per_mess)
+	var mess: Array[MessRecord] = _garden.mess_in(young[0].home_area)
+	assert_eq(mess.size(), mini(expected, tuning.most_per_area))
+	assert_eq(mess_changes[0], mess.size(), "told the levels each time")
+	for bit in mess:
+		var nearest := INF
+		for record in young:
+			nearest = minf(nearest, bit.position.distance_to(record.position))
+		assert_true(nearest <= tuning.spread + 0.001, "%s lands near the young" % bit.id)
+
+
+func test_young_looked_after_by_an_adult_make_no_mess() -> void:
+	_garden.advance_to(_simulated_until() + 48 * 3600)
+	assert_true(_garden.mess.is_empty(), "no mess with an adult around")
+
+
+func test_mess_stops_piling_up_past_a_point() -> void:
+	_only_young()
+	_garden.advance_to(_simulated_until() + 14 * DateUtil.SECONDS_PER_DAY)
+	var tuning: MessTuning = _garden.mess_tuning
+	assert_eq(_garden.mess.size(), tuning.most_per_area)
+
+
+func test_cleaning_up_takes_the_mess_away() -> void:
+	var young := _only_young()
+	_garden.make_mess_near(young[0])
+	var bit: MessRecord = _garden.mess[0]
+	_garden.clean_up(bit)
+	assert_true(_garden.mess.is_empty(), "cleaned up")
+
+
+func test_mess_survives_saving() -> void:
+	var young := _only_young()
+	_garden.make_mess_near(young[0])
+	var saved: Dictionary = JSON.to_native(JSON.from_native(_garden.get_save_data()))
+	var loaded: Node = GARDEN_SCRIPT.new()
+	loaded.apply_save_data(saved)
+	assert_eq(loaded.mess.size(), 1)
+	var original: MessRecord = _garden.mess[0]
+	var copy: MessRecord = loaded.mess[0]
+	assert_eq(copy.id, original.id)
+	assert_eq(copy.kind, original.kind)
+	assert_eq(copy.area, original.area)
+	assert_eq(copy.position, original.position)
+	loaded.free()
+
+
+## Takes every adult out of the garden, leaving the young on their own, and returns the young.
+func _only_young() -> Array[DhullRecord]:
+	var young: Array[DhullRecord] = []
+	for record: DhullRecord in _garden.dhulls:
+		if record.is_young():
+			young.append(record)
+	_garden.dhulls.assign(young)
+	return young

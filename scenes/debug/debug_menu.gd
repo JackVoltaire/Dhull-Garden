@@ -1,6 +1,6 @@
 extends CanvasLayer
 ## Developer tools, toggled with F3 (the debug_menu action): time travel, calendar state,
-## saving and loading, switching levels, launching minigames, and Dhulls' genes and needs.
+## saving and loading, switching levels, launching minigames, Dhulls' genes and needs, and mess.
 ## Registered as the [code]DebugMenu[/code] autoload and removed in release builds.
 
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -48,6 +48,9 @@ func _ready() -> void:
 	_add_button(needs_row, "Rested", _change_needs.bind(_rest))
 	_add_button(needs_row, "Happy", _change_needs.bind(_cheer_up))
 	_add_button(needs_row, "Unhappy", _change_needs.bind(_sadden))
+	var mess_row := _add_row("Garden")
+	_add_button(mess_row, "Make a mess", _make_mess)
+	_add_button(mess_row, "Clean it all up", _clean_up_mess)
 	var reaction_row := _add_row("Dhull reactions")
 	_add_button(reaction_row, "Eye", _react.bind(DhullReaction.Symbol.EYE))
 	_add_button(reaction_row, "Star", _react.bind(DhullReaction.Symbol.STAR))
@@ -160,6 +163,18 @@ func _reroll_dhulls() -> void:
 func _set_dhulls(property: StringName, value: int) -> void:
 	for dhull: Dhull in get_tree().get_nodes_in_group(Dhull.GROUP):
 		dhull.set(property, value)
+
+
+## Leaves a bit of mess near every young Dhull, as if no adult had looked after them.
+func _make_mess() -> void:
+	for record in Garden.dhulls:
+		if record.is_young():
+			Garden.make_mess_near(record)
+
+
+func _clean_up_mess() -> void:
+	for bit in Garden.mess.duplicate():
+		Garden.clean_up(bit)
 
 
 func _react(symbol: DhullReaction.Symbol, gloomy := false) -> void:

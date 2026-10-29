@@ -10,7 +10,7 @@ const DHULL_SCENE := preload("res://scenes/dhulls/dhull.tscn")
 
 
 func _ready() -> void:
-	Garden.dhulls_replaced.connect(_respawn)
+	Garden.garden_replaced.connect(_respawn)
 	_spawn()
 
 

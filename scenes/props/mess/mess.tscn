@@ -1,0 +1,150 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/props/mess/mess.gd" id="1_mess"]
+[ext_resource type="Script" path="res://systems/interaction/interactable.gd" id="2_interactable"]
+[ext_resource type="Material" path="res://assets/materials/toon_bark.tres" id="3_bark"]
+[ext_resource type="Material" path="res://assets/materials/toon_rock_dark.tres" id="4_grime"]
+[ext_resource type="Material" path="res://assets/materials/toon_stone.tres" id="5_stone"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_dropping_bottom"]
+radius = 0.1
+height = 0.12
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_dropping_middle"]
+radius = 0.075
+height = 0.1
+radial_segments = 8
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_dropping_top"]
+radius = 0.045
+height = 0.09
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_dirt"]
+top_radius = 0.36
+bottom_radius = 0.42
+height = 0.03
+radial_segments = 9
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_clod"]
+radius = 0.06
+height = 0.07
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_grime"]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 0.012
+radial_segments = 7
+rings = 1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_stick"]
+top_radius = 0.015
+bottom_radius = 0.022
+height = 0.4
+radial_segments = 5
+rings = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_pebble"]
+radius = 0.055
+height = 0.07
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 0.7
+
+[node name="Mess" type="Node3D"]
+script = ExtResource("1_mess")
+
+[node name="Droppings" type="Node3D" parent="."]
+
+[node name="Bottom" type="MeshInstance3D" parent="Droppings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("SphereMesh_dropping_bottom")
+surface_material_override/0 = ExtResource("3_bark")
+
+[node name="Middle" type="MeshInstance3D" parent="Droppings"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.012, 0.13, 0.006)
+mesh = SubResource("SphereMesh_dropping_middle")
+surface_material_override/0 = ExtResource("3_bark")
+
+[node name="Top" type="MeshInstance3D" parent="Droppings"]
+transform = Transform3D(0.9394, -0.3429, 0, 0.3429, 0.9394, 0, 0, 0, 1, 0.03, 0.2, 0)
+mesh = SubResource("SphereMesh_dropping_top")
+surface_material_override/0 = ExtResource("3_bark")
+
+[node name="Dirt" type="Node3D" parent="."]
+
+[node name="Patch" type="MeshInstance3D" parent="Dirt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.75, 0, 0.015, 0)
+mesh = SubResource("CylinderMesh_dirt")
+surface_material_override/0 = ExtResource("3_bark")
+
+[node name="Clod1" type="MeshInstance3D" parent="Dirt"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 0.04, 0.12)
+mesh = SubResource("SphereMesh_clod")
+surface_material_override/0 = ExtResource("3_bark")
+
+[node name="Clod2" type="MeshInstance3D" parent="Dirt"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.18, 0.04, -0.14)
+mesh = SubResource("SphereMesh_clod")
+surface_material_override/0 = ExtResource("3_bark")
+
+[node name="Grime" type="Node3D" parent="."]
+
+[node name="Smear" type="MeshInstance3D" parent="Grime"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.55, 0, 0.008, 0)
+mesh = SubResource("CylinderMesh_grime")
+surface_material_override/0 = ExtResource("4_grime")
+
+[node name="Spot" type="MeshInstance3D" parent="Grime"]
+transform = Transform3D(0.2889, 0, -0.1976, 0, 1, 0, 0.1694, 0, 0.2476, 0.42, 0.009, 0.22)
+mesh = SubResource("CylinderMesh_grime")
+surface_material_override/0 = ExtResource("4_grime")
+
+[node name="Splash" type="MeshInstance3D" parent="Grime"]
+transform = Transform3D(-0.07112, 0, -0.2082, 0, 1, -0, 0.1703, 0, -0.05819, -0.4, 0.009, -0.18)
+mesh = SubResource("CylinderMesh_grime")
+surface_material_override/0 = ExtResource("4_grime")
+
+[node name="Clutter" type="Node3D" parent="."]
+
+[node name="Stick1" type="MeshInstance3D" parent="Clutter"]
+transform = Transform3D(5.85e-17, 1, -1.81e-17, -0.9553, 6.123e-17, 0.2955, 0.2955, 0, 0.9553, 0, 0.022, 0.05)
+mesh = SubResource("CylinderMesh_stick")
+surface_material_override/0 = ExtResource("3_bark")
+
+[node name="Stick2" type="MeshInstance3D" parent="Clutter"]
+transform = Transform3D(-1.584e-17, 0.8, -4.636e-17, 0.2586, 4.899e-17, 0.757, 0.757, 0, -0.2586, 0.05, 0.05, -0.02)
+mesh = SubResource("CylinderMesh_stick")
+surface_material_override/0 = ExtResource("3_bark")
+
+[node name="Pebble1" type="MeshInstance3D" parent="Clutter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0.03, -0.12)
+mesh = SubResource("SphereMesh_pebble")
+surface_material_override/0 = ExtResource("5_stone")
+
+[node name="Pebble2" type="MeshInstance3D" parent="Clutter"]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.2, 0.025, 0.16)
+mesh = SubResource("SphereMesh_pebble")
+surface_material_override/0 = ExtResource("5_stone")
+
+[node name="Pebble3" type="MeshInstance3D" parent="Clutter"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.06, 0.02, -0.22)
+mesh = SubResource("SphereMesh_pebble")
+surface_material_override/0 = ExtResource("5_stone")
+
+[node name="CleanUp" type="Area3D" parent="."]
+script = ExtResource("2_interactable")
+prompt = "PROMPT_CLEAN_UP"
+
+[node name="Shape" type="CollisionShape3D" parent="CleanUp"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("SphereShape3D_reach")

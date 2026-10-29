@@ -38,8 +38,9 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   clock/            `Clock`: real-world local time, day phases, debug time travel
   calendar/         `Calendar`: dated events and seasons; CalendarEvent resource
   saves/            `Saves`: save slots, backups, migrations, time away
-  garden/           `Garden`: every Dhull's life (needs, life stage, where it is), saved and
-                    moved on with the real-world clock; NewGarden, who a new game starts with
+  garden/           `Garden`: every Dhull's life (needs, life stage, where it is) and the mess
+                    in the garden, saved and moved on with the real-world clock; NewGarden, who a
+                    new game starts with; MessRecord and MessTuning
   audio/            `Audio`: music crossfades and one-shot sounds
   scenes/           `Scenes`: fading scene changes with background loading
   minigames/        `Minigames`: launching minigames and returning results; MinigameSpot
@@ -51,10 +52,11 @@ data/               Game content as .tres resources
   minigames/        One MinigameDefinition per file
   dhulls/           Dhull colorings; life.tres, how fast needs change and when moods show;
                     habits.tres, what Dhulls do in each mood
-  garden/           new_garden.tres: the Dhulls a new game starts with
+  garden/           new_garden.tres, the Dhulls a new game starts with; mess.tres, how fast the
+                    young make a mess
 scenes/
   main/             Entry scene: loads the save and enters the garden
-  levels/           Level, the root script of walkable areas
+  levels/           Level, the root script of walkable areas, and Ground (where the ground is)
   levels/dream_island/  Look-test floating island: art direction, sky and effects
   levels/sandbox/   Greybox garden for trying out movement and mechanics
   levels/dhull_gallery/  Every Dhull animation side by side, for checking them
@@ -66,7 +68,8 @@ scenes/
                     and the face drawings in face/; DhullRecord and DhullLife (a Dhull's saved
                     life and the rules its needs follow), DhullHabits and DhullBrain (what it
                     does in each mood, and walking it there) and DhullSpawner
-  props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/
+  props/            Reusable things placed in levels: waterfall/, shiny_spot/, goth_tree/, and
+                    mess/ (a bit of mess, and the MessSpawner that shows an area's mess)
   minigames/        Minigame scenes. sample/ holds placeholder 2D and 3D minigames
   ui/pause_menu/    Pause overlay (autoload, so it works in every scene)
   debug/            F3 developer menu (autoload, debug builds only)
@@ -166,7 +169,10 @@ above it.
   the game was closed (up to two weeks; needs have settled by then). Dhulls nap like cats when
   tired, the young much more; adults forage, so they get peckish but never starve; the young are
   fed and kept happy by the most nurturing adult at home, as well as its friendliness allows, and
-  without one they starve and grow unhappy. A Dhull's mood comes from its needs
+  without one they starve, grow unhappy and make a mess of the garden: every few hours a bit of
+  droppings, dirt, grime or clutter lands near them (`MessRecord`, tuned in
+  `data/garden/mess.tres`). The Garden keeps the mess too; a level shows it with a `MessSpawner`,
+  and the player cleans each bit up with Interact. A Dhull's mood comes from its needs
   (`DhullLife.mood_for`), and its activity and mood pick its animation and face as before. Tune
   it all in `data/dhulls/life.tres`. The F3 menu lists every Dhull's needs and can set them.
 - **Dhull habits.** What an awake Dhull does comes from its mood's `DhullHabit` in
