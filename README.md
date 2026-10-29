@@ -260,10 +260,9 @@ above it.
   curtains frame the face and wide panels hang down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet standing
   straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
   `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
-  tired and fed up, and neither masculine nor feminine: no makeup, no lashes. A thick dark upper
-  lid line cuts across the top of each plain iris, a thin line runs under the eye, a fold above
-  shows the heavy lid in a sunken socket, and heavy dark circles sit under it, streaked below, as
-  House of Decay paints them; thick straight brows; a small nose over a
+  tired and fed up, and neither masculine nor feminine: no lashes or wing. The eyes are drawn like
+  Bitey's in House of Decay: a thick black outline round each, its top a heavy dark red lid down
+  to a thick black lid line, with a pale iris under it; thick straight brows; a small nose over a
   short flat mouth. Frames follow `DreamerModel.Eyes` and `DreamerModel.Mouth`, and
   `DreamerModel.glance` rests the irises a little down, from under the heavy lids.
   `eyes_apart` spaces the two eyes wider than the drawings without stretching them, and they

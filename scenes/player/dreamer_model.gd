@@ -5,7 +5,7 @@ extends Node3D
 ## sheet in front of their head and blinks, and stands idle or walks as they move.
 
 ## The dreamer's own face drawings, in the order of the frames in scenes/player/face/: tired and
-## fed up, with no makeup.
+## fed up, with heavy dark red lids.
 enum Eyes { HALF_LIDDED, SHUT }
 enum Mouth { FLAT }
 
