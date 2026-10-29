@@ -87,6 +87,13 @@ height = 0.5
 radial_segments = 10
 rings = 6
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_phone"]
+albedo_color = Color(0.08, 0.06, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_phone"]
+material = SubResource("StandardMaterial3D_phone")
+size = Vector3(0.07, 0.12, 0.012)
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_care"]
 radius = 0.6
 
@@ -161,8 +168,11 @@ visible = false
 cast_shadow = 0
 mesh = ExtResource("15_spiral")
 
-[node name="SelfieArm" type="Marker3D" parent="Model"]
-transform = Transform3D(0.9487, -0.1107, 0.2962, 0.0000, 0.9367, 0.3501, -0.3162, -0.3321, 0.8887, 0.2200, 0.8800, 0.6600)
+[node name="HeldPhone" type="MeshInstance3D" parent="Model"]
+visible = false
+layers = 524288
+cast_shadow = 0
+mesh = SubResource("BoxMesh_phone")
 
 [node name="HeldThing" type="MeshInstance3D" parent="Model"]
 visible = false
@@ -216,5 +226,6 @@ size = Vector2i(256, 192)
 render_target_update_mode = 0
 
 [node name="Lens" type="Camera3D" parent="Selfie"]
+cull_mask = 524287
 current = true
 fov = 72.0

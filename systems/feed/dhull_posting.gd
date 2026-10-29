@@ -12,6 +12,17 @@ enum Tone { UP, DOWN, ANGRY }
 
 ## How many ways there are to word each topic. Their translation keys end in 1, 2 and so on.
 const WORDINGS := 2
+## The face a Dhull pulls in the selfie for each topic: thrilled with its food, drowsy at 3am.
+## An upset post shows its mood instead.
+const SELFIE_FACES: Dictionary[FeedPost.Topic, DhullFace.Emotion] = {
+	FeedPost.Topic.CHEERED_UP: DhullFace.Emotion.HAPPY,
+	FeedPost.Topic.HUNGRY: DhullFace.Emotion.HUNGRY,
+	FeedPost.Topic.WOKE_UP: DhullFace.Emotion.TIRED,
+	FeedPost.Topic.NAPPING: DhullFace.Emotion.TIRED,
+	FeedPost.Topic.ATE: DhullFace.Emotion.HAPPY,
+	FeedPost.Topic.LATE_NIGHT: DhullFace.Emotion.TIRED,
+	FeedPost.Topic.MORNING: DhullFace.Emotion.TIRED,
+}
 
 
 ## What a Dhull wants from reactions to its posts, from its personality: bold Dhulls want a rise,
@@ -75,6 +86,15 @@ static func take_reaction(
 	record.happiness = clampf(record.happiness + happiness[taken], 0.0, 1.0)
 	record.bond = clampf(record.bond + bond[taken], 0.0, 1.0)
 	return taken
+
+
+## The face a Dhull pulls in the selfie for [param post].
+static func selfie_face(post: FeedPost) -> DhullFace.Emotion:
+	if post.topic == FeedPost.Topic.UPSET:
+		if post.mood == DhullState.Mood.GRUMPY:
+			return DhullFace.Emotion.ANGRY
+		return DhullFace.Emotion.SAD
+	return SELFIE_FACES[post.topic]
 
 
 ## Translation key of the words for a post on [param topic], worded the [param wording]th way.

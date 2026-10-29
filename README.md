@@ -173,7 +173,7 @@ above it.
   shape, model it like the others, add it to `DhullGenome.BodyShape` or `HeadShape` with its
   dominance and commonness, and to `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is
   missing.
-- **Dhull animations.** A Dhull's `activity` (standing, walking, sitting, sleeping) and `mood`
+- **Dhull animations.** A Dhull's `activity` (standing, walking, sitting, sleeping, taking a selfie) and `mood`
   (content, happy, playful, sleepy, hungry, sad, grumpy) pick its animation and face from the
   tables in `DhullState`, never at random; its energy gene sets how fast they play. The
   animations are loops in `scenes/dhulls/dhull_animations.tres`, an AnimationLibrary you can
@@ -223,9 +223,13 @@ above it.
 - **The feed.** The phone button (Tab) opens the dreamer's phone. Its feed is the only way
   Dhulls talk to them: grown Dhulls post when their mood swings, when they doze off or wake up,
   when they eat, at 3am and in the morning, never more often than every 45 minutes
-  (`data/feed/feed.tres`). Each post has a real selfie: the Dhull takes it on its own phone right
-  where it is, with a camera at arm's length (its `SelfieArm` marker and `Selfie` SubViewport,
-  which share the level's world), holding up what the post is about (an item's `prop` mesh). A
+  (`data/feed/feed.tres`). Each post has a real selfie, taken right where the Dhull is: it strikes
+  the `selfie` pose (activity `TAKING_SELFIE`), raising its phone (`HeldPhone`) in its right nub
+  and holding up what the post is about in its left (an item's `prop` mesh), and pulls a face
+  that fits the post (`DhullPosting.selfie_face`: thrilled with its food, drowsy at 3am). The
+  shot comes from its `Selfie` SubViewport, which shares the level's world, out along the line
+  from its face through the phone, since nubs are too short to frame a face. The phone is on
+  render layer 20, `selfie_phone`, which the selfie lens doesn't see. A
   post made while the Dhull's area wasn't loaded gets its selfie the next time it is. The
   pictures are PNGs in a `slot_<n>_selfies` folder beside the save, and go with their posts. The player reacts once per
   post with a like, a heart, a sad face or an angry face, and `DhullPosting` decides how the

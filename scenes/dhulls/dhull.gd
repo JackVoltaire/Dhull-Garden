@@ -16,9 +16,11 @@ extends Node3D
 ## (see DhullBrain) unless it's napping, and the young are smaller. It reacts when its mood
 ## changes, when it notices the player, and now and then as it rests. The player can pet it, feed
 ## it and carry it about (see DhullCare and CareMenu). When it posts on the feed it takes a selfie
-## on its phone, right where it is, holding up what the post is about; posts it made while its
-## area wasn't loaded get their selfies the next time it is. Without a record, as in the
-## Dhull gallery, it shows whatever activity and mood are set on it and stays where it is.
+## right where it is: it raises its phone in one nub, holds up what the post is about in the
+## other, and pulls a face that fits (see DhullPosting.selfie_face); the shot is taken from the
+## phone. Posts it made while its area wasn't loaded get their selfies the next time it is.
+## Without a record, as in the Dhull gallery, it shows whatever activity and mood are set on it
+## and stays where it is.
 
 const BODY_MODELS: Dictionary[DhullGenome.BodyShape, PackedScene] = {
 	DhullGenome.BodyShape.BELL: preload("res://assets/models/dhull_body_bell/dhull_body_bell.glb"),
@@ -80,6 +82,16 @@ const GROUP := &"dhulls"
 ## How close the player has to come before it notices them, for the least and the most curious
 ## Dhulls.
 @export var notice_distance := Vector2(2.0, 6.0)
+@export_group("Selfies")
+## Where the right nub holds the phone and the left nub holds the thing it's posting about, from
+## their joints.
+@export var phone_grip := Vector3(-0.17, -0.15, 0.0)
+@export var held_thing_grip := Vector3(0.17, -0.15, 0.02)
+## How far from the Dhull's face the selfie is taken, for a grown Dhull.
+@export_range(0.2, 3.0, 0.05, "suffix:m") var selfie_distance := 0.75
+## How long it takes to strike the pose before the shot, and how long it holds it after.
+@export_range(0.0, 3.0, 0.05, "suffix:s") var selfie_pose_seconds := 0.6
+@export_range(0.0, 3.0, 0.05, "suffix:s") var selfie_hold_seconds := 0.8
 ## Seconds between blinks, picked at random between x and y, and how long a blink lasts.
 @export var blink_interval := Vector2(2.0, 5.0)
 @export_range(0.05, 1.0, 0.01, "suffix:s") var blink_duration := 0.14
@@ -108,6 +120,8 @@ var _shown_life_stage := DhullRecord.LifeStage.ADULT
 ## Posts it still has to take a selfie for, oldest first.
 var _selfies_due: Array[FeedPost] = []
 var _taking_selfies := false
+## The face it pulls in the selfie it's taking.
+var _selfie_face := DhullFace.Emotion.NEUTRAL
 
 @onready var _model: Node3D = $Model
 @onready var _head: Node3D = $Model/Head
@@ -122,7 +136,7 @@ var _taking_selfies := false
 @onready var _egg: MeshInstance3D = $Egg
 @onready var _selfie: SubViewport = $Selfie
 @onready var _selfie_lens: Camera3D = $Selfie/Lens
-@onready var _selfie_arm: Marker3D = $Model/SelfieArm
+@onready var _held_phone: MeshInstance3D = $Model/HeldPhone
 @onready var _held_thing: MeshInstance3D = $Model/HeldThing
 
 
@@ -204,26 +218,46 @@ func _on_posted(post: FeedPost) -> void:
 	_take_selfies()
 
 
-## Takes a selfie for each post waiting for one, one after another: the camera at arm's length,
-## holding up what the post is about.
+## Takes a selfie for each post waiting for one, one after another.
 func _take_selfies() -> void:
 	if _taking_selfies:
 		return
 	_taking_selfies = true
 	while not _selfies_due.is_empty():
-		var post: FeedPost = _selfies_due.front()
-		var subject: ItemDefinition = Inventory.definitions.get(post.subject)
-		_held_thing.mesh = subject.prop if subject else null
-		_held_thing.visible = _held_thing.mesh != null
-		_selfie_lens.global_transform = _selfie_arm.global_transform.orthonormalized()
-		_selfie.render_target_update_mode = SubViewport.UPDATE_ONCE
-		# One frame to draw the picture, one for it to be ready to read back.
-		await RenderingServer.frame_post_draw
-		await RenderingServer.frame_post_draw
-		Feed.keep_selfie(post, _selfie.get_texture().get_image())
-		_held_thing.visible = false
+		await _take_selfie(_selfies_due.front())
 		_selfies_due.pop_front()
 	_taking_selfies = false
+	_show_life()
+
+
+## Raises the phone, holds up what [param post] is about, pulls the face that fits and shoots,
+## from the phone, so the face and the thing are both in the picture.
+func _take_selfie(post: FeedPost) -> void:
+	var subject: ItemDefinition = Inventory.definitions.get(post.subject)
+	_held_thing.mesh = subject.prop if subject else null
+	_held_thing.visible = _held_thing.mesh != null
+	_held_phone.visible = true
+	_selfie_face = DhullPosting.selfie_face(post)
+	_brain.rest()
+	_set_activity(DhullState.Activity.TAKING_SELFIE)
+	await get_tree().create_timer(selfie_pose_seconds).timeout
+	var focus := _head.global_position
+	if _held_thing.visible:
+		focus = focus.lerp(_held_thing.global_position, 0.5)
+	# Nubs are far too short to hold a phone out far enough to frame a face, so the shot is taken
+	# further out along the line from the face through the phone, a little from above, as if on
+	# a longer arm.
+	var away := (_held_phone.global_position - focus).normalized() + Vector3.UP * 0.3
+	var lens_at := focus + away.normalized() * selfie_distance * size_scale()
+	_selfie_lens.global_transform = Transform3D(Basis.IDENTITY, lens_at).looking_at(focus)
+	_selfie.render_target_update_mode = SubViewport.UPDATE_ONCE
+	# One frame to draw the picture, one for it to be ready to read back.
+	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
+	Feed.keep_selfie(post, _selfie.get_texture().get_image())
+	await get_tree().create_timer(selfie_hold_seconds).timeout
+	_held_thing.visible = false
+	_held_phone.visible = false
 
 
 func _respond(response: DhullCare.Response) -> void:
@@ -256,6 +290,16 @@ func _show_life() -> void:
 	_care.enabled = not carried
 	_model.visible = not record.is_egg()
 	_egg.visible = record.is_egg()
+	# A selfie holds its pose until the shot is done; it shows the rest of its life afterwards.
+	if not _taking_selfies:
+		_show_activity()
+	_model.scale = Vector3.ONE * size_scale()
+	_keep_sighing()
+
+
+## What it's doing follows from its life: an egg sits still, a napping Dhull sleeps, a carried
+## one sits on the player's shoulders, and otherwise its brain walks it about.
+func _show_activity() -> void:
 	if record.is_egg():
 		_brain.rest()
 		_set_activity(DhullState.Activity.STANDING)
@@ -267,12 +311,10 @@ func _show_life() -> void:
 		_set_activity(DhullState.Activity.SITTING)
 	else:
 		_brain.follow_mood(mood)
-	_model.scale = Vector3.ONE * size_scale()
-	_keep_sighing()
 
 
 func _on_brain_activity_changed(new_activity: DhullState.Activity) -> void:
-	if not record.napping and not carried:
+	if not record.napping and not carried and not _taking_selfies:
 		_set_activity(new_activity)
 
 
@@ -312,6 +354,10 @@ func _set_gloom(gloomy: bool) -> void:
 ## Puts the model together from the body and head its genes call for.
 func _build_model() -> void:
 	var old_body := _model.get_node_or_null(^"Body")
+	if not Engine.is_editor_hint():
+		# Out of the old nubs before they go.
+		_held_phone.reparent(_model, false)
+		_held_thing.reparent(_model, false)
 	if old_body:
 		_model.remove_child(old_body)
 		old_body.queue_free()
@@ -320,7 +366,11 @@ func _build_model() -> void:
 		_head_shape.queue_free()
 	var body_shape := genome.body_shape() if genome else DhullGenome.BodyShape.BELL
 	var head_shape := genome.head_shape() if genome else DhullGenome.HeadShape.MOON
-	_model.add_child(_take_part(BODY_MODELS[body_shape], &"Body"))
+	var body := _take_part(BODY_MODELS[body_shape], &"Body")
+	_model.add_child(body)
+	if not Engine.is_editor_hint():
+		_hold(_held_phone, body.get_node(^"ArmRight"), phone_grip)
+		_hold(_held_thing, body.get_node(^"ArmLeft"), held_thing_grip)
 	_head_shape = _take_part(HEAD_MODELS[head_shape], &"Head")
 	_head_shape.name = &"Shape"
 	_head_shape.material_overlay = face_material
@@ -329,6 +379,12 @@ func _build_model() -> void:
 	_animation_player.clear_caches()
 	_apply_coloring()
 	_show_state()
+
+
+## Puts [param thing] in [param nub], at [param grip] from its joint.
+static func _hold(thing: Node3D, nub: Node3D, grip: Vector3) -> void:
+	thing.reparent(nub, false)
+	thing.transform = Transform3D(Basis.IDENTITY, grip)
 
 
 ## The named part of a model, with its children, taken out of the rest of the model.
@@ -353,6 +409,8 @@ func _show_state() -> void:
 
 func _show_face() -> void:
 	var emotion := DhullState.emotion_for(activity, mood)
+	if activity == DhullState.Activity.TAKING_SELFIE:
+		emotion = _selfie_face
 	var eye_style := genome.eye_style() if genome else DhullFace.EyeStyle.ROUND
 	var eye_color := genome.eye_color() if genome else DhullGenome.EyeColor.TEAL
 	_head_shape.set_instance_shader_parameter(&"eye_color", eye_color)
