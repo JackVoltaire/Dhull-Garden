@@ -3,11 +3,17 @@
 // rather than smooth. Each character colors its own parts through the instance uniforms (see
 // DhullColoring): the part's color, the color it turns towards at the tips, and an optional
 // pattern. How far towards a tip each point is comes from the model's vertex color, red channel.
+// Characters have no ink lines round them, as House of Decay's have none: they mark themselves in
+// the normal-roughness buffer with CHARACTER_ROUGHNESS, and the world's ink lines
+// (ink_outlines.gdshader) leave out whatever has it. With no specular, the roughness changes
+// nothing else about how they look.
 shader_type spatial;
 
+const float CHARACTER_ROUGHNESS = 0.3;
 // Patterns, numbered as in DhullColoring.Pattern.
 const int PATTERN_DIAMONDS = 1;
 const int PATTERN_SPOTS = 2;
+const int PATTERN_STRIPES = 3;
 // A 4x4 Bayer matrix: the threshold pattern PS1 games dithered with.
 const float BAYER[16] = {0.0, 8.0, 2.0, 10.0, 12.0, 4.0, 14.0, 6.0, 3.0, 11.0, 1.0, 9.0, 15.0, 7.0, 13.0, 5.0};
 
@@ -17,9 +23,10 @@ instance uniform vec4 part_color : source_color, instance_index(0) = vec4(1.0, 0
 instance uniform vec4 tip_color : source_color, instance_index(1) = vec4(1.0, 0.55, 0.25, 1.0);
 instance uniform vec4 pattern_color : source_color, instance_index(2) = vec4(0.36, 0.24, 0.8, 1.0);
 instance uniform int pattern : instance_index(3) = 0;
-// Size of a pattern's diamonds and spots, in meters.
+// Size of a pattern's diamonds and spots, and how wide each stripe is, in meters.
 uniform float diamond_size = 0.11;
 uniform float spot_size = 0.06;
+uniform float stripe_size = 0.045;
 // Share of the light that still reaches the shady side.
 uniform float shade_fill : hint_range(0.0, 1.0) = 0.5;
 // How many steps light falls off in, and how many steps the tip color comes in.
@@ -71,6 +78,10 @@ float pattern_mask(vec3 p) {
 	if (pattern == PATTERN_SPOTS) {
 		return step(0.64, value_noise(p / spot_size + 7.0));
 	}
+	if (pattern == PATTERN_STRIPES) {
+		// Bands across the part, like a striped sleeve, so they swing with it.
+		return mod(floor(p.y / stripe_size), 2.0);
+	}
 	return 0.0;
 }
 
@@ -83,6 +94,8 @@ void fragment() {
 	float threshold = dither(FRAGCOORD.xy, VIEWPORT_SIZE);
 	vec3 color = mix(part_color.rgb, pattern_color.rgb, pattern_mask(model_position));
 	ALBEDO = mix(color, tip_color.rgb, banded(tip_amount, tip_bands, threshold));
+	SPECULAR = 0.0;
+	ROUGHNESS = CHARACTER_ROUGHNESS;
 }
 
 void light() {

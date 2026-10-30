@@ -46,18 +46,6 @@ _subresources={
 "use_external/fallback_path": "res://assets/materials/toon_bark.tres",
 "use_external/path": "res://assets/materials/toon_bark.tres"
 },
-"toon_character": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/materials/toon_character.tres"
-},
-"toon_grass": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/materials/toon_grass.tres"
-},
-"toon_ice": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/materials/toon_ice.tres"
-},
 "toon_island_rock": {
 "use_external/enabled": true,
 "use_external/fallback_path": "res://assets/materials/toon_island_rock.tres",
@@ -68,18 +56,10 @@ _subresources={
 "use_external/fallback_path": "res://assets/materials/toon_rock_dark.tres",
 "use_external/path": "res://assets/materials/toon_rock_dark.tres"
 },
-"toon_snow": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/materials/toon_snow.tres"
-},
 "toon_spooky": {
 "use_external/enabled": true,
 "use_external/fallback_path": "res://assets/materials/toon_spooky.tres",
 "use_external/path": "res://assets/materials/toon_spooky.tres"
-},
-"toon_stone": {
-"use_external/enabled": true,
-"use_external/path": "res://assets/materials/toon_stone.tres"
 }
 }
 }

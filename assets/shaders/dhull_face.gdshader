@@ -1,10 +1,11 @@
-// A Dhull's face, drawn over its head as an overlay (GeometryInstance3D.material_overlay): a pair
-// of eyes and a mouth, each picked from a strip of drawings, like Wind Waker's swappable face
-// textures. The drawings are imported small and shown with hard pixels, so they read as crunchy
-// painted textures, like a PS1 character's. They're projected straight onto the front (+Z) of
-// the head, so the head needs no special UVs. Each Dhull picks its own drawings through the
-// instance uniforms eye_frame and mouth_frame (see DhullFace for the order); a mouth_frame below
-// 0 shows no mouth. A gloomy Dhull gets anime-style blue lines down its forehead, behind the eyes,
+// A character's face, a Dhull's or the dreamer's, drawn over its head as an overlay
+// (GeometryInstance3D.material_overlay): a pair of eyes and a mouth, each picked from a strip of
+// drawings, like Wind Waker's swappable face textures. The drawings are imported small and shown
+// with hard pixels, so they read as crunchy painted textures, like a PS1 character's. They're
+// projected straight onto the front (+Z) of the head, around its origin, so the head needs no
+// special UVs; each head's material sets where the features sit. Each picks its own drawings
+// through the instance uniforms eye_frame and mouth_frame (see DhullFace for the order); a
+// mouth_frame below 0 shows no mouth. A gloomy Dhull gets anime-style blue lines down its forehead, behind the eyes,
 // while gloom is above 0.
 //
 // The eyes are drawn in three strips so the irises can move: the whites, the irises whole and at
@@ -14,10 +15,11 @@
 shader_type spatial;
 render_mode unshaded, depth_draw_never, cull_back, shadows_disabled;
 
-uniform sampler2D eye_whites : source_color, filter_nearest_mipmap, repeat_disable;
-uniform sampler2D irises : source_color, filter_nearest_mipmap, repeat_disable;
-uniform sampler2D eye_lines : source_color, filter_nearest_mipmap, repeat_disable;
-uniform sampler2D mouths : source_color, filter_nearest_mipmap, repeat_disable;
+// A face without some drawings, like the dreamer's without mouths, shows nothing there.
+uniform sampler2D eye_whites : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
+uniform sampler2D irises : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
+uniform sampler2D eye_lines : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
+uniform sampler2D mouths : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
 uniform int eye_frames = 10;
 uniform int eye_colors = 6;
 uniform int mouth_frames = 2;
@@ -28,6 +30,9 @@ uniform vec2 iris_reach = vec2(4.0, 3.0);
 // and how wide and tall each drawing is.
 uniform vec2 eyes_center = vec2(0.0, -0.025);
 uniform vec2 eyes_size = vec2(0.44, 0.275);
+// How much further apart the two eyes sit than in the drawings, in meters; each eye moves out by
+// half, keeping its size.
+uniform float eyes_apart = 0.0;
 uniform vec2 mouth_center = vec2(0.0, -0.155);
 uniform vec2 mouth_size = vec2(0.17, 0.085);
 // The gloomy lines: their color, where on the forehead they hang and how big the patch is.
@@ -37,8 +42,7 @@ uniform vec2 gloom_size = vec2(0.4, 0.26);
 // How big one of the face drawings' pixels is on the head, in meters, so the gloom is drawn in
 // pixels as crunchy as theirs: the eye drawings' width over their width in pixels.
 uniform float face_pixel = 0.006875;
-// Fixed instance slots 4-7 and 9, apart from the character shader's and the ink outline's on the
-// same head.
+// Fixed instance slots 4-7 and 9, apart from the character shader's on the same head.
 instance uniform int eye_frame : instance_index(4) = 0;
 instance uniform int mouth_frame : instance_index(5) = 0;
 instance uniform int eye_color : instance_index(6) = 0;
@@ -84,8 +88,11 @@ vec4 frame_texel(sampler2D strip, vec2 uv, int frame, int frames, int row, int r
 
 // The eyes: the irises slid to look, over the whites and clipped to them, and the lines on top.
 vec4 eyes() {
-	vec2 uv = drawing_uv(eyes_center, eyes_size);
-	if (on_drawing(uv) == 0.0) {
+	// Each side of the face shows its own eye, moved out by half of eyes_apart.
+	float side = head_position.x < 0.0 ? -1.0 : 1.0;
+	vec2 uv = drawing_uv(eyes_center + vec2(side * eyes_apart * 0.5, 0.0), eyes_size);
+	bool own_half = side < 0.0 ? uv.x < 0.5 : uv.x >= 0.5;
+	if (on_drawing(uv) == 0.0 || !own_half) {
 		return vec4(0.0);
 	}
 	vec4 white = frame_texel(eye_whites, uv, eye_frame, eye_frames, 0, 1);

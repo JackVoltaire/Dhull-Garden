@@ -41,6 +41,7 @@ systems/            Game-wide systems, one folder each. Most are autoloads.
   saves/            `Saves`: save slots, backups, migrations, time away
   inventory/        `Inventory`: the player's pockets and money; ItemDefinition, one kind of item
   feed/             `Feed`: what Dhulls post and the player's reactions; DhullPosting, the rules
+  dreamer/          `Dreamer`: how the player's dreamer looks; DreamerLook and DreamerColors
   garden/           `Garden`: every Dhull's life (needs, life stage, where it is) and the mess
                     in the garden, saved and moved on with the real-world clock; NewGarden, who a
                     new game starts with; MessRecord and MessTuning
@@ -68,7 +69,8 @@ scenes/
   levels/dhull_gallery/  Every Dhull animation side by side, for checking them
   environment/      SkyCycle (sky and light by time of day), CutoutRing, InkOutlines,
                     ScreenTexture, and the drawn clouds/, sun_moon/, floating_eyes/ and doodles/
-  player/           Player scene and its controller script
+  player/           Player scene and its controller script; DreamerModel, the dreamer's model,
+                    with its animations and face
   dhulls/           The Dhull scene, its genes (DhullGenome), DhullState (which animation and
                     face show each activity and mood), its animations, DhullFace, DhullColoring
                     and the face drawings in face/; DhullRecord and DhullLife (a Dhull's saved
@@ -86,6 +88,7 @@ scenes/
   ui/shop_menu/     Pebble's shop: buy and sell, one at a time
   ui/phone/         The dreamer's phone: the feed and its post cards
   ui/name_prompt/   Naming a newly hatched Dhull
+  ui/look_menu/     Where the dreamer picks their hair
   debug/            F3 developer menu (autoload, debug builds only)
 localization/       strings.csv: every player-facing string, by key and language
 tests/              Test runner and unit tests
@@ -156,7 +159,8 @@ above it.
   and crayon streaks, laid out in world space; tune the marks per material. Instance
   `scenes/environment/ink_outlines.tscn` in a level for ink lines along silhouettes and sharp
   folds, the same width on screen at any distance; tune `line_width`, `silhouette_gap` and
-  `crease_angle` on its material. `SkyCycle` colors the sky, sunlight, fog and shadow tint from
+  `crease_angle` on its material. Characters get none: `ps1_character.gdshader` marks them in the
+  normal-roughness buffer, and the lines leave out whatever has its roughness. `SkyCycle` colors the sky, sunlight, fog and shadow tint from
   gradients that run from midnight to midnight, and shows the drawn sun by day and the moon by
   night; in the editor, drag its **Preview Hour** to see any time of day. The sky itself is
   `stained_glass_sky.gdshader`, a speckled mosaic of broken stained glass: irregular shards of
@@ -170,7 +174,7 @@ above it.
   it's ready, in the editor too: a body (`assets/models/dhull_body_*/`: the body, with arms,
   legs and a tail as its children, each with its origin at its joint) and a head
   (`assets/models/dhull_head_*/`) that floats and bobs above it in a nebula mist. The parts are
-  separate, so each gets its own ink outline and can move on its own. To add a body or head
+  separate, so each can move on its own. To add a body or head
   shape, model it like the others, add it to `DhullGenome.BodyShape` or `HeadShape` with its
   dominance and commonness, and to `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is
   missing.
@@ -243,6 +247,34 @@ above it.
   you to match their vibe. The right reaction lifts its mood and bond; the wrong one stings. The
   words are translation keys `POST_<TOPIC>_<n>`, placeholders in a Dhull's voice. A hatched Dhull
   is named the first time the dreamer cares for it, the one thing they ever type.
+- **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
+  Decay's characters, though with Animal Crossing's short proportions: a low-poly chibi with hard
+  facets, in an oversized hoodie with striped sleeves and platform boots, and a big head on a
+  short neck, wider than it's tall: widest at round cheeks, its jaw coming in to a chin with a
+  flat underside, and a flattish face. The skin is shaded the way House of Decay's faces are
+  painted, darker to the sides, down the jaw and under the fringe, through its "Tip" vertex color
+  and `DreamerColors.skin_shade`. Each hair length is one mass, made the way House of Decay's hair
+  is: a smooth cap well out from the head with big, wide, flat panels laid over it, overlapping so
+  no gaps show. A fringe of broad pointed panels comes down to the brows, which peek out between
+  the points, with one panel over the right eye; flat curtains frame the face and wide panels hang
+  down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet
+  standing straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader`
+  through `assets/materials/face_dreamer.tres` with the dreamer's own drawings in
+  `scenes/player/face/`: tired and fed up, and neither masculine nor feminine: no lashes or wing.
+  The eyes are drawn like Bitey's in House of Decay: so big they reach past the sides of the head,
+  as Sylvia's do, with a thick black outline round each, its top a heavy dark red lid down to a
+  thick black lid line, with plenty of white and a pale iris under it; thick, short brows sit
+  right on the lids; a small nose over gritted teeth. Frames follow `DreamerModel.Eyes` and
+  `DreamerModel.Mouth`, and `DreamerModel.glance` rests the irises a little down, from under the
+  heavy lids. `eyes_apart` spaces the two eyes wider than the drawings without stretching them,
+  and they blink. `DreamerModel` shows the hair of the chosen length (`HairShort`, `HairMedium`,
+  `HairLong`) in the chosen color, colors the rest from `data/dreamer/colors.tres`
+  (`DreamerColors`), and plays `idle` or `walk` (`scenes/player/dreamer_animations.tres`), the
+  walk sped up to match how fast they go. The `Dreamer` autoload keeps their look (`DreamerLook`,
+  saved by name) and whether they've picked it: a new game opens the look menu before the first
+  dream, with the camera turned to their face, and **Change look** in the pause menu opens it
+  again. Its lengths and swatches come from `DreamerLook`'s enums and the palette, so adding a
+  choice is a data change plus its `UI_HAIR_<NAME>` string.
 - **Characters.** A character is a scene in `scenes/characters/` with an `Interactable` for "[E]
   Talk to". What it says is translation keys in exported lists, shown with `Player.listen()` in
   the dialogue box; the dreamer only listens, and Interact moves on a line. Lulla's lines are
@@ -261,7 +293,7 @@ above it.
   which cheers them and grows their `bond` with you, but not while they nap, when they're
   grumpy, when they're sad and don't trust you yet, or after too much fuss; they turn down food
   when full, and the young turn down coffee and energy drinks. A star or a spiral shows how it
-  went. A picked-up Dhull rides on the player's shoulders until Interact puts it down. Tune it
+  went. A picked-up Dhull rides on the dreamer's head until Interact puts it down. Tune it
   in the "Care from the player" group of `data/dhulls/life.tres`.
 - **Genetics.** Every Dhull has a hidden `genome` (`DhullGenome`) that the game never shows.
   Each gene is a pair of alleles, one from each parent. Head shape, body shape, eye style and
@@ -273,10 +305,8 @@ above it.
   load genes by name, so saves survive new genes. A Dhull without a genome gets a random one
   when the game runs; the F3 menu's "New random genes" rerolls every Dhull in the level.
 - **Dhull look.** Characters look like House of Decay's: PS1-era models with crunchy painted
-  faces, while the world stays ink-drawn. Each part has its own ink outline, as wide on screen as
-  the world's ink lines: `toon_character`'s next pass, `ink_hull`, draws the part's back faces in
-  ink, pushed out from the part's middle (its `outline_center`, which the Dhull sets), since the
-  screen-wide lines miss something as small as a Dhull standing on the ground. The part models are low-poly and flat-shaded, and
+  faces and no ink outlines, while the world stays ink-drawn. The part models are low-poly and
+  flat-shaded, and
   `ps1_character.gdshader` (the `toon_character` material) lights them in a few dithered bands.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
   eyes with a thick black border, big banded irises and a starburst round a tiny pupil, black
@@ -303,8 +333,8 @@ above it.
   match. A Dhull's colors come from its `coloring`, a `DhullColoring` resource in
   `data/dhulls/colorings/`: a color per part, the color the nubs turn towards at their tips
   (painted into the model's vertex color, and stepped like the light), and an optional pattern,
-  harlequin diamonds or spots. The Dhull sets them on its parts through the shader's instance
-  uniforms, so every Dhull can differ while sharing one material; the character and face shaders
+  harlequin diamonds, spots or stripes. The Dhull sets them on its parts through the shader's
+  instance uniforms, so every Dhull can differ while sharing one material; the character and face shaders
   keep their instance uniforms in separate slots, as a head carries both.
 - **Cutouts.** Things on the ground are 3D models, but tree tops, clouds, the sun and the moon
   are 2D drawings, like cardboard cutouts, animated in steps with 3 or 4 frames. The drawings in
@@ -361,8 +391,9 @@ uses. Godot is set not to read `.blend` files itself, so the project works on ma
 Blender.
 
 1. Edit or create `<name>.blend`.
-2. Name each material after a palette file in `assets/materials/`, such as `toon_grass` or
-   `toon_bark`. Godot then uses the shared toon material instead of the Blender one.
+2. Name each material after a palette file in `assets/materials/`: one of the `toon_*.tres`,
+   such as `toon_grass` or `toon_bark`, or a `face_*.tres` for a face the face shader paints.
+   Godot then uses that material instead of the Blender one.
 3. Name objects with a collision suffix where needed: `-col` (the mesh plus matching collision),
    `-convcol` (the mesh plus simpler convex collision), or `-colonly` / `-convcolonly` (an
    invisible collider only).
