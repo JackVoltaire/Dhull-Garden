@@ -261,7 +261,8 @@ above it.
   straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
   `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
   tired and fed up, and neither masculine nor feminine: no lashes or wing. The eyes are drawn like
-  Bitey's in House of Decay: big, with a thick black outline round each, its top a heavy dark red
+  Bitey's in House of Decay: so big they reach past the sides of the head, as Sylvia's do, with a
+  thick black outline round each, its top a heavy dark red
   lid down to a thick black lid line, with plenty of white and a pale iris under it; thick, short
   brows sit right on the lids; a small nose over gritted teeth. Frames follow `DreamerModel.Eyes` and `DreamerModel.Mouth`, and
   `DreamerModel.glance` rests the irises a little down, from under the heavy lids.
