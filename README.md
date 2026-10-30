@@ -250,32 +250,31 @@ above it.
 - **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
   Decay's characters, though with Animal Crossing's short proportions: a low-poly chibi with hard
   facets, in an oversized hoodie with striped sleeves and platform boots, and a big head on a
-  short neck, wider than it's tall: widest at round cheeks, its jaw coming in to a chin with a flat
-  underside, and a flattish face. The skin is
-  shaded the way House of Decay's faces are painted, darker to the sides, down the jaw and under
-  the fringe, through its "Tip" vertex color and `DreamerColors.skin_shade`. Each hair length is one
-  mass, made the way House of Decay's hair is: a smooth cap well out from the head with big, wide,
-  flat panels laid over it, overlapping so no gaps show. A fringe of broad pointed panels comes
-  down to the brows, which peek out between the points, with one panel over the right eye; flat
-  curtains frame the face and wide panels hang down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet standing
-  straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader` through
-  `assets/materials/face_dreamer.tres` with the dreamer's own drawings in `scenes/player/face/`:
-  tired and fed up, and neither masculine nor feminine: no lashes or wing. The eyes are drawn like
-  Bitey's in House of Decay: so big they reach past the sides of the head, as Sylvia's do, with a
-  thick black outline round each, its top a heavy dark red
-  lid down to a thick black lid line, with plenty of white and a pale iris under it; thick, short
-  brows sit right on the lids; a small nose over gritted teeth. Frames follow `DreamerModel.Eyes` and `DreamerModel.Mouth`, and
-  `DreamerModel.glance` rests the irises a little down, from under the heavy lids.
-  `eyes_apart` spaces the two eyes wider than the drawings without stretching them, and they
-  blink. `DreamerModel` shows
-  the hair of the chosen length (`HairShort`, `HairMedium`, `HairLong`) in the chosen color,
-  colors the rest from `data/dreamer/colors.tres` (`DreamerColors`), and plays `idle` or `walk`
-  (`scenes/player/dreamer_animations.tres`), the walk sped up to match how fast they go. The
-  `Dreamer` autoload keeps their look (`DreamerLook`, saved by name) and whether they've picked
-  it: a new game opens the look menu before the first dream, with the camera turned to their
-  face, and **Change look** in the pause menu opens it again. Its lengths and swatches come from
-  `DreamerLook`'s enums and the palette, so adding a choice is a data change plus its
-  `UI_HAIR_<NAME>` string.
+  short neck, wider than it's tall: widest at round cheeks, its jaw coming in to a chin with a
+  flat underside, and a flattish face. The skin is shaded the way House of Decay's faces are
+  painted, darker to the sides, down the jaw and under the fringe, through its "Tip" vertex color
+  and `DreamerColors.skin_shade`. Each hair length is one mass, made the way House of Decay's hair
+  is: a smooth cap well out from the head with big, wide, flat panels laid over it, overlapping so
+  no gaps show. A fringe of broad pointed panels comes down to the brows, which peek out between
+  the points, with one panel over the right eye; flat curtains frame the face and wide panels hang
+  down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet
+  standing straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader`
+  through `assets/materials/face_dreamer.tres` with the dreamer's own drawings in
+  `scenes/player/face/`: tired and fed up, and neither masculine nor feminine: no lashes or wing.
+  The eyes are drawn like Bitey's in House of Decay: so big they reach past the sides of the head,
+  as Sylvia's do, with a thick black outline round each, its top a heavy dark red lid down to a
+  thick black lid line, with plenty of white and a pale iris under it; thick, short brows sit
+  right on the lids; a small nose over gritted teeth. Frames follow `DreamerModel.Eyes` and
+  `DreamerModel.Mouth`, and `DreamerModel.glance` rests the irises a little down, from under the
+  heavy lids. `eyes_apart` spaces the two eyes wider than the drawings without stretching them,
+  and they blink. `DreamerModel` shows the hair of the chosen length (`HairShort`, `HairMedium`,
+  `HairLong`) in the chosen color, colors the rest from `data/dreamer/colors.tres`
+  (`DreamerColors`), and plays `idle` or `walk` (`scenes/player/dreamer_animations.tres`), the
+  walk sped up to match how fast they go. The `Dreamer` autoload keeps their look (`DreamerLook`,
+  saved by name) and whether they've picked it: a new game opens the look menu before the first
+  dream, with the camera turned to their face, and **Change look** in the pause menu opens it
+  again. Its lengths and swatches come from `DreamerLook`'s enums and the palette, so adding a
+  choice is a data change plus its `UI_HAIR_<NAME>` string.
 - **Characters.** A character is a scene in `scenes/characters/` with an `Interactable` for "[E]
   Talk to". What it says is translation keys in exported lists, shown with `Player.listen()` in
   the dialogue box; the dreamer only listens, and Interact moves on a line. Lulla's lines are
