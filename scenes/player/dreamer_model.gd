@@ -7,7 +7,7 @@ extends Node3D
 ## The dreamer's own face drawings, in the order of the frames in scenes/player/face/: tired and
 ## fed up, with heavy dark red lids.
 enum Eyes { HALF_LIDDED, SHUT }
-enum Mouth { FLAT }
+enum Mouth { GRITTED }
 
 ## The hair of each length; only the chosen one shows.
 const HAIRS: Dictionary[DreamerLook.HairLength, NodePath] = {
@@ -57,7 +57,7 @@ var _rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	_rng.randomize()
-	_face.set_instance_shader_parameter(&"mouth_frame", Mouth.FLAT)
+	_face.set_instance_shader_parameter(&"mouth_frame", Mouth.GRITTED)
 	_face.set_instance_shader_parameter(&"look", glance)
 	_paint(SKIN, colors.skin, colors.skin_shade)
 	_paint(HOODIE, colors.hoodie)
