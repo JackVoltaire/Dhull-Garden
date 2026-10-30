@@ -18,6 +18,6 @@ shader_parameter/eye_colors = 1
 shader_parameter/mouth_frames = 1
 shader_parameter/eyes_center = Vector2(0, -0.015)
 shader_parameter/eyes_size = Vector2(0.62, 0.504)
-shader_parameter/eyes_apart = 0.17
+shader_parameter/eyes_apart = 0.12
 shader_parameter/mouth_center = Vector2(0, -0.18)
 shader_parameter/mouth_size = Vector2(0.31, 0.155)
