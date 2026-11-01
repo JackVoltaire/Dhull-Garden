@@ -310,11 +310,12 @@ above it.
   `cel_character.gdshader` (the `toon_character` material) cel-shades them: a crisp edge between
   light and a cool shade (`shade_color`), a thin rim of light along the lit side, and no cast
   shadows on heads, whose shade edge (`head_shade_edge`) comes later so faces stay lit unless the
-  light is well behind them. Heads are drawn turned partway towards the camera and flattened
-  along its line of sight, as anime-style games draw them, so faces keep their drawn shape from
-  every side: `head_turn.gdshaderinc` does it in every shader that draws a head, and a `HeadTurn`
-  resource (`data/characters/head_turn.tres`, shared by the Dhulls and the dreamer) says how far
-  they turn and tip, how flat they're drawn and how round they're shaded. Only the drawing turns,
+  light is well behind them. Heads are drawn with their faces flattened, as a flattice in
+  Blender flattens them, then turned partway towards the camera and flattened along its line of
+  sight, as anime-style games draw them, so faces keep their drawn shape from every side:
+  `head_turn.gdshaderinc` does it in every shader that draws a head, and a `HeadTurn` resource
+  (`data/characters/head_turn.tres`, shared by the Dhulls and the dreamer) says how far they
+  turn and tip, how flat the face and the whole head are drawn and how round they're shaded. Only the drawing turns,
   not the node, so animations and gameplay don't notice.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
   eyes with a thick black border, big banded irises and a starburst round a tiny pupil, black
