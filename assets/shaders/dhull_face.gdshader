@@ -63,11 +63,11 @@ varying float facing_forward;
 void vertex() {
 	head_position = VERTEX;
 	facing_forward = NORMAL.z;
-	// Lift the face a hair off the head, so it draws over it without flickering. Outward from the
-	// head's middle rather than along the normals: they split at the head's sharp creases, and
-	// pushing each side along its own would open cracks there.
-	VERTEX += normalize(VERTEX) * 0.002;
 	turn_head(VERTEX, NORMAL, MODEL_MATRIX, MAIN_CAM_INV_VIEW_MATRIX);
+	// Lift the face a hair off the head towards the camera, so it draws over the head without
+	// flickering. After the flattice, which would squash a lift made before it to nothing; and
+	// straight at the camera, so the face doesn't move on screen.
+	VERTEX += toward_camera(MODEL_MATRIX, MAIN_CAM_INV_VIEW_MATRIX) * 0.002;
 }
 
 // Where this point of the head falls in a drawing at center of the given size: 0 to 1 across
