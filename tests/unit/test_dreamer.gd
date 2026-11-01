@@ -71,6 +71,32 @@ func test_every_hair_color_has_a_color() -> void:
 		assert_true(colors.hair.has(hair_color), "%s has a color" % hair_color)
 
 
+func test_hair_is_darker_in_the_creases_between_its_locks() -> void:
+	var colors: DreamerColors = load(COLORS_PATH)
+	for hair_color: DreamerLook.HairColor in DreamerLook.HairColor.values():
+		var crease := colors.hair_crease(hair_color)
+		assert_true(
+			crease.get_luminance() < colors.hair[hair_color].get_luminance(), str(hair_color)
+		)
+
+
+## The hair's creases are painted into its "Tip" vertex color; an export that leaves it out
+## shows every lock run together.
+func test_the_hair_is_painted_with_its_creases() -> void:
+	var model: Node3D = load(MODEL_PATH).instantiate()
+	for length: DreamerLook.HairLength in DreamerModel.HAIRS:
+		var hair: MeshInstance3D = model.get_node(DreamerModel.HAIRS[length])
+		var tips: PackedColorArray = hair.mesh.surface_get_arrays(0)[Mesh.ARRAY_COLOR]
+		var creases := 0
+		for tip in tips:
+			if tip.r > 0.5:
+				creases += 1
+		assert_true(
+			creases > 0 and creases < tips.size(), "%s has creases and lock middles" % hair.name
+		)
+	model.free()
+
+
 ## DreamerModel finds the parts it colors and the hair it shows by name in the model.
 func test_the_model_has_every_part_the_dreamer_shows() -> void:
 	var model: Node3D = load(MODEL_PATH).instantiate()

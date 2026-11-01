@@ -248,16 +248,21 @@ above it.
   words are translation keys `POST_<TOPIC>_<n>`, placeholders in a Dhull's voice. A hatched Dhull
   is named the first time the dreamer cares for it, the one thing they ever type.
 - **The dreamer.** The player is the dreamer, modelled in `assets/models/dreamer/` like House of
-  Decay's characters, though with Animal Crossing's short proportions: a low-poly chibi with hard
-  facets, in an oversized hoodie with striped sleeves and platform boots, and a big head on a
-  short neck, wider than it's tall: widest at round cheeks, its jaw coming in to a chin with a
+  Decay's characters, though with Animal Crossing's short proportions: a low-poly chibi in an
+  oversized hoodie with striped sleeves and platform boots, pastel goth (a pale lilac hoodie,
+  near-black stripes, chunky off-white shoes) so they stand out from the dark ground, and a big
+  head on a short neck, wider than it's tall: widest at round cheeks, its jaw coming in to a chin with a
   flat underside, and a flattish face. The skin is shaded the way House of Decay's faces are
   painted, darker to the sides, down the jaw and under the fringe, through its "Tip" vertex color
   and `DreamerColors.skin_shade`. Each hair length is one mass, made the way House of Decay's hair
-  is: a smooth cap well out from the head with big, wide, flat panels laid over it, overlapping so
-  no gaps show. A fringe of broad pointed panels comes down to the brows, which peek out between
-  the points, with one panel over the right eye; flat curtains frame the face and wide panels hang
-  down the back, some curling out at their ends. As in House of Decay, the face is a flat sheet
+  is: a smooth cap well out from the head with a few big, wide locks laid over it, overlapping so
+  no gaps show. Each lock is rounded across and painted darker at its edges, and the cap darker
+  between them, through their "Tip" vertex color and `DreamerColors.hair_crease()`, so every lock
+  reads on its own, as anime hair is drawn; `DreamerModel.hair_sheen` sets how bright the band of
+  highlight round the crown is (its shape is on `cel_character.gdshader`). A fringe of broad
+  pointed locks comes down to the brows, which peek out between the points, with one lock over
+  the right eye; curtains frame the face and wide locks hang down the back, some curling out at
+  their ends. As in House of Decay, the face is a flat sheet
   standing straight in front of the head, like glasses (`Face`), painted by `dhull_face.gdshader`
   through `assets/materials/face_dreamer.tres` with the dreamer's own drawings in
   `scenes/player/face/`: tired and fed up, and neither masculine nor feminine: no lashes or wing.
@@ -308,7 +313,9 @@ above it.
   and no ink outlines, while the world stays ink-drawn, and are lit like anime. The part models
   are shaded smooth, with sharp edges only at creases (hair spikes, hems), and
   `cel_character.gdshader` (the `toon_character` material) cel-shades them: a crisp edge between
-  light and a cool shade (`shade_color`), a thin rim of light along the lit side, and no cast
+  light and a shade that's a deeper, cooler take on each part's own color (`shade_color`, and
+  `shade_own_color` for how much of the part's color it keeps: rosy on skin, orange on yellow),
+  a thin rim of light along the lit side, a band of highlight round the crown of hair, and no cast
   shadows on heads, whose shade edge (`head_shade_edge`) comes later so faces stay lit unless the
   light is well behind them. Heads are drawn turned partway towards the camera, so faces keep
   their drawn shape from every side, as in anime-style games, and squashed nearly flat towards
@@ -317,8 +324,7 @@ above it.
   swelling on the near side. `head_turn.gdshaderinc` does it in every shader that draws a head,
   and a `HeadTurn` resource (`data/characters/head_turn.tres`, shared by the Dhulls and the
   dreamer) says how far they turn and tip, how flat they're squashed and how round they're
-  shaded. Only the drawing turns,
-  not the node, so animations and gameplay don't notice.
+  shaded. Only the drawing turns, not the node, so animations and gameplay don't notice.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
   eyes with a thick black border, big banded irises and a starburst round a tiny pupil, black
   wedge lashes, eye bags dithered under the eyes, and gritted teeth. The drawings are pixel-art

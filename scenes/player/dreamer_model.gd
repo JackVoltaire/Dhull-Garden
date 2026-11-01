@@ -42,6 +42,8 @@ const ANIMATED_TRACKS: Array[NodePath] = [
 @export var head_turn: HeadTurn
 ## Where their irises rest, from -1 to 1 right and up: a little down, from under heavy lids.
 @export var glance := Vector2(0.0, -0.3)
+## How bright the highlight round the crown of the hair is, from 0 to 1.
+@export_range(0.0, 1.0, 0.05) var hair_sheen := 0.6
 ## Seconds between blinks, picked at random between x and y, and how long a blink lasts.
 @export var blink_interval := Vector2(2.0, 5.0)
 @export_range(0.05, 1.0, 0.01, "suffix:s") var blink_duration := 0.14
@@ -72,17 +74,21 @@ func _ready() -> void:
 	_paint(TROUSERS, colors.trousers)
 	_paint(SHOES, colors.shoes)
 	head_turn.apply(get_node(HEAD))
+	for length: DreamerLook.HairLength in HAIRS:
+		var hair: GeometryInstance3D = get_node(HAIRS[length])
+		hair.set_instance_shader_parameter(&"sheen", hair_sheen)
 	_blink_timer.timeout.connect(_toggle_blink)
 	_show_eyes()
 	_blink_timer.start(_rng.randf_range(blink_interval.x, blink_interval.y))
 
 
-## Shows [param look]: the hair of its length, in its color.
+## Shows [param look]: the hair of its length, in its color, darker in the creases between its
+## locks (painted into the model as their "Tip").
 func show_look(look: DreamerLook) -> void:
 	for length: DreamerLook.HairLength in HAIRS:
 		var hair: MeshInstance3D = get_node(HAIRS[length])
 		hair.visible = length == look.hair_length
-		_paint_part(hair, colors.hair[look.hair_color])
+		_paint_part(hair, colors.hair[look.hair_color], colors.hair_crease(look.hair_color))
 
 
 ## Walks, at a pace to match, while the dreamer goes at least [member walking_from] across the
@@ -109,8 +115,8 @@ func _show_eyes() -> void:
 	_face.set_instance_shader_parameter(&"eye_frame", Eyes.SHUT if _blinking else Eyes.HALF_LIDDED)
 
 
-## The model shades parts towards their tip color by its "Tip" vertex color; only the skin has
-## shading, so other parts' tip color is their own.
+## The model shades parts towards their tip color by its "Tip" vertex color; only the skin and
+## the hair have any, so other parts' tip color is their own.
 func _paint(parts: Array[NodePath], color: Color, shade := color) -> void:
 	for part in parts:
 		_paint_part(get_node(part), color, shade)
