@@ -1,10 +1,10 @@
 class_name DhullColoring
 extends Resource
 ## How a Dhull is colored: a color for each of its parts, the color its nubs turn towards at the
-## tips, and an optional pattern on its body. A Dhull applies it to its parts through the clay
-## shader's instance uniforms, so Dhulls can differ while sharing one material.
+## tips, and an optional pattern on its body. A Dhull applies it to its parts through the
+## character shader's instance uniforms, so Dhulls can differ while sharing one material.
 
-## Numbered as in clay.gdshader.
+## Numbered as in cel_character.gdshader.
 enum Pattern { NONE, DIAMONDS, SPOTS, STRIPES }
 
 ## Stable name that saves refer to it by. Never rename it.

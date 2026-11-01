@@ -174,7 +174,10 @@ above it.
   it's ready, in the editor too: a body (`assets/models/dhull_body_*/`: the body, with arms,
   legs and a tail as its children, each with its origin at its joint) and a head
   (`assets/models/dhull_head_*/`) that floats and bobs above it in a nebula mist. The parts are
-  separate, so each can move on its own. To add a body or head
+  smooth and round, clay-like as the design notes ask, and separate, so each can move on its own.
+  The mist is emitted from behind the face and moves with the head, so it rings the head like a
+  halo from every side and never fogs over the face, even with the head drawn flattened towards
+  the camera. To add a body or head
   shape, model it like the others, add it to `DhullGenome.BodyShape` or `HeadShape` with its
   dominance and commonness, and to `Dhull.BODY_MODELS` or `HEAD_MODELS`; tests check nothing is
   missing.
@@ -315,7 +318,11 @@ above it.
   `cel_character.gdshader` (the `toon_character` material) cel-shades them: a crisp edge between
   light and a shade that's a deeper, cooler take on each part's own color (`shade_color`, and
   `shade_own_color` for how much of the part's color it keeps: rosy on skin, orange on yellow),
-  a thin rim of light along the lit side, a band of highlight round the crown of hair, and no cast
+  a thin rim of light along the lit side, a band of highlight round the crown of hair, detail
+  painted over parts in crunchy pixels as House of Decay paints its textures (strands through the
+  dreamer's hair, folds in their clothes: a `CharacterDetail.Kind` set on each part, its tiles in
+  `assets/textures/character_detail.png`, wrapped round the part so the models need no UVs;
+  Dhulls stay clay-smooth), and no cast
   shadows on heads, whose shade edge (`head_shade_edge`) comes later so faces stay lit unless the
   light is well behind them. Heads are drawn turned partway towards the camera, so faces keep
   their drawn shape from every side, as in anime-style games, and squashed nearly flat towards

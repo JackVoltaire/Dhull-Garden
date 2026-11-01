@@ -1,7 +1,9 @@
 // Characters cel-shaded like anime: a crisp edge between light and shade, the shade a deeper,
 // cooler take on each part's own color, as anime paints it (warm and rosy on skin), a thin rim of
-// light along the lit side's outline, and on hair a band of highlight round the crown. The tips'
-// color is stepped and dithered rather than smooth, like a PS1 texture, as in House of Decay.
+// light along the lit side's outline, and on hair a band of highlight round the crown. Detail is
+// painted over parts in crunchy pixels, as House of Decay paints its textures: strands through
+// hair, folds in cloth. The tips' color is stepped and dithered rather than smooth, like a PS1
+// texture.
 // Heads turn towards the camera (see head_turn.gdshaderinc). Each character colors its own parts
 // through the instance uniforms (see DhullColoring): the part's color, the color it turns towards
 // at the tips, and an optional pattern. How far towards a tip each point is comes from the
@@ -31,6 +33,8 @@ instance uniform int pattern : instance_index(3) = 0;
 // How bright the highlight round the crown is, from 0 (none, on anything but hair) to 1. Slot 12,
 // past the head turn's.
 instance uniform float sheen : instance_index(12) = 0.0;
+// The detail painted over the part, a CharacterDetail.Kind. Slot 13.
+instance uniform int detail : instance_index(13) = 0;
 // Size of a pattern's diamonds and spots, and how wide each stripe is, in meters.
 uniform float diamond_size = 0.11;
 uniform float spot_size = 0.06;
@@ -62,6 +66,13 @@ uniform int sheen_strands = 12;
 uniform float sheen_strand_length = 0.14;
 uniform float sheen_facing : hint_range(0.0, 1.0) = 0.45;
 uniform float sheen_whiteness : hint_range(0.0, 1.0) = 0.35;
+// The detail: a tile per CharacterDetail.Kind past NONE, stacked top to bottom, in grey (mid grey
+// leaves the part's color as it is, darker darkens it, lighter lightens it); how many there are;
+// how far each tile reaches over a part, in meters; and how strongly it shows, from 0 to 1.
+uniform sampler2D detail_tiles : filter_nearest, repeat_enable;
+uniform int detail_kinds = 2;
+uniform float detail_size = 0.5;
+uniform float detail_strength : hint_range(0.0, 1.0) = 1.0;
 // How many steps the tip color comes in.
 uniform int tip_bands : hint_range(2, 16) = 4;
 // Size of a dither dot, in screen pixels on a screen 720 pixels tall; it scales with resolution.
@@ -112,6 +123,18 @@ float sheen_band(vec3 p) {
 	return step(lowest, from_middle.y) * step(from_middle.y, sheen_height.y);
 }
 
+// What the detail does to the part's color at [p], in its model space: 1 leaves it as it is,
+// less darkens it, more lightens it. The tile is wrapped round the part's upright axis, as far
+// round as the part's surface goes there, and repeated down it, so the models need no UVs.
+float detail_shade(vec3 p) {
+	if (detail == 0) {
+		return 1.0;
+	}
+	vec2 over_part = vec2(atan(p.x, p.z) * length(p.xz), -p.y) / detail_size;
+	vec2 in_tile = vec2(fract(over_part.x), (fract(over_part.y) + float(detail - 1)) / float(detail_kinds));
+	return mix(1.0, texture(detail_tiles, in_tile).r * 2.0, detail_strength);
+}
+
 // 1 where the pattern's second color shows, 0 elsewhere.
 float pattern_mask(vec3 p) {
 	if (pattern == PATTERN_DIAMONDS) {
@@ -141,6 +164,7 @@ void fragment() {
 	float threshold = dither(FRAGCOORD.xy, VIEWPORT_SIZE);
 	vec3 color = mix(part_color.rgb, pattern_color.rgb, pattern_mask(model_position));
 	ALBEDO = mix(color, tip_color.rgb, banded(tip_amount, tip_bands, threshold));
+	ALBEDO *= detail_shade(model_position);
 	SPECULAR = 0.0;
 	ROUGHNESS = CHARACTER_ROUGHNESS;
 }

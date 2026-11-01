@@ -73,6 +73,8 @@ func _ready() -> void:
 		part.set_instance_shader_parameter(&"pattern_color", colors.sleeve_stripes)
 	_paint(TROUSERS, colors.trousers)
 	_paint(SHOES, colors.shoes)
+	_add_detail(HAIRS.values(), CharacterDetail.Kind.HAIR_STRANDS)
+	_add_detail(HOODIE + TROUSERS, CharacterDetail.Kind.CLOTH_FOLDS)
 	head_turn.apply(get_node(HEAD))
 	for length: DreamerLook.HairLength in HAIRS:
 		var hair: GeometryInstance3D = get_node(HAIRS[length])
@@ -120,6 +122,12 @@ func _show_eyes() -> void:
 func _paint(parts: Array[NodePath], color: Color, shade := color) -> void:
 	for part in parts:
 		_paint_part(get_node(part), color, shade)
+
+
+## Paints [param kind] of detail over [param parts], which are NodePaths.
+func _add_detail(parts: Array, kind: CharacterDetail.Kind) -> void:
+	for part: NodePath in parts:
+		(get_node(part) as GeometryInstance3D).set_instance_shader_parameter(&"detail", kind)
 
 
 static func _paint_part(part: GeometryInstance3D, color: Color, shade := color) -> void:
