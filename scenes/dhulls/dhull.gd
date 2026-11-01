@@ -79,6 +79,8 @@ const GROUP := &"dhulls"
 			_apply_coloring()
 ## Draws the face on the head; see dhull_face.gdshader.
 @export var face_material: Material
+## How the head is drawn turned towards the camera.
+@export var head_turn: HeadTurn
 ## How big a young Dhull is next to an adult.
 @export_range(0.3, 1.0, 0.05) var young_scale := 0.7
 ## How close the player has to come before it notices them, for the least and the most curious
@@ -368,6 +370,7 @@ func _build_model() -> void:
 	_head_shape = _take_part(HEAD_MODELS[head_shape], &"Head")
 	_head_shape.name = &"Shape"
 	_head_shape.material_overlay = face_material
+	head_turn.apply(_head_shape)
 	_head.add_child(_head_shape)
 	if not Engine.is_editor_hint():
 		_gaze.face = _head_shape

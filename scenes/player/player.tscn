@@ -14,6 +14,7 @@
 [ext_resource type="Resource" path="res://data/dreamer/colors.tres" id="12_colors"]
 [ext_resource type="AnimationLibrary" path="res://scenes/player/dreamer_animations.tres" id="14_animations"]
 [ext_resource type="PackedScene" path="res://scenes/ui/look_menu/look_menu.tscn" id="15_look_menu"]
+[ext_resource type="Resource" path="res://data/characters/head_turn.tres" id="16_head_turn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.3
@@ -39,6 +40,7 @@ shape = SubResource("CapsuleShape3D_body")
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 script = ExtResource("11_dreamer_model")
 colors = ExtResource("12_colors")
+head_turn = ExtResource("16_head_turn")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Model/Dreamer"]
 libraries = {

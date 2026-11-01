@@ -159,7 +159,7 @@ above it.
   and crayon streaks, laid out in world space; tune the marks per material. Instance
   `scenes/environment/ink_outlines.tscn` in a level for ink lines along silhouettes and sharp
   folds, the same width on screen at any distance; tune `line_width`, `silhouette_gap` and
-  `crease_angle` on its material. Characters get none: `ps1_character.gdshader` marks them in the
+  `crease_angle` on its material. Characters get none: `cel_character.gdshader` marks them in the
   normal-roughness buffer, and the lines leave out whatever has its roughness. `SkyCycle` colors the sky, sunlight, fog and shadow tint from
   gradients that run from midnight to midnight, and shows the drawn sun by day and the moon by
   night; in the editor, drag its **Preview Hour** to see any time of day. The sky itself is
@@ -304,10 +304,18 @@ above it.
   occasional mutations and a little drift in personality. `to_dict()` and `from_dict()` save and
   load genes by name, so saves survive new genes. A Dhull without a genome gets a random one
   when the game runs; the F3 menu's "New random genes" rerolls every Dhull in the level.
-- **Dhull look.** Characters look like House of Decay's: PS1-era models with crunchy painted
-  faces and no ink outlines, while the world stays ink-drawn. The part models are low-poly and
-  flat-shaded, and
-  `ps1_character.gdshader` (the `toon_character` material) lights them in a few dithered bands.
+- **Dhull look.** Characters look like House of Decay's, low-poly with crunchy painted faces
+  and no ink outlines, while the world stays ink-drawn, and are lit like anime. The part models
+  are shaded smooth, with sharp edges only at creases (hair spikes, hems), and
+  `cel_character.gdshader` (the `toon_character` material) cel-shades them: a crisp edge between
+  light and a cool shade (`shade_color`), a thin rim of light along the lit side, and no cast
+  shadows on heads, whose shade edge (`head_shade_edge`) comes later so faces stay lit unless the
+  light is well behind them. Heads are drawn turned partway towards the camera and flattened
+  along its line of sight, as anime-style games draw them, so faces keep their drawn shape from
+  every side: `head_turn.gdshaderinc` does it in every shader that draws a head, and a `HeadTurn`
+  resource (`data/characters/head_turn.tres`, shared by the Dhulls and the dreamer) says how far
+  they turn and tip, how flat they're drawn and how round they're shaded. Only the drawing turns,
+  not the node, so animations and gameplay don't notice.
   The face is drawn on the head by `dhull_face.gdshader`, swapped like Wind Waker's faces: big
   eyes with a thick black border, big banded irises and a starburst round a tiny pupil, black
   wedge lashes, eye bags dithered under the eyes, and gritted teeth. The drawings are pixel-art

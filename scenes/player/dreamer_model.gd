@@ -2,7 +2,8 @@ class_name DreamerModel
 extends Node3D
 ## The dreamer's model (assets/models/dreamer/): shows their look, the hair of the length they
 ## picked in the color they picked, colors the rest of them, paints their sleepy face on the flat
-## sheet in front of their head and blinks, and stands idle or walks as they move.
+## sheet in front of their head and blinks, turns their head towards the camera as it's drawn, and
+## stands idle or walks as they move.
 
 ## The dreamer's own face drawings, in the order of the frames in scenes/player/face/: tired and
 ## fed up, with heavy dark red lids.
@@ -15,8 +16,10 @@ const HAIRS: Dictionary[DreamerLook.HairLength, NodePath] = {
 	DreamerLook.HairLength.MEDIUM: ^"Body/Head/HairMedium",
 	DreamerLook.HairLength.LONG: ^"Body/Head/HairLong",
 }
+## The head, with the hair and the face on it.
+const HEAD := ^"Body/Head"
 const SKIN: Array[NodePath] = [
-	^"Body/Head", ^"Body/Neck", ^"Body/SleeveLeft/HandLeft", ^"Body/SleeveRight/HandRight"
+	HEAD, ^"Body/Neck", ^"Body/SleeveLeft/HandLeft", ^"Body/SleeveRight/HandRight"
 ]
 const HOODIE: Array[NodePath] = [^"Body", ^"Body/SleeveLeft", ^"Body/SleeveRight"]
 const SLEEVES: Array[NodePath] = [^"Body/SleeveLeft", ^"Body/SleeveRight"]
@@ -36,6 +39,7 @@ const ANIMATED_TRACKS: Array[NodePath] = [
 ]
 
 @export var colors: DreamerColors
+@export var head_turn: HeadTurn
 ## Where their irises rest, from -1 to 1 right and up: a little down, from under heavy lids.
 @export var glance := Vector2(0.0, -0.3)
 ## Seconds between blinks, picked at random between x and y, and how long a blink lasts.
@@ -67,6 +71,7 @@ func _ready() -> void:
 		part.set_instance_shader_parameter(&"pattern_color", colors.sleeve_stripes)
 	_paint(TROUSERS, colors.trousers)
 	_paint(SHOES, colors.shoes)
+	head_turn.apply(get_node(HEAD))
 	_blink_timer.timeout.connect(_toggle_blink)
 	_show_eyes()
 	_blink_timer.start(_rng.randf_range(blink_interval.x, blink_interval.y))

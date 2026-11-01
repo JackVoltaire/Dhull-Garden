@@ -18,6 +18,7 @@
 [ext_resource type="Material" path="res://assets/materials/toon_character.tres" id="17_character"]
 [ext_resource type="Script" path="res://scenes/dhulls/dhull_gaze.gd" id="18_gaze"]
 [ext_resource type="Script" path="res://systems/looking/lookable.gd" id="19_lookable"]
+[ext_resource type="Resource" path="res://data/characters/head_turn.tres" id="20_head_turn"]
 
 [sub_resource type="Gradient" id="Gradient_mist"]
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
@@ -125,6 +126,7 @@ radius = 4.0
 [node name="Dhull" type="Node3D"]
 script = ExtResource("1_dhull")
 face_material = ExtResource("3_face")
+head_turn = ExtResource("20_head_turn")
 coloring = ExtResource("4_coloring")
 
 [node name="Model" type="Node3D" parent="."]

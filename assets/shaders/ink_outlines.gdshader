@@ -3,7 +3,7 @@
 // grown around each model. Use it on a 2x2 QuadMesh that is never culled; it covers the screen
 // by itself (see scenes/environment/ink_outlines.tscn). Characters get no lines, as House of
 // Decay's have none: where the nearest surface is a character, marked by its roughness (see
-// ps1_character.gdshader), nothing is drawn.
+// cel_character.gdshader), nothing is drawn.
 shader_type spatial;
 render_mode unshaded, fog_disabled, shadows_disabled, depth_draw_never, depth_test_disabled, cull_disabled;
 
@@ -16,7 +16,7 @@ uniform float line_width : hint_range(0.5, 8.0) = 2.5;
 uniform float silhouette_gap : hint_range(0.01, 1.0) = 0.1;
 // How sharply, in degrees, a surface must fold to draw a line along the fold.
 uniform float crease_angle : hint_range(1.0, 180.0) = 40.0;
-// The roughness characters mark themselves with: ps1_character.gdshader's CHARACTER_ROUGHNESS.
+// The roughness characters mark themselves with: cel_character.gdshader's CHARACTER_ROUGHNESS.
 uniform float character_roughness = 0.3;
 // Lines fade out between these distances, in meters, like the environment's distance fog.
 uniform float fade_start = 40.0;

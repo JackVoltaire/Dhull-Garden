@@ -1,6 +1,7 @@
-// Characters shaded like a PS1-era game, as in House of Decay: flat-shaded facets, light in a few
-// coarse bands with ordered dithering between them, and the nub tips' color stepped and dithered
-// rather than smooth. Each character colors its own parts through the instance uniforms (see
+// Characters cel-shaded like anime: a crisp edge between light and shade, the shade a cool tint of
+// the part's own color, and a thin rim of light along the lit side's outline. The nub tips' color
+// is stepped and dithered rather than smooth, like a PS1 texture, as in House of Decay. Heads turn
+// towards the camera (see head_turn.gdshaderinc). Each character colors its own parts through the instance uniforms (see
 // DhullColoring): the part's color, the color it turns towards at the tips, and an optional
 // pattern. How far towards a tip each point is comes from the model's vertex color, red channel.
 // Characters have no ink lines round them, as House of Decay's have none: they mark themselves in
@@ -8,6 +9,8 @@
 // (ink_outlines.gdshader) leave out whatever has it. With no specular, the roughness changes
 // nothing else about how they look.
 shader_type spatial;
+
+#include "res://assets/shaders/head_turn.gdshaderinc"
 
 const float CHARACTER_ROUGHNESS = 0.3;
 // Patterns, numbered as in DhullColoring.Pattern.
@@ -27,16 +30,29 @@ instance uniform int pattern : instance_index(3) = 0;
 uniform float diamond_size = 0.11;
 uniform float spot_size = 0.06;
 uniform float stripe_size = 0.045;
-// Share of the light that still reaches the shady side.
-uniform float shade_fill : hint_range(0.0, 1.0) = 0.5;
-// How many steps light falls off in, and how many steps the tip color comes in.
-uniform int light_bands : hint_range(2, 16) = 4;
+// The share of the light, in each color, that still reaches the shady side: under 1 and bluer
+// than the light, for cool anime shade.
+uniform vec3 shade_color : source_color = vec3(0.6, 0.5, 0.7);
+// Where the shade starts, as how squarely a surface faces the light, from -1 (facing away) to 1;
+// and how soft its edge is.
+uniform float shade_edge : hint_range(-1.0, 1.0) = 0.0;
+// Where the shade starts on heads: later than elsewhere, so a face is lit unless the light is
+// well behind it, as anime keeps faces in the light.
+uniform float head_shade_edge : hint_range(-1.0, 1.0) = -0.45;
+uniform float shade_softness : hint_range(0.0, 0.5) = 0.02;
+// The rim of light: how far in from the outline it reaches, as how far a surface turns from the
+// camera, from 0 to 1, and how bright it is.
+uniform float rim_width : hint_range(0.0, 1.0) = 0.25;
+uniform float rim_strength : hint_range(0.0, 1.0) = 0.35;
+// How many steps the tip color comes in.
 uniform int tip_bands : hint_range(2, 16) = 4;
 // Size of a dither dot, in screen pixels on a screen 720 pixels tall; it scales with resolution.
 uniform float dither_pixel = 2.0;
 
 varying vec3 model_position;
 varying float tip_amount;
+// 1 on a head, 0 elsewhere.
+varying float on_head;
 
 float hash(vec3 p) {
 	return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453);
@@ -88,6 +104,8 @@ float pattern_mask(vec3 p) {
 void vertex() {
 	model_position = VERTEX;
 	tip_amount = COLOR.r;
+	on_head = is_head() ? 1.0 : 0.0;
+	turn_head(VERTEX, NORMAL, MODEL_MATRIX, MAIN_CAM_INV_VIEW_MATRIX[3].xyz);
 }
 
 void fragment() {
@@ -99,13 +117,17 @@ void fragment() {
 }
 
 void light() {
-	float threshold = dither(FRAGCOORD.xy, VIEWPORT_SIZE);
-	// Half-Lambert: light wraps softly round the form before it's cut into bands.
-	float wrapped = dot(NORMAL, LIGHT) * 0.5 + 0.5;
-	float lit = banded(wrapped * wrapped, light_bands, threshold);
+	float facing = dot(NORMAL, LIGHT);
+	float edge = mix(shade_edge, head_shade_edge, on_head);
+	float lit = smoothstep(edge - shade_softness, edge + shade_softness, facing);
 	if (LIGHT_IS_DIRECTIONAL) {
-		float shadow = banded(ATTENUATION, 2, threshold);
-		DIFFUSE_LIGHT += mix(shade_fill, 1.0, lit * shadow) * LIGHT_COLOR / PI;
+		// Cast shadows are shade too, with the same crisp edge; but not on heads, where the hair's
+		// shadow would put the whole face in shade. As in anime, a head is shaded by how it faces
+		// the light alone.
+		float shadow = smoothstep(0.5 - shade_softness, 0.5 + shade_softness, ATTENUATION);
+		lit *= max(shadow, on_head);
+		float rim = step(1.0 - rim_width, 1.0 - dot(NORMAL, VIEW)) * rim_strength * lit;
+		DIFFUSE_LIGHT += (mix(shade_color, vec3(1.0), lit) + rim) * LIGHT_COLOR / PI;
 	} else {
 		DIFFUSE_LIGHT += lit * ATTENUATION * LIGHT_COLOR / PI;
 	}

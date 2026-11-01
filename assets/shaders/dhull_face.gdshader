@@ -12,8 +12,11 @@
 // rest, and the lines laid over both. The irises slide by look (see DhullGaze), a whole pixel at a
 // time, and only show over the whites, so an iris turned far is cut off by the eye's border. The
 // iris strip has a row per iris color, and eye_color picks the row (see DhullGenome.EyeColor).
+// The face turns towards the camera with the head it's on (see head_turn.gdshaderinc).
 shader_type spatial;
 render_mode unshaded, depth_draw_never, cull_back, shadows_disabled;
+
+#include "res://assets/shaders/head_turn.gdshaderinc"
 
 // A face without some drawings, like the dreamer's without mouths, shows nothing there.
 uniform sampler2D eye_whites : source_color, hint_default_transparent, filter_nearest_mipmap, repeat_disable;
@@ -61,9 +64,10 @@ void vertex() {
 	head_position = VERTEX;
 	facing_forward = NORMAL.z;
 	// Lift the face a hair off the head, so it draws over it without flickering. Outward from the
-	// head's middle rather than along each face's normal: the head is flat-shaded, and pushing each
-	// facet along its own normal would open cracks between them.
+	// head's middle rather than along the normals: they split at the head's sharp creases, and
+	// pushing each side along its own would open cracks there.
 	VERTEX += normalize(VERTEX) * 0.002;
+	turn_head(VERTEX, NORMAL, MODEL_MATRIX, MAIN_CAM_INV_VIEW_MATRIX[3].xyz);
 }
 
 // Where this point of the head falls in a drawing at center of the given size: 0 to 1 across

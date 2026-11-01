@@ -2,7 +2,7 @@ extends TestCase
 ## Characters have no ink outlines, as House of Decay's have none. They mark themselves in the
 ## normal-roughness buffer, and the world's ink lines leave out whatever has that roughness.
 
-const CHARACTER_SHADER := "res://assets/shaders/ps1_character.gdshader"
+const CHARACTER_SHADER := "res://assets/shaders/cel_character.gdshader"
 const INK_LINES_SHADER := "res://assets/shaders/ink_outlines.gdshader"
 const CHARACTER_MATERIAL := "res://assets/materials/toon_character.tres"
 ## What the world's materials leave their roughness at.
