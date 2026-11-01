@@ -105,7 +105,7 @@ void vertex() {
 	model_position = VERTEX;
 	tip_amount = COLOR.r;
 	on_head = is_head() ? 1.0 : 0.0;
-	turn_head(VERTEX, NORMAL, MODEL_MATRIX, MAIN_CAM_INV_VIEW_MATRIX[3].xyz);
+	turn_head(VERTEX, NORMAL, MODEL_MATRIX, MAIN_CAM_INV_VIEW_MATRIX);
 }
 
 void fragment() {

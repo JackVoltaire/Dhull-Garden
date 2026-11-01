@@ -67,7 +67,7 @@ void vertex() {
 	// head's middle rather than along the normals: they split at the head's sharp creases, and
 	// pushing each side along its own would open cracks there.
 	VERTEX += normalize(VERTEX) * 0.002;
-	turn_head(VERTEX, NORMAL, MODEL_MATRIX, MAIN_CAM_INV_VIEW_MATRIX[3].xyz);
+	turn_head(VERTEX, NORMAL, MODEL_MATRIX, MAIN_CAM_INV_VIEW_MATRIX);
 }
 
 // Where this point of the head falls in a drawing at center of the given size: 0 to 1 across

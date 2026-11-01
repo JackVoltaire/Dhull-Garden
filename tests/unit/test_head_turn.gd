@@ -25,14 +25,12 @@ func test_every_part_on_a_head_turns_with_it() -> void:
 	turn.most_upward = 10.0
 	turn.depth = 0.6
 	turn.roundness = 0.4
-	turn.face_depth = 0.3
 	turn.apply(head)
 	var expected_turn := Vector2(deg_to_rad(20.0), deg_to_rad(10.0))
 	for part: MeshInstance3D in [head, hair, face]:
 		assert_eq(part.get_instance_shader_parameter(&"head_turn"), expected_turn, part.name)
 		assert_eq(part.get_instance_shader_parameter(&"head_depth"), 0.6, part.name)
 		assert_eq(part.get_instance_shader_parameter(&"head_roundness"), 0.4, part.name)
-		assert_eq(part.get_instance_shader_parameter(&"head_face_depth"), 0.3, part.name)
 	head.free()
 
 
