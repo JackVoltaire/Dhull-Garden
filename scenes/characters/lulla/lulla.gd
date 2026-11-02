@@ -1,6 +1,6 @@
 class_name Lulla
 extends Node3D
-## Lulla, the sleepy, cryptic goat girl who carries her pillow everywhere. The first time the
+## Lulla, the sleepy, cryptic sheep girl who carries her pillow everywhere. The first time the
 ## dreamer talks to her she hands over their first egg; after that she mumbles, a line at a time.
 ## She nods off in the middle of some lines and dozes until she's talked to again, then wakes
 ## with a start (see LullaTalk); her model acts it all out.

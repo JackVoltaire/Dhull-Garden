@@ -288,13 +288,16 @@ above it.
   the dialogue box; the dreamer only listens, and Interact moves on a line. `listen()` can also
   call back with each line as it's shown, so the character can act it out. Lulla's lines are
   placeholders in her voice.
-- **Lulla.** Modelled in `assets/models/lulla/` like the dreamer, a House of Decay chibi about
-  three heads tall: lilac wool for hair with yellow stars and moons in it (the `STARS_AND_MOONS`
-  pattern, from `assets/textures/stars_and_moons.png`, also on her pillow) and wool curls painted
-  through it, curled horns, floppy ears, a sleep mask pushed up on her forehead, and a long black
-  Victorian nightgown with ruffled frills, hugging her pillow. Her face is her own, painted on a
-  flat sheet like the dreamer's (`face_lulla.tres`, drawings in `scenes/characters/lulla/face/`):
-  drowsy, shut and startled eyes with golden irises and goat pupils, and a mouth closed or open.
+- **Lulla.** Modelled in `assets/models/lulla/`, a House of Decay chibi about three heads tall
+  with a sheep's head like Animal Crossing's sheep villagers: a soft cream face, egg-shaped and
+  narrowing to a muzzle, poking out of a big round fleece of lilac wool that wraps round it like
+  a hood, with yellow stars and moons in it (the `STARS_AND_MOONS` pattern, from
+  `assets/textures/stars_and_moons.png`, also on her pillow) and wool curls painted through it;
+  ears sticking out sideways, curled horns, a sleep mask pushed up on her forehead, and a long
+  black Victorian nightgown with ruffled frills, hugging her pillow. Her face is painted on her
+  head like the Dhulls' faces (`face_lulla.tres` as the head's overlay, drawings in
+  `scenes/characters/lulla/face/`): drowsy, shut and startled eyes with golden irises and a
+  sheep's sideways pupils, and on the muzzle a small nose over a mouth closed or open.
   `LullaModel` colors her (tune the colors on it) and acts her out with the animations in
   `lulla_animations.tres`: `idle` sways her on her feet, blinking, her head drooping until she
   jolts awake; `talk` keeps her awake while her mouth moves for as long as each line takes;
