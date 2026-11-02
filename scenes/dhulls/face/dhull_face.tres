@@ -16,3 +16,5 @@ shader_parameter/mouths = ExtResource("3_mouths")
 shader_parameter/eye_frames = 10
 shader_parameter/eye_colors = 6
 shader_parameter/mouth_frames = 2
+shader_parameter/eyes_size = Vector2(0.44, 0.275)
+shader_parameter/mouth_size = Vector2(0.17, 0.085)

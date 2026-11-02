@@ -79,6 +79,8 @@ const GROUP := &"dhulls"
 			_apply_coloring()
 ## Draws the face on the head; see dhull_face.gdshader.
 @export var face_material: Material
+## How the head is drawn turned towards the camera.
+@export var head_turn: HeadTurn
 ## How big a young Dhull is next to an adult.
 @export_range(0.3, 1.0, 0.05) var young_scale := 0.7
 ## How close the player has to come before it notices them, for the least and the most curious
@@ -296,7 +298,7 @@ func _show_life() -> void:
 
 
 ## What it's doing follows from its life: an egg sits still, a napping Dhull sleeps, a carried
-## one sits on the player's shoulders, and otherwise its brain walks it about.
+## one sits on the player's head, and otherwise its brain walks it about.
 func _show_activity() -> void:
 	if record.is_egg():
 		_brain.rest()
@@ -368,8 +370,8 @@ func _build_model() -> void:
 	_head_shape = _take_part(HEAD_MODELS[head_shape], &"Head")
 	_head_shape.name = &"Shape"
 	_head_shape.material_overlay = face_material
+	head_turn.apply(_head_shape)
 	_head.add_child(_head_shape)
-	_center_outlines(body)
 	if not Engine.is_editor_hint():
 		_gaze.face = _head_shape
 		_hold(_selfie_stick, body.get_node(^"ArmRight"), stick_grip)
@@ -390,16 +392,6 @@ func _front_camera() -> Vector3:
 		phone_up = _selfie_stick.global_basis.z
 	var height := front_camera_height * size_scale()
 	return _stick_phone.global_position + phone_up.normalized() * height
-
-
-## Tells each part's ink outline where the part's middle is, to grow it out from there (see
-## ink_hull.gdshader).
-func _center_outlines(body: Node3D) -> void:
-	# Parts taken out of their models have no owner, so look at every node.
-	var parts: Array[Node] = body.find_children("*", "MeshInstance3D", true, false)
-	parts.append_array([body, _head_shape, _egg])
-	for part: MeshInstance3D in parts:
-		part.set_instance_shader_parameter(&"outline_center", part.mesh.get_aabb().get_center())
 
 
 ## Puts [param thing] in [param nub], at [param grip] from its joint, turned as it was.

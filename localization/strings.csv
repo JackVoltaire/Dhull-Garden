@@ -47,6 +47,9 @@ CHARACTER_LULLA,Lulla
 "LULLA_MUMBLE_2","The clouds hum when you're not looking. Don't tell them I said that."
 "LULLA_MUMBLE_3","You again. Or still. ...zzz."
 "LULLA_MUMBLE_4","Is it day? Feels like day. Feels like everything, honestly."
+"LULLA_WAKE_1","...hm? Oh. You. I was only resting my eyes. They were tired of looking."
+"LULLA_WAKE_2","Mm. I wasn't asleep. I was listening to the pillow. It says hello."
+"LULLA_WAKE_3","...was I talking? I do that. Sometimes the dream answers."
 MINIGAME_MINING,Mining
 MINIGAME_MINING_DESCRIPTION,Dig materials out of a wall before it caves in.
 UI_PICK,Pick
@@ -100,3 +103,20 @@ UI_REACT_LIKE,Like
 UI_REACT_HEART,Heart
 UI_REACT_SAD,Sad
 UI_REACT_ANGRY,Angry
+UI_CHANGE_LOOK,Change look
+UI_YOUR_LOOK,Your look
+UI_HAIR_LENGTH,Hair length
+UI_HAIR_COLOR,Hair color
+UI_HAIR_SHORT,Short
+UI_HAIR_MEDIUM,Medium
+UI_HAIR_LONG,Long
+UI_HAIR_BLACK,Black
+UI_HAIR_WHITE,White
+UI_HAIR_SILVER,Silver
+UI_HAIR_BROWN,Brown
+UI_HAIR_BLOND,Blond
+UI_HAIR_RED,Red
+UI_HAIR_PINK,Pink
+UI_HAIR_VIOLET,Violet
+UI_HAIR_TEAL,Teal
+UI_HAIR_GREEN,Green

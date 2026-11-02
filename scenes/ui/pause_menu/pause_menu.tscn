@@ -47,6 +47,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "UI_RESUME"
 
+[node name="LookButton" type="Button" parent="CenterContainer/Panel/Margin/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "UI_CHANGE_LOOK"
+
 [node name="QuitButton" type="Button" parent="CenterContainer/Panel/Margin/Items"]
 unique_name_in_owner = true
 layout_mode = 2
