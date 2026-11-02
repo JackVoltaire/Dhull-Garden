@@ -7,6 +7,7 @@
 [ext_resource type="Resource" path="res://data/characters/head_turn.tres" id="5_head_turn"]
 [ext_resource type="AnimationLibrary" path="res://scenes/characters/lulla/lulla_animations.tres" id="6_animations"]
 [ext_resource type="Script" path="res://systems/looking/lookable.gd" id="7_lookable"]
+[ext_resource type="Material" path="res://assets/materials/face_lulla.tres" id="8_face"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
 radius = 0.9
@@ -22,6 +23,7 @@ nodding_off = PackedStringArray("LULLA_FIRST_4", "LULLA_MUMBLE_1", "LULLA_MUMBLE
 
 [node name="Lulla" parent="Model" instance=ExtResource("3_model")]
 script = ExtResource("4_lulla_model")
+face_material = ExtResource("8_face")
 head_turn = ExtResource("5_head_turn")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Model/Lulla"]

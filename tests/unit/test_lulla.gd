@@ -40,11 +40,9 @@ func test_talking_to_her_while_she_dozes_wakes_her_with_a_waking_line() -> void:
 func test_the_model_has_every_part_lulla_colors() -> void:
 	var model: Node3D = load(MODEL_PATH).instantiate()
 	var parts: Array[NodePath] = [
-		LullaModel.FACE, LullaModel.WOOL, LullaModel.MASK, LullaModel.PILLOW, LullaModel.HOOVES
+		LullaModel.HEAD, LullaModel.WOOL, LullaModel.MASK, LullaModel.PILLOW, LullaModel.HOOVES
 	]
-	for group in [
-		LullaModel.SKIN, LullaModel.GOWN, LullaModel.FRILLS, LullaModel.EARS, LullaModel.HORNS
-	]:
+	for group in [LullaModel.SKIN, LullaModel.GOWN, LullaModel.FRILLS, LullaModel.HORNS]:
 		parts.append_array(group)
 	for part in parts:
 		assert_true(model.get_node_or_null(part) is MeshInstance3D, "%s is in the model" % part)

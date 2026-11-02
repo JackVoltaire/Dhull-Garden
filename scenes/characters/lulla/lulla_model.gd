@@ -1,8 +1,8 @@
 class_name LullaModel
 extends Node3D
-## Lulla's model (assets/models/lulla/): colors her parts, paints her face on the flat sheet in
-## front of her head, and acts her out. She sways sleepily on her feet hugging her pillow, her
-## head drooping until she jolts awake (idle); stays awake while she talks, her mouth moving
+## Lulla's model (assets/models/lulla/): colors her parts, paints her face on her sheep's head
+## (see dhull_face.gdshader), and acts her out. She sways sleepily on her feet hugging her pillow,
+## her head drooping until she jolts awake (idle); stays awake while she talks, her mouth moving
 ## (talk); nods off and dozes (doze); and wakes with a start (wake). The animations are in
 ## scenes/characters/lulla/lulla_animations.tres, and key her eyes too.
 
@@ -10,10 +10,16 @@ extends Node3D
 enum Eyes { DROWSY, SHUT, STARTLED }
 enum Mouth { CLOSED, OPEN }
 
+## The sheep's head, its face painted on it.
 const HEAD := ^"Body/Head"
-const FACE := ^"Body/Head/Face"
+## Her face, ears and hands.
 const SKIN: Array[NodePath] = [
-	HEAD, ^"Body/Neck", ^"Body/SleeveLeft/HandLeft", ^"Body/SleeveRight/HandRight"
+	HEAD,
+	^"Body/Neck",
+	^"Body/Head/EarLeft",
+	^"Body/Head/EarRight",
+	^"Body/SleeveLeft/HandLeft",
+	^"Body/SleeveRight/HandRight",
 ]
 const GOWN: Array[NodePath] = [^"Body", ^"Body/SleeveLeft", ^"Body/SleeveRight"]
 const FRILLS: Array[NodePath] = [
@@ -23,7 +29,6 @@ const FRILLS: Array[NodePath] = [
 	^"Body/SleeveRight/CuffFrillRight",
 ]
 const WOOL := ^"Body/Head/Wool"
-const EARS: Array[NodePath] = [^"Body/Head/EarLeft", ^"Body/Head/EarRight"]
 const HORNS: Array[NodePath] = [^"Body/Head/HornLeft", ^"Body/Head/HornRight"]
 const MASK := ^"Body/Head/Mask"
 const PILLOW := ^"Body/Pillow"
@@ -35,19 +40,20 @@ const ANIMATED_TRACKS: Array[NodePath] = [
 	^"Body/Head:rotation",
 	^"Body/Head/EarLeft:rotation",
 	^"Body/Head/EarRight:rotation",
-	^"Body/Head/Face:instance_shader_parameters/eye_frame",
+	^"Body/Head:instance_shader_parameters/eye_frame",
 ]
 
+## Paints her face on her head; see dhull_face.gdshader.
+@export var face_material: Material
 @export var head_turn: HeadTurn
 @export_group("Colors")
-@export var skin := Color(1.0, 0.9, 0.86)
-## What the skin turns to where it's shaded: to the sides of the face, the jaw and under the wool.
-@export var skin_shade := Color(0.82, 0.66, 0.72)
-## Lilac wool, with yellow stars and moons in it, as on her pillow, and her woolly ears a shade
-## darker, so they stand out from it.
+## A soft cream sheep's face, as on Animal Crossing's pale-faced sheep, and her ears and hands.
+@export var skin := Color(1.0, 0.95, 0.88)
+## What the face turns to where it's shaded: round its edges and up under the wool.
+@export var skin_shade := Color(0.86, 0.76, 0.78)
+## Lilac wool, with yellow stars and moons in it, as on her pillow.
 @export var wool := Color(0.72, 0.6, 0.9)
 @export var stars_and_moons := Color(1.0, 0.86, 0.32)
-@export var ears := Color(0.58, 0.47, 0.76)
 ## A Victorian black nightgown, its frills a shade lighter so they read.
 @export var gown := Color(0.11, 0.09, 0.14)
 @export var frills := Color(0.21, 0.18, 0.27)
@@ -69,7 +75,7 @@ const ANIMATED_TRACKS: Array[NodePath] = [
 var _nodding_off := false
 var _mouth_open := false
 
-@onready var _face: GeometryInstance3D = get_node(FACE)
+@onready var _face: GeometryInstance3D = get_node(HEAD)
 @onready var _animation_player: AnimationPlayer = $AnimationPlayer
 @onready var _mouth_timer: Timer = $MouthTimer
 @onready var _talk_timer: Timer = $TalkTimer
@@ -81,8 +87,7 @@ func _ready() -> void:
 	_add_detail(GOWN, CharacterDetail.Kind.CLOTH_FOLDS)
 	_paint(FRILLS, frills)
 	_paint([WOOL], wool)
-	_paint(EARS, ears)
-	_add_detail([WOOL] + EARS, CharacterDetail.Kind.WOOL_CURLS)
+	_add_detail([WOOL], CharacterDetail.Kind.WOOL_CURLS)
 	_paint(HORNS, horns, horn_tips)
 	_paint([MASK], mask)
 	_paint([PILLOW], pillow)
@@ -92,7 +97,8 @@ func _ready() -> void:
 		starry.set_instance_shader_parameter(&"pattern", DhullColoring.Pattern.STARS_AND_MOONS)
 		starry.set_instance_shader_parameter(&"pattern_color", stars_and_moons)
 	_paint([HOOVES], hooves)
-	head_turn.apply(get_node(HEAD))
+	_face.material_overlay = face_material
+	head_turn.apply(_face)
 	_face.set_instance_shader_parameter(&"mouth_frame", Mouth.CLOSED)
 	_mouth_timer.timeout.connect(_flap_mouth)
 	_talk_timer.timeout.connect(_stop_talking)
@@ -143,7 +149,7 @@ func _show_mouth(open: bool) -> void:
 
 
 ## Colors [param parts], NodePaths, turning towards [param shade] by their "Tip" vertex color;
-## only the skin and the horns have any.
+## only the face and the horns have any.
 func _paint(parts: Array, color: Color, shade := color) -> void:
 	for path: NodePath in parts:
 		var part: GeometryInstance3D = get_node(path)
