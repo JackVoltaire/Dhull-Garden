@@ -7,6 +7,7 @@ var _player: Player
 var _lines := PackedStringArray()
 var _next_line := 0
 var _when_done := Callable()
+var _on_line := Callable()
 
 @onready var _speaker: Label = %Speaker
 @onready var _line: Label = %Line
@@ -16,10 +17,15 @@ func _ready() -> void:
 	hide()
 
 
-## Shows [param lines], translation keys, from [param speaker]. Calls [param when_done] after
-## the last one.
+## Shows [param lines], translation keys, from [param speaker]. Calls [param on_line] with each
+## line's key as it's shown, so the speaker can act it out, and [param when_done] after the last
+## one.
 func say(
-	player: Player, speaker: String, lines: PackedStringArray, when_done := Callable()
+	player: Player,
+	speaker: String,
+	lines: PackedStringArray,
+	when_done := Callable(),
+	on_line := Callable()
 ) -> void:
 	_player = player
 	_player.busy = true
@@ -27,6 +33,7 @@ func say(
 	_lines = lines
 	_next_line = 0
 	_when_done = when_done
+	_on_line = on_line
 	show()
 	_show_next_line()
 
@@ -47,4 +54,6 @@ func _show_next_line() -> void:
 			_when_done.call()
 		return
 	_line.text = tr(_lines[_next_line])
+	if _on_line.is_valid():
+		_on_line.call(_lines[_next_line])
 	_next_line += 1

@@ -47,6 +47,9 @@ CHARACTER_LULLA,Lulla
 "LULLA_MUMBLE_2","The clouds hum when you're not looking. Don't tell them I said that."
 "LULLA_MUMBLE_3","You again. Or still. ...zzz."
 "LULLA_MUMBLE_4","Is it day? Feels like day. Feels like everything, honestly."
+"LULLA_WAKE_1","...hm? Oh. You. I was only resting my eyes. They were tired of looking."
+"LULLA_WAKE_2","Mm. I wasn't asleep. I was listening to the pillow. It says hello."
+"LULLA_WAKE_3","...was I talking? I do that. Sometimes the dream answers."
 MINIGAME_MINING,Mining
 MINIGAME_MINING_DESCRIPTION,Dig materials out of a wall before it caves in.
 UI_PICK,Pick

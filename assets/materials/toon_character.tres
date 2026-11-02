@@ -2,9 +2,11 @@
 
 [ext_resource type="Shader" path="res://assets/shaders/cel_character.gdshader" id="1_shader"]
 [ext_resource type="Texture2D" path="res://assets/textures/character_detail.png" id="2_detail"]
+[ext_resource type="Texture2D" path="res://assets/textures/stars_and_moons.png" id="3_stars"]
 
 [resource]
 resource_name = "toon_character"
 render_priority = 0
 shader = ExtResource("1_shader")
 shader_parameter/detail_tiles = ExtResource("2_detail")
+shader_parameter/stars_and_moons = ExtResource("3_stars")

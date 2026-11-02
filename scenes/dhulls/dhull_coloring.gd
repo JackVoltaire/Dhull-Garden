@@ -5,7 +5,7 @@ extends Resource
 ## character shader's instance uniforms, so Dhulls can differ while sharing one material.
 
 ## Numbered as in cel_character.gdshader.
-enum Pattern { NONE, DIAMONDS, SPOTS, STRIPES }
+enum Pattern { NONE, DIAMONDS, SPOTS, STRIPES, STARS_AND_MOONS }
 
 ## Stable name that saves refer to it by. Never rename it.
 @export var id: StringName

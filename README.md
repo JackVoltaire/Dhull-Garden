@@ -285,8 +285,23 @@ above it.
   choice is a data change plus its `UI_HAIR_<NAME>` string.
 - **Characters.** A character is a scene in `scenes/characters/` with an `Interactable` for "[E]
   Talk to". What it says is translation keys in exported lists, shown with `Player.listen()` in
-  the dialogue box; the dreamer only listens, and Interact moves on a line. Lulla's lines are
+  the dialogue box; the dreamer only listens, and Interact moves on a line. `listen()` can also
+  call back with each line as it's shown, so the character can act it out. Lulla's lines are
   placeholders in her voice.
+- **Lulla.** Modelled in `assets/models/lulla/` like the dreamer, a House of Decay chibi about
+  three heads tall: lilac wool for hair with yellow stars and moons in it (the `STARS_AND_MOONS`
+  pattern, from `assets/textures/stars_and_moons.png`, also on her pillow) and wool curls painted
+  through it, curled horns, floppy ears, a sleep mask pushed up on her forehead, and a long black
+  Victorian nightgown with ruffled frills, hugging her pillow. Her face is her own, painted on a
+  flat sheet like the dreamer's (`face_lulla.tres`, drawings in `scenes/characters/lulla/face/`):
+  drowsy, shut and startled eyes with golden irises and goat pupils, and a mouth closed or open.
+  `LullaModel` colors her (tune the colors on it) and acts her out with the animations in
+  `lulla_animations.tres`: `idle` sways her on her feet, blinking, her head drooping until she
+  jolts awake; `talk` keeps her awake while her mouth moves for as long as each line takes;
+  `doze` sleeps on her feet; `wake` is a start. The animations key her eyes as well as her parts,
+  every animation keying every track in `LullaModel.ANIMATED_TRACKS`. `LullaTalk` decides what
+  she says: the first meeting, then a mumble at a time in turn; she nods off on the lines in her
+  `nodding_off` list, mid-sentence, and dozes until talked to, then wakes with a `waking` line.
 - **Items and money.** Every kind of item is an `ItemDefinition` in `data/items/`: a stable `id`,
   a translated name, a kind (material, food or drink), what Pebble asks for it and pays for it,
   and for food and drink how much it fills, cheers and wakes a Dhull. The `Inventory` autoload

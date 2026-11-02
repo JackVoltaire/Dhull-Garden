@@ -11,6 +11,7 @@ const HEAD_TURN_INCLUDE := "res://assets/shaders/head_turn.gdshaderinc"
 const CHARACTERS := {
 	"res://scenes/dhulls/dhull.tscn": ^".",
 	"res://scenes/player/player.tscn": ^"./Model/Dreamer",
+	"res://scenes/characters/lulla/lulla.tscn": ^"./Model/Lulla",
 }
 
 

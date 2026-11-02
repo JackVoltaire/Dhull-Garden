@@ -1,11 +1,12 @@
 extends TestCase
-## The face drawings and the materials that paint them with dhull_face.gdshader: the Dhulls' and
-## the dreamer's. Each material must have a frame per drawing its owner picks from, the eye
-## layers alike, and a row of irises per eye color, or faces show the wrong drawing; and each
-## frame must be the shape the material shows it at, or it's stretched. Where the eyes are spread
-## apart, the shader cuts each frame in two, so no eye may reach the middle of its frame.
+## The face drawings and the materials that paint them with dhull_face.gdshader: the Dhulls',
+## the dreamer's and Lulla's. Each material must have a frame per drawing its owner picks from,
+## the eye layers alike, and a row of irises per eye color, or faces show the wrong drawing; and
+## each frame must be the shape the material shows it at, or it's stretched. Where the eyes are
+## spread apart, the shader cuts each frame in two, so no eye may reach the middle of its frame.
 const DHULL_FACE_PATH := "res://scenes/dhulls/face/dhull_face.tres"
 const DREAMER_FACE_PATH := "res://assets/materials/face_dreamer.tres"
+const LULLA_FACE_PATH := "res://assets/materials/face_lulla.tres"
 
 
 func test_dhull_faces_have_a_drawing_per_shape() -> void:
@@ -19,6 +20,13 @@ func test_the_dreamer_has_a_drawing_per_eye_and_mouth() -> void:
 	var material: ShaderMaterial = load(DREAMER_FACE_PATH)
 	_check_eyes(material, DreamerModel.Eyes.size(), 1)
 	_check_mouths(material, DreamerModel.Mouth.size())
+
+
+## Lulla has a face of her own, with eyes in one color.
+func test_lulla_has_a_drawing_per_eye_and_mouth() -> void:
+	var material: ShaderMaterial = load(LULLA_FACE_PATH)
+	_check_eyes(material, LullaModel.Eyes.size(), 1)
+	_check_mouths(material, LullaModel.Mouth.size())
 
 
 func _check_eyes(material: ShaderMaterial, frames: int, colors: int) -> void:

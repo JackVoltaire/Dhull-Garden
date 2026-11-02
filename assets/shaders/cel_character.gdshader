@@ -21,6 +21,7 @@ const float CHARACTER_ROUGHNESS = 0.3;
 const int PATTERN_DIAMONDS = 1;
 const int PATTERN_SPOTS = 2;
 const int PATTERN_STRIPES = 3;
+const int PATTERN_STARS_AND_MOONS = 4;
 // A 4x4 Bayer matrix: the threshold pattern PS1 games dithered with.
 const float BAYER[16] = {0.0, 8.0, 2.0, 10.0, 12.0, 4.0, 14.0, 6.0, 3.0, 11.0, 1.0, 9.0, 15.0, 7.0, 13.0, 5.0};
 
@@ -39,6 +40,10 @@ instance uniform int detail : instance_index(13) = 0;
 uniform float diamond_size = 0.11;
 uniform float spot_size = 0.06;
 uniform float stripe_size = 0.045;
+// The stars-and-moons pattern's shapes: a tile, white where the pattern's color shows, and how
+// far it reaches over a part, in meters.
+uniform sampler2D stars_and_moons : filter_nearest, repeat_enable;
+uniform float stars_and_moons_size = 0.4;
 // The share of the light, in each color, that still reaches the shady side: under 1 and bluer
 // than the light, for cool anime shade.
 uniform vec3 shade_color : source_color = vec3(0.66, 0.6, 0.74);
@@ -70,7 +75,7 @@ uniform float sheen_whiteness : hint_range(0.0, 1.0) = 0.35;
 // leaves the part's color as it is, darker darkens it, lighter lightens it); how many there are;
 // how far each tile reaches over a part, in meters; and how strongly it shows, from 0 to 1.
 uniform sampler2D detail_tiles : filter_nearest, repeat_enable;
-uniform int detail_kinds = 2;
+uniform int detail_kinds = 3;
 uniform float detail_size = 0.5;
 uniform float detail_strength : hint_range(0.0, 1.0) = 1.0;
 // How many steps the tip color comes in.
@@ -123,15 +128,21 @@ float sheen_band(vec3 p) {
 	return step(lowest, from_middle.y) * step(from_middle.y, sheen_height.y);
 }
 
+// Where [p], in a part's model space, falls on a tile [size] meters across wrapped round the
+// part's upright axis, as far round as the part's surface goes there, and repeated down it, so
+// the models need no UVs: 0 to 1 across and down the tile.
+vec2 on_wrapped_tile(vec3 p, float size) {
+	return fract(vec2(atan(p.x, p.z) * length(p.xz), -p.y) / size);
+}
+
 // What the detail does to the part's color at [p], in its model space: 1 leaves it as it is,
-// less darkens it, more lightens it. The tile is wrapped round the part's upright axis, as far
-// round as the part's surface goes there, and repeated down it, so the models need no UVs.
+// less darkens it, more lightens it.
 float detail_shade(vec3 p) {
 	if (detail == 0) {
 		return 1.0;
 	}
-	vec2 over_part = vec2(atan(p.x, p.z) * length(p.xz), -p.y) / detail_size;
-	vec2 in_tile = vec2(fract(over_part.x), (fract(over_part.y) + float(detail - 1)) / float(detail_kinds));
+	vec2 on_tile = on_wrapped_tile(p, detail_size);
+	vec2 in_tile = vec2(on_tile.x, (on_tile.y + float(detail - 1)) / float(detail_kinds));
 	return mix(1.0, texture(detail_tiles, in_tile).r * 2.0, detail_strength);
 }
 
@@ -149,6 +160,9 @@ float pattern_mask(vec3 p) {
 	if (pattern == PATTERN_STRIPES) {
 		// Bands across the part, like a striped sleeve, so they swing with it.
 		return mod(floor(p.y / stripe_size), 2.0);
+	}
+	if (pattern == PATTERN_STARS_AND_MOONS) {
+		return step(0.5, texture(stars_and_moons, on_wrapped_tile(p, stars_and_moons_size)).r);
 	}
 	return 0.0;
 }

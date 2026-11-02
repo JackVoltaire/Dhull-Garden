@@ -115,9 +115,12 @@ func _physics_process(delta: float) -> void:
 
 
 ## Shows what [param speaker] says, [param lines] of translation keys, then calls
-## [param when_done]. The dreamer only listens.
-func listen(speaker: String, lines: PackedStringArray, when_done := Callable()) -> void:
-	_dialogue_box.say(self, speaker, lines, when_done)
+## [param when_done]. Calls [param on_line] with each line's key as it's shown, so the speaker
+## can act it out. The dreamer only listens.
+func listen(
+	speaker: String, lines: PackedStringArray, when_done := Callable(), on_line := Callable()
+) -> void:
+	_dialogue_box.say(self, speaker, lines, when_done, on_line)
 
 
 ## Opens the look menu, turning the camera round to see the dreamer's face. Not while another
